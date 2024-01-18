@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["digit_from_display_byte"]};

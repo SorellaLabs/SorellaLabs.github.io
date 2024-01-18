@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Literal","TemplateElement"],"struct":["ArrayLiteral","ObjectLiteral","TemplateLiteral"]};

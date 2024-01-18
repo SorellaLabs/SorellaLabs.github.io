@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["OriginalValuesKnown"],"struct":["BundleStateWithReceipts","HashedStateChanges","StateChanges","StateReverts"],"type":["AccountRevertInit","BundleStateInit","RevertsInit"]};

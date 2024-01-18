@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["kuhn_munkres","kuhn_munkres_min"],"trait":["Weights"]};

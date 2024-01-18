@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ModuleItem","Punctuator","StatementListItem"],"macro":["try_break"],"mod":["declaration","expression","function","keyword","operations","pattern","property","statement","visitor"],"struct":["Module","ModuleItemList","Position","Script","Span","StatementList"]};

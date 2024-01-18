@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ForLoopInitializer","IterableLoopInitializer"],"struct":["Break","Continue","DoWhileLoop","ForInLoop","ForLoop","ForOfLoop","WhileLoop"]};

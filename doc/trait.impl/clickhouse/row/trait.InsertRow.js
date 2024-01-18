@@ -1,0 +1,5 @@
+(function() {var implementors = {
+"brontes_types":[["impl <a class=\"trait\" href=\"clickhouse/row/trait.InsertRow.html\" title=\"trait clickhouse::row::InsertRow\">InsertRow</a> for <a class=\"enum\" href=\"brontes_types/normalized_actions/enum.Actions.html\" title=\"enum brontes_types::normalized_actions::Actions\">Actions</a>"],["impl <a class=\"trait\" href=\"clickhouse/row/trait.InsertRow.html\" title=\"trait clickhouse::row::InsertRow\">InsertRow</a> for <a class=\"struct\" href=\"https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html\" title=\"struct alloc::boxed::Box\">Box</a>&lt;dyn <a class=\"trait\" href=\"brontes_types/classified_mev/trait.SpecificMev.html\" title=\"trait brontes_types::classified_mev::SpecificMev\">SpecificMev</a>&gt;"]],
+"clickhouse":[],
+"sorella_db_databases":[]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

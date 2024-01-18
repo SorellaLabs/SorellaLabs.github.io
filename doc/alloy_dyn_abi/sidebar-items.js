@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["DynSolType","DynSolValue","DynToken","Error"],"externcrate":["parser"],"mod":["eip712"],"struct":["DecodedEvent","DynSolEvent"],"trait":["EventExt","FunctionExt","JsonAbiExt","ResolveSolEvent","ResolveSolType"],"type":["Result"]};

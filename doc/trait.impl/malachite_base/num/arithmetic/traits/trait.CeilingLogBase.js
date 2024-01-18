@@ -1,0 +1,6 @@
+(function() {var implementors = {
+"malachite":[],
+"malachite_base":[],
+"malachite_nz":[["impl&lt;'a, 'b&gt; <a class=\"trait\" href=\"malachite_base/num/arithmetic/traits/trait.CeilingLogBase.html\" title=\"trait malachite_base::num::arithmetic::traits::CeilingLogBase\">CeilingLogBase</a>&lt;&amp;'b <a class=\"struct\" href=\"malachite_nz/natural/struct.Natural.html\" title=\"struct malachite_nz::natural::Natural\">Natural</a>&gt; for &amp;'a <a class=\"struct\" href=\"malachite_nz/natural/struct.Natural.html\" title=\"struct malachite_nz::natural::Natural\">Natural</a>"]],
+"malachite_q":[["impl&lt;'a, 'b&gt; <a class=\"trait\" href=\"malachite_base/num/arithmetic/traits/trait.CeilingLogBase.html\" title=\"trait malachite_base::num::arithmetic::traits::CeilingLogBase\">CeilingLogBase</a>&lt;&amp;'b <a class=\"struct\" href=\"malachite_q/struct.Rational.html\" title=\"struct malachite_q::Rational\">Rational</a>&gt; for &amp;'a <a class=\"struct\" href=\"malachite_q/struct.Rational.html\" title=\"struct malachite_q::Rational\">Rational</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["MessageType","OpCode","ResponseCode"],"mod":["update_message"],"struct":["DnsResponse","Edns","Header","LowerQuery","Message","Query"],"trait":["MessageFinalizer"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["PidRUsageFlavor"],"fn":["pidrusage"],"struct":["RUsageInfoV0","RUsageInfoV1","RUsageInfoV2","RUsageInfoV3","RUsageInfoV4"],"trait":["PIDRUsage"]};

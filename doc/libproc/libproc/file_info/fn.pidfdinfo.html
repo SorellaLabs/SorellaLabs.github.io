@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Returns the information about file descriptors of the process that match pid passed in."><title>pidfdinfo in libproc::libproc::file_info - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="libproc" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../libproc/index.html">libproc</a><span class="version">0.14.2</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In libproc::libproc::file_info</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Function <a href="../../index.html">libproc</a>::<wbr><a href="../index.html">libproc</a>::<wbr><a href="index.html">file_info</a>::<wbr><a class="fn" href="#">pidfdinfo</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../../src/libproc/libproc/file_info.rs.html#154-170">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub fn pidfdinfo&lt;T: <a class="trait" href="trait.PIDFDInfo.html" title="trait libproc::libproc::file_info::PIDFDInfo">PIDFDInfo</a>&gt;(pid: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, fd: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Returns the information about file descriptors of the process that match pid passed in.</p>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io::Write;
+<span class="kw">use </span>std::net::TcpListener;
+<span class="kw">use </span>libproc::libproc::proc_pid::{listpidinfo, pidinfo, ListThreads};
+<span class="kw">use </span>libproc::libproc::bsd_info::{BSDInfo};
+<span class="kw">use </span>libproc::libproc::net_info::{SocketFDInfo, SocketInfoKind};
+<span class="kw">use </span>libproc::libproc::file_info::{pidfdinfo, ListFDs, ProcFDType};
+<span class="kw">use </span>std::process;
+
+<span class="kw">let </span>pid = process::id() <span class="kw">as </span>i32;
+
+<span class="comment">// Open TCP port:8000 to test.
+</span><span class="kw">let </span>_listener = TcpListener::bind(<span class="string">"127.0.0.1:8000"</span>);
+
+<span class="kw">if let </span><span class="prelude-val">Ok</span>(info) = pidinfo::&lt;BSDInfo&gt;(pid, <span class="number">0</span>) {
+    <span class="kw">if let </span><span class="prelude-val">Ok</span>(fds) = listpidinfo::&lt;ListFDs&gt;(pid, info.pbi_nfiles <span class="kw">as </span>usize) {
+        <span class="kw">for </span>fd <span class="kw">in </span><span class="kw-2">&amp;</span>fds {
+            <span class="kw">match </span>fd.proc_fdtype.into() {
+                ProcFDType::Socket =&gt; {
+                    <span class="kw">if let </span><span class="prelude-val">Ok</span>(socket) = pidfdinfo::&lt;SocketFDInfo&gt;(pid, fd.proc_fd) {
+                        <span class="kw">match </span>socket.psi.soi_kind.into() {
+                            SocketInfoKind::Tcp =&gt; {
+                                <span class="comment">// access to the member of `soi_proto` is unsafe becasuse of union type.
+                               </span><span class="kw">let </span>info = <span class="kw">unsafe </span>{ socket.psi.soi_proto.pri_tcp };
+
+                                <span class="comment">// change endian and cut off because insi_lport is network endian and 16bit witdh.
+                                </span><span class="kw">let </span><span class="kw-2">mut </span>port = <span class="number">0</span>;
+                                port |= info.tcpsi_ini.insi_lport &gt;&gt; <span class="number">8 </span>&amp; <span class="number">0x00ff</span>;
+                                port |= info.tcpsi_ini.insi_lport &lt;&lt; <span class="number">8 </span>&amp; <span class="number">0xff00</span>;
+
+                                <span class="comment">// access to the member of `insi_laddr` is unsafe becasuse of union type.
+                                </span><span class="kw">let </span>s_addr = <span class="kw">unsafe </span>{ info.tcpsi_ini.insi_laddr.ina_46.i46a_addr4.s_addr };
+
+                                <span class="comment">// change endian because insi_laddr is network endian.
+                                </span><span class="kw">let </span><span class="kw-2">mut </span>addr = <span class="number">0</span>;
+                                addr |= s_addr &gt;&gt; <span class="number">24 </span>&amp; <span class="number">0x000000ff</span>;
+                                addr |= s_addr &gt;&gt; <span class="number">8  </span>&amp; <span class="number">0x0000ff00</span>;
+                                addr |= s_addr &lt;&lt; <span class="number">8  </span>&amp; <span class="number">0x00ff0000</span>;
+                                addr |= s_addr &lt;&lt; <span class="number">24 </span>&amp; <span class="number">0xff000000</span>;
+
+                                <span class="macro">println!</span>(<span class="string">"{}.{}.{}.{}:{}"</span>, addr &gt;&gt; <span class="number">24 </span>&amp; <span class="number">0xff</span>, addr &gt;&gt; <span class="number">16 </span>&amp; <span class="number">0xff</span>, addr &gt;&gt; <span class="number">8 </span>&amp; <span class="number">0xff</span>, addr &amp; <span class="number">0xff</span>, port);
+                            }
+                            <span class="kw">_ </span>=&gt; (),
+                        }
+                    }
+                }
+                <span class="kw">_ </span>=&gt; (),
+            }
+        }
+    }
+}</code></pre></div>
+</div></details></section></div></main></body></html>

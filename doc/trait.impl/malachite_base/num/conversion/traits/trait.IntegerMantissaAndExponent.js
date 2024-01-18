@@ -1,0 +1,5 @@
+(function() {var implementors = {
+"malachite":[],
+"malachite_base":[],
+"malachite_nz":[["impl&lt;'a&gt; <a class=\"trait\" href=\"malachite_base/num/conversion/traits/trait.IntegerMantissaAndExponent.html\" title=\"trait malachite_base::num::conversion::traits::IntegerMantissaAndExponent\">IntegerMantissaAndExponent</a>&lt;<a class=\"struct\" href=\"malachite_nz/natural/struct.Natural.html\" title=\"struct malachite_nz::natural::Natural\">Natural</a>, <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.u64.html\">u64</a>, <a class=\"struct\" href=\"malachite_nz/natural/struct.Natural.html\" title=\"struct malachite_nz::natural::Natural\">Natural</a>&gt; for &amp;'a <a class=\"struct\" href=\"malachite_nz/natural/struct.Natural.html\" title=\"struct malachite_nz::natural::Natural\">Natural</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

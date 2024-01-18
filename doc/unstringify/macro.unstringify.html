@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Reverse of `stringify!`: tokenize an input string literal."><title>unstringify in unstringify - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="unstringify" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../static.files/storage-bc37acceda91d44a.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../unstringify/index.html">unstringify</a><span class="version">0.1.4</span></h2></div><div class="sidebar-elems"></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="index.html">unstringify</a>::<wbr><a class="macro" href="#">unstringify</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/unstringify/lib.rs.html#225-260">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>unstringify!() { <span class="comment">/* proc-macro */</span> }</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Reverse of <a href="https://doc.rust-lang.org/nightly/core/macro.stringify.html" title="macro core::stringify"><code>stringify!</code></a>: tokenize an input string literal.</p>
+<h3 id="basic-example"><a href="#basic-example">Basic example</a></h3>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>::unstringify::unstringify;
+
+<span class="macro">unstringify!</span>(<span class="string">r#"
+    fn main ()
+    {
+        println!("Hello, World!");
+    }
+"#</span>);</code></pre></div>
+<p>Or, equivalently:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>::unstringify::unstringify;
+
+<span class="macro">unstringify!</span>(<span class="macro">stringify! </span>{
+    <span class="kw">fn </span>main ()
+    {
+        <span class="macro">println!</span>(<span class="string">"Hello, World!"</span>);
+    }
+});</code></pre></div>
+<details><summary>▶ A more interesting example</summary>
+<p>A (non-procedural!) macro to evaluate the rust code snippets inside
+docstrings:</p>
+
+<div class="example-wrap should_panic"><a href="#" class="tooltip" title="This example panics">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>::unstringify::unstringify;
+
+<span class="macro">macro_rules! </span>eval_docstrings {(
+    $(
+        <span class="attr">#[doc = <span class="macro-nonterminal">$doc</span>:tt]
+    </span>)*
+) =&gt; (
+    <span class="macro">extract_code_snippets! </span>{
+        @find_start
+        $(<span class="macro-nonterminal">$doc</span>)*
+    }
+)}
+
+<span class="macro">macro_rules! </span>extract_code_snippets {
+    (
+        @find_start
+        <span class="string">r" ```rust"
+        </span>$(<span class="macro-nonterminal">$rest</span>:tt)*
+    ) =&gt; (
+        <span class="macro">extract_code_snippets! </span>{
+            @accumulate_into []
+            $(<span class="macro-nonterminal">$rest</span>)*
+        }
+    );
+
+    (
+        @find_start
+        <span class="macro-nonterminal">$otherwise_ignored</span>:tt <span class="comment">// ≠ " ```rust"
+        </span>$(<span class="macro-nonterminal">$rest</span>:tt)*
+    ) =&gt; (
+        <span class="macro">extract_code_snippets! </span>{
+            @find_start
+            $(<span class="macro-nonterminal">$rest</span>)*
+        }
+    );
+
+    (
+        @find_start
+        <span class="comment">// No lines left
+    </span>) =&gt; (
+        <span class="comment">// The end.
+    </span>);
+
+    <span class="comment">// End of code snippet found,
+    // TIME TO EVALUATE THE CODE!
+    </span>(
+        @accumulate_into [ $(<span class="macro-nonterminal">$lines</span>:tt)* ]
+        <span class="string">r" ```"
+        </span>$(<span class="macro-nonterminal">$rest</span>:tt)*
+    ) =&gt; (
+        <span class="comment">// evaluate the code...
+        </span><span class="macro">unstringify!</span>(<span class="macro">concat!</span>(
+            $(<span class="macro-nonterminal">$lines</span>),*
+        ));
+        <span class="comment">// ... and rince and repeat with the remaining docstrings
+        </span><span class="macro">extract_code_snippets! </span>{
+            @find_start
+            $(<span class="macro-nonterminal">$rest</span>)*
+        }
+    );
+
+    <span class="comment">// Basic recursion step: accumulate a non-terminating line
+    </span>(
+        @accumulate_into [ $(<span class="macro-nonterminal">$lines</span>:tt)* ]
+        <span class="macro-nonterminal">$current_line</span>:tt <span class="comment">// ≠ " ```"
+        </span>$(<span class="macro-nonterminal">$rest</span>:tt)*
+    ) =&gt; (
+        <span class="macro">extract_code_snippets! </span>{
+            @accumulate_into [ $(<span class="macro-nonterminal">$lines</span>)* <span class="macro-nonterminal">$current_line </span>]
+            $(<span class="macro-nonterminal">$rest</span>)*
+        }
+    );
+}
+
+<span class="macro">eval_docstrings! </span>{
+    <span class="doccomment">/// This is a comment.
+    /// As ordinary as they make them.
+    ///
+    /// And yet...
+    /// Sometimes...
+    ///
+    /// &gt; A code snippet appears!
+    ///
+    /// ```rust
+    /// panic!("Successfully managed to evaluate this panic (and thus panic)");
+    /// ```
+    ///
+    /// Impressive, ain't it?
+</span>}</code></pre></div>
+<hr />
+</details>
+<h3 id="remarks"><a href="#remarks">Remarks</a></h3>
+<p>This intuitive API very quickly encounters limitations, related not the
+macro itself, but rather to the way Rust expands macros.</p>
+<p>So, for instance, the following assertion fails:</p>
+
+<div class="example-wrap should_panic"><a href="#" class="tooltip" title="This example panics">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="macro">assert_eq!</span>(
+    <span class="macro">stringify!</span>(<span class="macro">unstringify!</span>(<span class="string">"example"</span>)),
+    <span class="string">"example"</span>,
+);</code></pre></div>
+<p>Indeed, in the above code the macro <code>stringify!</code> is called <em>before</em>
+<code>unstringify!</code>, so what happens is <code>stringify!</code> simply stringifies its input
+tokens, <em>verbatim</em>, without evaluating them: <code>'unstringify!(&quot;example&quot;)'</code>. 🤦</p>
+<p>To solve that, <a href="macro.unstringify.html" title="macro unstringify::unstringify"><code>unstringify!</code></a> features “preprocessor” capabilities
+similar to <a href="https://docs.rs/paste"><code>::paste::paste!</code></a>, that allow to
+circumvent this limitation, by doing:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">assert_eq!</span>(
+    <span class="macro">unstringify!</span>(<span class="kw">let </span><span class="macro-nonterminal">$tokens </span>= <span class="macro">unstringify!</span>(<span class="string">"example"</span>) <span class="kw">in </span>{
+        <span class="macro">stringify!</span>(<span class="macro-nonterminal">$tokens</span>)
+    }),
+    <span class="string">"example"</span>,
+);</code></pre></div>
+<hr />
+<p>Also, for the same reason but reversed this time, the input fed to
+<a href="macro.unstringify.html" title="macro unstringify::unstringify"><code>unstringify!</code></a> cannot be eagerly macro-expanded.</p>
+<p>This means that the following fails:</p>
+
+<div class="example-wrap compile_fail"><a href="#" class="tooltip" title="This example deliberately fails to compile">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="macro">macro_rules! </span>my_macro {() =&gt; (<span class="string">"fn main () {}"</span>)}
+
+<span class="macro">unstringify!</span>(<span class="macro">my_macro!</span>());</code></pre></div>
+<ul>
+<li>
+<p>The workaround is to define things such as <code>my_macro!</code> using, for
+instance, the callback pattern:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">macro_rules! </span>my_macro {(
+    =&gt; <span class="macro-nonterminal">$callback</span>:ident !
+) =&gt; (
+    <span class="macro-nonterminal">$</span><span class="macro">callback! </span>{ <span class="string">"fn main () {}" </span>}
+)}
+
+<span class="macro">my_macro!</span>(=&gt; <span class="macro">unstringify!</span>);</code></pre></div>
+</li>
+</ul>
+<p>That being said, the astute reader may retort:</p>
+<blockquote>
+<p>But wait, doesn’t your second example within this documentation showcase
+<code>unstringify!(stringify! { ...  })</code>?</p>
+</blockquote>
+<p>And indeed it does. This is achieved by hard-coding the (basic) logic of
+<code>stringify!</code> and <code>concat!</code> inside the <a href="macro.unstringify.html" title="macro unstringify::unstringify"><code>unstringify!</code></a> macro (for instance,
+when <a href="macro.unstringify.html" title="macro unstringify::unstringify"><code>unstringify!</code></a> stumbles upon a <code>stringify! { ... }</code> (which is <em>not</em>, I
+repeat, a <em>verbatim</em> string literal), it decides to simply emit the inner
+<code>...</code>).</p>
+</div></details></section></div></main></body></html>

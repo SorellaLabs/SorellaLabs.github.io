@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["IErc20Calls"],"struct":["balanceOfCall","balanceOfReturn","decimalsCall","decimalsReturn"]};

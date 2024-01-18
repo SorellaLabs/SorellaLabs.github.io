@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Find a topological order in a directed graph if one exists."><title>topological_sort in pathfinding::directed::topological_sort - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="pathfinding" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../pathfinding/index.html">pathfinding</a><span class="version">4.8.2</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In pathfinding::directed::topological_sort</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Function <a href="../../index.html">pathfinding</a>::<wbr><a href="../index.html">directed</a>::<wbr><a href="index.html">topological_sort</a>::<wbr><a class="fn" href="#">topological_sort</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../../src/pathfinding/directed/topological_sort.rs.html#76-98">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub fn topological_sort&lt;N, FN, IN&gt;(
+    roots: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">[N]</a>,
+    successors: FN
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;N&gt;, N&gt;<div class="where">where
+    N: <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html" title="trait core::cmp::Eq">Eq</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html" title="trait core::hash::Hash">Hash</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a>,
+    FN: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnMut.html" title="trait core::ops::function::FnMut">FnMut</a>(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;N</a>) -&gt; IN,
+    IN: <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/collect/trait.IntoIterator.html" title="trait core::iter::traits::collect::IntoIterator">IntoIterator</a>&lt;Item = N&gt;,</div></code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Find a topological order in a directed graph if one exists.</p>
+<ul>
+<li><code>roots</code> is a collection of nodes that ought to be explored.</li>
+<li><code>successors</code> returns a list of successors for a given node, including possibly
+nodes that were not present in <code>roots</code>.</li>
+</ul>
+<p>The function returns an acceptable topological order of nodes given as roots or
+discovered, or an error if a cycle is detected.</p>
+<h2 id="errors"><a href="#errors">Errors</a></h2>
+<p>If a cycle is found, <code>Err(n)</code> is returned with <code>n</code> being an arbitrary node involved in a cycle.
+In this case case, the strongly connected set can then be found using the
+<a href="../strongly_connected_components/fn.strongly_connected_component.html" title="fn pathfinding::directed::strongly_connected_components::strongly_connected_component"><code>strongly_connected_component</code></a>
+function, or if only one of the loops is needed the <a href="../bfs/fn.bfs_loop.html" title="fn pathfinding::directed::bfs::bfs_loop"><code>bfs_loop</code></a> function
+can be used instead to identify one of the shortest loops involving this node.</p>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
+<p>We will sort integers from 1 to 9, each integer having its two immediate
+greater numbers as successors, starting with two roots 5 and 1:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>pathfinding::prelude::topological_sort;
+
+<span class="kw">fn </span>successors(node: <span class="kw-2">&amp;</span>usize) -&gt; Vec&lt;usize&gt; {
+  <span class="kw">match </span><span class="kw-2">*</span>node {
+    n <span class="kw">if </span>n &lt;= <span class="number">7 </span>=&gt; <span class="macro">vec!</span>[n+<span class="number">1</span>, n+<span class="number">2</span>],
+    <span class="number">8 </span>=&gt; <span class="macro">vec!</span>[<span class="number">9</span>],
+    <span class="kw">_ </span>=&gt; <span class="macro">vec!</span>[],
+  }
+}
+
+<span class="kw">let </span>sorted = topological_sort(<span class="kw-2">&amp;</span>[<span class="number">5</span>, <span class="number">1</span>], successors);
+<span class="macro">assert_eq!</span>(sorted, <span class="prelude-val">Ok</span>(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]));</code></pre></div>
+<p>If, however, there is a loop in the graph (for example, all nodes but 7
+have also 7 has a successor), one of the nodes in the loop will be returned as
+an error:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>pathfinding::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">fn </span>successors(node: <span class="kw-2">&amp;</span>usize) -&gt; Vec&lt;usize&gt; {
+  <span class="kw">match </span><span class="kw-2">*</span>node {
+    n <span class="kw">if </span>n &lt;= <span class="number">6 </span>=&gt; <span class="macro">vec!</span>[n+<span class="number">1</span>, n+<span class="number">2</span>, <span class="number">7</span>],
+    <span class="number">7 </span>=&gt; <span class="macro">vec!</span>[<span class="number">8</span>, <span class="number">9</span>],
+    <span class="number">8 </span>=&gt; <span class="macro">vec!</span>[<span class="number">7</span>, <span class="number">9</span>],
+    <span class="kw">_ </span>=&gt; <span class="macro">vec!</span>[<span class="number">7</span>],
+  }
+}
+
+<span class="kw">let </span>sorted = topological_sort(<span class="kw-2">&amp;</span>[<span class="number">5</span>, <span class="number">1</span>], successors);
+<span class="macro">assert!</span>(sorted.is_err());
+
+<span class="comment">// Let's assume that the returned node is 8 (it can be any node which is part
+// of a loop). We can lookup up one of the shortest loops containing 8
+// (8 -&gt; 7 -&gt; 8 is the unique loop with two hops containing 8):
+
+</span><span class="macro">assert_eq!</span>(bfs_loop(<span class="kw-2">&amp;</span><span class="number">8</span>, successors), <span class="prelude-val">Some</span>(<span class="macro">vec!</span>[<span class="number">8</span>, <span class="number">7</span>, <span class="number">8</span>]));
+
+<span class="comment">// We can also request the whole strongly connected set containing 8. Here
+// 7, 8, and 9 are all reachable from one another.
+
+</span><span class="kw">let </span><span class="kw-2">mut </span>set = strongly_connected_component(<span class="kw-2">&amp;</span><span class="number">8</span>, successors);
+set.sort();
+<span class="macro">assert_eq!</span>(set, <span class="macro">vec!</span>[<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]);</code></pre></div>
+</div></details></section></div></main></body></html>

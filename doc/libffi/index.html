@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Rust bindings for libffi."><title>libffi - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="libffi" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../libffi/index.html">libffi</a><span class="version">3.2.0</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">libffi</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/libffi/lib.rs.html#1-101">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Rust bindings for <a href="https://sourceware.org/libffi/">libffi</a>.</p>
+<p>The C libffi library provides two main facilities: assembling calls
+to functions dynamically, and creating closures that can be called
+as ordinary C functions. In Rust, the latter means that we can turn
+a Rust lambda (or any object implementing <a href="https://doc.rust-lang.org/nightly/core/ops/function/trait.Fn.html" title="trait core::ops::function::Fn"><code>Fn</code></a>/<a href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnMut.html" title="trait core::ops::function::FnMut"><code>FnMut</code></a>) into an
+ordinary C function pointer that we can pass as a callback to C.</p>
+<p>The easiest way to use this library is via the
+<a href="high/index.html" title="mod libffi::high"><code>high</code></a> layer module, but more flexibility (and
+less checking) is provided by the <a href="middle/index.html" title="mod libffi::middle"><code>middle</code></a> and
+<a href="low/index.html" title="mod libffi::low"><code>low</code></a> layers.</p>
+<h2 id="usage"><a href="#usage">Usage</a></h2>
+<p>Building libffi will build lifbffi-sys, which will in turn build the
+libffi C library <a href="https://github.com/libffi/libffi">from github</a>, which
+requires that you have a working make, C compiler, automake, and
+autoconf first. It’s <a href="https://crates.io/crates/libffi">on crates.io</a>, so
+you can add</p>
+<div class="example-wrap"><pre class="language-toml"><code>[dependencies]
+libffi = &quot;3.2.0&quot;
+</code></pre></div>
+<p>This crate depends on <a href="https://crates.io/crates/libffi-sys/">the <code>libffi-sys</code> crate</a>, which by default
+attempts to build its own version of the C libffi library. In order to
+use your system’s C libffi instead, enable this crate’s  <code>system</code>
+feature in your <code>Cargo.toml</code>:</p>
+<div class="example-wrap"><pre class="language-toml"><code>[features]
+libffi = { version = &quot;3.2.0&quot;, features = [&quot;system&quot;] }
+</code></pre></div>
+<p>See <a href="https://docs.rs/libffi-sys/#usage">the <code>libffi-sys</code> documentation</a> for more information about how it
+finds C libffi.</p>
+<p>This crate supports Rust version 1.48 and later.</p>
+<h2 id="organization"><a href="#organization">Organization</a></h2>
+<p>This library is organized in four layers, each of which attempts to
+provide more safety and a simpler interface than the next layer
+down. From top to bottom:</p>
+<ul>
+<li>The <a href="high/index.html" title="mod libffi::high"><code>high</code></a> layer provides safe(?) and
+automatic marshalling of Rust closures into C function pointers.</li>
+<li>The <a href="middle/index.html" title="mod libffi::middle"><code>middle</code></a> layer provides memory-managed
+abstractions for assembling calls and closures, but is unsafe
+because it doesn’t check argument types.</li>
+<li>The <a href="low/index.html" title="mod libffi::low"><code>low</code></a> layer makes no attempts at safety,
+but provides a more idiomatically “Rusty” API than the underlying
+C library.</li>
+<li>The <a href="raw/index.html" title="mod libffi::raw"><code>raw</code></a> layer is a re-export of the
+<a href="https://crates.io/crates/libffi-sys"><code>libffi-sys</code></a> crate,
+a direct mapping of the C libffi library into Rust, generated by
+<a href="https://crates.io/crates/bindgen">bindgen</a>.</li>
+</ul>
+<p>It should be possible to use any layer without dipping into lower
+layers (and it will be considered a bug to the extent that it
+isn’t).</p>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
+<p>In this example, we convert a Rust lambda containing a free variable
+into an ordinary C code pointer. The type of <code>fun</code> below is
+<code>extern &quot;C&quot; fn(u64, u64) -&gt; u64</code>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>libffi::high::Closure2;
+
+<span class="kw">let </span>x = <span class="number">5u64</span>;
+<span class="kw">let </span>f = |y: u64, z: u64| x + y + z;
+
+<span class="kw">let </span>closure = Closure2::new(<span class="kw-2">&amp;</span>f);
+<span class="kw">let </span>fun     = closure.code_ptr();
+
+<span class="macro">assert_eq!</span>(<span class="number">18</span>, fun.call(<span class="number">6</span>, <span class="number">7</span>));</code></pre></div>
+</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="high/index.html" title="mod libffi::high">high</a></div><div class="desc docblock-short">High layer providing automatic marshalling of Rust closures
+as C function pointers.</div></li><li><div class="item-name"><a class="mod" href="low/index.html" title="mod libffi::low">low</a></div><div class="desc docblock-short">A low-level wrapping of libffi, this layer makes no attempts at safety,
+but tries to provide a somewhat more idiomatic interface.</div></li><li><div class="item-name"><a class="mod" href="middle/index.html" title="mod libffi::middle">middle</a></div><div class="desc docblock-short">Middle layer providing a somewhat safer (but still quite unsafe)
+API.</div></li><li><div class="item-name"><a class="mod" href="raw/index.html" title="mod libffi::raw">raw</a></div><div class="desc docblock-short">Raw definitions imported from the C library (via bindgen).</div></li></ul><h2 id="macros" class="section-header"><a href="#macros">Macros</a></h2><ul class="item-table"><li><div class="item-name"><a class="macro" href="macro.ffi_call.html" title="macro libffi::ffi_call">ffi_call</a></div><div class="desc docblock-short">Performs a dynamic call to a C function.</div></li></ul></section></div></main></body></html>

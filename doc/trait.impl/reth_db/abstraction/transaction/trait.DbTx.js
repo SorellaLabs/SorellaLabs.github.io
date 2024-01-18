@@ -1,0 +1,4 @@
+(function() {var implementors = {
+"brontes_database_libmdbx":[["impl&lt;K: <a class=\"trait\" href=\"reth_libmdbx/transaction/trait.TransactionKind.html\" title=\"trait reth_libmdbx::transaction::TransactionKind\">TransactionKind</a>&gt; <a class=\"trait\" href=\"reth_db/abstraction/transaction/trait.DbTx.html\" title=\"trait reth_db::abstraction::transaction::DbTx\">DbTx</a> for <a class=\"struct\" href=\"brontes_database_libmdbx/implementation/tx/struct.LibmdbxTx.html\" title=\"struct brontes_database_libmdbx::implementation::tx::LibmdbxTx\">LibmdbxTx</a>&lt;K&gt;"]],
+"reth_db":[]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

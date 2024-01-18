@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="pathfinding"><title>pathfinding - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="pathfinding" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../pathfinding/index.html">pathfinding</a><span class="version">4.8.2</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">pathfinding</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/pathfinding/lib.rs.html#1-52">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="pathfinding"><a href="#pathfinding">pathfinding</a></h2>
+<p><a href="https://crates.io/crates/pathfinding"><img src="https://img.shields.io/crates/v/pathfinding.svg" alt="Current Version" /></a>
+<a href="https://docs.rs/pathfinding"><img src="https://docs.rs/pathfinding/badge.svg" alt="Documentation" /></a>
+<a href="#license"><img src="https://img.shields.io/crates/l/pathfinding.svg" alt="License: Apache-2.0/MIT" /></a></p>
+<p>This crate implements several pathfinding, flow, and graph algorithms in <a href="https://rust-lang.org/">Rust</a>.</p>
+<h3 id="algorithms"><a href="#algorithms">Algorithms</a></h3>
+<p>The algorithms are generic over their arguments.</p>
+<h4 id="directed-graphs"><a href="#directed-graphs">Directed graphs</a></h4>
+<ul>
+<li><a href="directed/astar/index.html">A*</a>: find the shortest path in a weighted graph using an heuristic to guide the process (<a href="https://en.wikipedia.org/wiki/A*_search_algorithm">⇒ Wikipedia</a>)</li>
+<li><a href="directed/bfs">BFS</a>: explore nearest successors first, then widen the search (<a href="https://en.wikipedia.org/wiki/Breadth-first_search">⇒ Wikipedia</a>)</li>
+<li><a href="directed/cycle_detection/index.html">Brent</a>: find a cycle in an infinite sequence (<a href="https://en.wikipedia.org/wiki/Cycle_detection#Brent&#x27;s_algorithm">⇒ Wikipedia</a>)</li>
+<li><a href="directed/dfs/index.html">DFS</a>: explore a graph by going as far as possible, then backtrack (<a href="https://en.wikipedia.org/wiki/Depth-first_search">⇒ Wikipedia</a>)</li>
+<li><a href="directed/dijkstra/index.html">Dijkstra</a>: find the shortest path in a weighted graph (<a href="https://en.wikipedia.org/wiki/Dijkstra&#x27;s_algorithm">⇒ Wikipedia</a>)</li>
+<li><a href="directed/edmonds_karp/index.html">Edmonds Karp</a>: find the maximum flow in a weighted graph (<a href="https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm">⇒ Wikipedia</a>)</li>
+<li><a href="directed/cycle_detection/index.html">Floyd</a>: find a cycle in an infinite sequence (<a href="https://en.wikipedia.org/wiki/Cycle_detection#Floyd&#x27;s_tortoise_and_hare">⇒ Wikipedia</a>)</li>
+<li><a href="directed/fringe/index.html">Fringe</a>: find the shortest path in a weighted graph using an heuristic to guide the process (<a href="https://en.wikipedia.org/wiki/Fringe_search">⇒ Wikipedia</a>)</li>
+<li><a href="directed/idastar/index.html">IDA*</a>: explore longer and longer paths in a weighted graph at the cost of multiple similar examinations (<a href="https://en.wikipedia.org/wiki/Iterative_deepening_A*">⇒ Wikipedia</a>)</li>
+<li><a href="directed/iddfs/index.html">IDDFS</a>: explore longer and longer paths in an unweighted graph at the cost of multiple similar examinations (<a href="https://en.wikipedia.org/wiki/Iterative_deepening_depth-first_search">⇒ Wikipedia</a>)</li>
+<li><a href="directed/strongly_connected_components/index.html">strongly connected components</a>: find strongly connected components in a directed graph (<a href="https://en.wikipedia.org/wiki/Strongly_connected_component">⇒ Wikipedia</a>)</li>
+<li><a href="directed/topological_sort/index.html">topological sorting</a>: find an acceptable topological order in a directed graph (<a href="https://en.wikipedia.org/wiki/Topological_sorting">⇒ Wikipedia</a>)</li>
+<li><a href="directed/yen/index.html">Yen</a>: find k-shortest paths using Dijkstra (<a href="https://en.wikipedia.org/wiki/Yen&#x27;s_algorithm">⇒ Wikipedia</a>)</li>
+</ul>
+<h4 id="undirected-graphs"><a href="#undirected-graphs">Undirected graphs</a></h4>
+<ul>
+<li><a href="undirected/connected_components/index.html">connected components</a>: find disjoint connected sets of vertices (<a href="https://en.wikipedia.org/wiki/Connected_component_(graph_theory)">⇒ Wikipedia</a>)</li>
+<li><a href="undirected/kruskal/index.html">Kruskal</a>: find a minimum-spanning-tree (<a href="https://en.wikipedia.org/wiki/Kruskal&#x27;s_algorithm">⇒ Wikipedia</a>)</li>
+</ul>
+<h4 id="matching"><a href="#matching">Matching</a></h4>
+<ul>
+<li><a href="kuhn_munkres/index.html">Kuhn-Munkres</a> (Hungarian algorithm): find the maximum (or minimum) matching in a weighted bipartite graph (<a href="https://en.wikipedia.org/wiki/Hungarian_algorithm">⇒ Wikipedia</a>)</li>
+</ul>
+<h4 id="miscellaneous-structures"><a href="#miscellaneous-structures">Miscellaneous structures</a></h4>
+<ul>
+<li>A <a href="grid/index.html"><code>Grid</code></a> type representing a rectangular grid in which vertices can be added or removed, with automatic creation of edges between adjacent vertices.</li>
+<li>A <a href="matrix/index.html"><code>Matrix</code></a> type to store data of arbitrary types, with neighbour-aware methods.</li>
+</ul>
+<h3 id="using-this-crate"><a href="#using-this-crate">Using this crate</a></h3>
+<p>In your <code>Cargo.toml</code>, put:</p>
+<div class="example-wrap"><pre class="language-ini"><code>[dependencies]
+pathfinding = &quot;4.8.2&quot;
+</code></pre></div>
+<p>You can then pull your preferred algorithm (BFS in this example) using:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>pathfinding::prelude::bfs;</code></pre></div>
+<h3 id="example"><a href="#example">Example</a></h3>
+<p>We will search the shortest path on a chess board to go from (1, 1) to (4, 6) doing only knight
+moves.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>pathfinding::prelude::bfs;
+
+<span class="attr">#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+</span><span class="kw">struct </span>Pos(i32, i32);
+
+<span class="kw">impl </span>Pos {
+  <span class="kw">fn </span>successors(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;Pos&gt; {
+    <span class="kw">let </span><span class="kw-2">&amp;</span>Pos(x, y) = <span class="self">self</span>;
+    <span class="macro">vec!</span>[Pos(x+<span class="number">1</span>,y+<span class="number">2</span>), Pos(x+<span class="number">1</span>,y-<span class="number">2</span>), Pos(x-<span class="number">1</span>,y+<span class="number">2</span>), Pos(x-<span class="number">1</span>,y-<span class="number">2</span>),
+         Pos(x+<span class="number">2</span>,y+<span class="number">1</span>), Pos(x+<span class="number">2</span>,y-<span class="number">1</span>), Pos(x-<span class="number">2</span>,y+<span class="number">1</span>), Pos(x-<span class="number">2</span>,y-<span class="number">1</span>)]
+  }
+}
+
+<span class="kw">static </span>GOAL: Pos = Pos(<span class="number">4</span>, <span class="number">6</span>);
+<span class="kw">let </span>result = bfs(<span class="kw-2">&amp;</span>Pos(<span class="number">1</span>, <span class="number">1</span>), |p| p.successors(), |p| <span class="kw-2">*</span>p == GOAL);
+<span class="macro">assert_eq!</span>(result.expect(<span class="string">"no path found"</span>).len(), <span class="number">5</span>);</code></pre></div>
+<h3 id="note-on-floating-point-types"><a href="#note-on-floating-point-types">Note on floating-point types</a></h3>
+<p>Several algorithms require that the numerical types used to describe
+edge weights implement <code>Ord</code>. If you wish to use Rust built-in
+floating-point types (such as <code>f32</code>) that implement <code>PartialOrd</code>
+in this context, you can wrap them into compliant types using the
+<a href="https://crates.io/crates/ordered-float">ordered-float</a> crate.</p>
+<p>The minimum supported Rust version (MSRV) is Rust 1.70.0.</p>
+<h3 id="license"><a href="#license">License</a></h3>
+<p>This code is released under a dual Apache 2.0 / MIT free software license.</p>
+<h3 id="contributing"><a href="#contributing">Contributing</a></h3>
+<p>You are welcome to contribute by opening <a href="https://github.com/evenfurther/pathfinding/issues">issues</a>
+or submitting <a href="https://github.com/evenfurther/pathfinding/pulls">pull requests</a>. Please open an issue
+before implementing a new feature, in case it is a work in progress already or it is fit for this
+repository.</p>
+<p>In order to pass the continuous integration tests, your code must be formatted using the latest
+<code>rustfmt</code> with the nightly rust toolchain, and pass <code>cargo clippy</code> and <a href="https://pre-commit.com/"><code>pre-commit</code></a> checks.
+Those will run automatically when you submit a pull request. You can install <code>pre-commit</code> to your
+checked out version of the repository by running:</p>
+<div class="example-wrap"><pre class="language-bash"><code>$ pre-commit install --hook-type commit-msg
+</code></pre></div>
+<p>This repository uses the <a href="https://www.conventionalcommits.org/en/v1.0.0/">conventional commits</a> commit message style, such as:</p>
+<ul>
+<li>feat(matrix): add <code>Matrix::transpose()</code></li>
+<li>fix(tests): remove unused imports</li>
+</ul>
+<p>If a pull-request should automatically close an open issue, please
+include “Fix #xxx# or “Close #xxx” in the pull-request cover-letter.</p>
+</div></details><h2 id="reexports" class="section-header"><a href="#reexports">Re-exports</a></h2><ul class="item-table"><li><div class="item-name" id="reexport.num_traits"><code>pub use <a class="mod" href="../num_traits/index.html" title="mod num_traits">num_traits</a>;</code></div></li></ul><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="cycle_detection/index.html" title="mod pathfinding::cycle_detection">cycle_detection</a><span class="stab deprecated" title="">Deprecated</span></div><div class="desc docblock-short">Deprecated: moved into the <code>directed</code> module.</div></li><li><div class="item-name"><a class="mod" href="directed/index.html" title="mod pathfinding::directed">directed</a></div><div class="desc docblock-short">Algorithms for directed graphs.</div></li><li><div class="item-name"><a class="mod" href="grid/index.html" title="mod pathfinding::grid">grid</a></div><div class="desc docblock-short">Rectangular grid in which vertices can be added or removed, with or
+without diagonal links.</div></li><li><div class="item-name"><a class="mod" href="kuhn_munkres/index.html" title="mod pathfinding::kuhn_munkres">kuhn_munkres</a></div><div class="desc docblock-short">Compute a maximum weight maximum matching between two disjoints sets of
+vertices using the
+<a href="https://en.wikipedia.org/wiki/Hungarian_algorithm">Kuhn-Munkres algorithm</a>
+(also known as Hungarian algorithm).</div></li><li><div class="item-name"><a class="mod" href="matrix/index.html" title="mod pathfinding::matrix">matrix</a></div><div class="desc docblock-short">Matrix of an arbitrary type and utilities to rotate, transpose, etc.</div></li><li><div class="item-name"><a class="mod" href="prelude/index.html" title="mod pathfinding::prelude">prelude</a></div><div class="desc docblock-short">Export all public functions and structures for an easy access.</div></li><li><div class="item-name"><a class="mod" href="undirected/index.html" title="mod pathfinding::undirected">undirected</a></div><div class="desc docblock-short">Algorithms for undirected graphs.</div></li><li><div class="item-name"><a class="mod" href="utils/index.html" title="mod pathfinding::utils">utils</a></div><div class="desc docblock-short">Miscellaneous utilities</div></li></ul><h2 id="macros" class="section-header"><a href="#macros">Macros</a></h2><ul class="item-table"><li><div class="item-name"><a class="macro" href="macro.matrix.html" title="macro pathfinding::matrix">matrix</a></div><div class="desc docblock-short">The matrix! macro allows the declaration of a Matrix from static data.
+All rows must have the same number of columns. The data will be copied
+into the matrix. There exist two forms:</div></li></ul></section></div></main></body></html>

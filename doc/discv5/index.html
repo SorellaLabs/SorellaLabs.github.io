@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="An implementation of Discovery V5."><title>discv5 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="discv5" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../discv5/index.html">discv5</a><span class="version">0.3.1</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#types">Type Aliases</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">discv5</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/discv5/lib.rs.html#1-130">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>An implementation of <a href="https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md">Discovery V5</a>.</p>
+<h2 id="overview"><a href="#overview">Overview</a></h2>
+<p>Discovery v5 is a protocol designed for encrypted peer discovery and topic advertisement. Each
+peer/node on the network is identified via it’s ENR (<a href="https://eips.ethereum.org/EIPS/eip-778">Ethereum Name
+Record</a>), which is essentially a signed key-value store
+containing the node’s public key and optionally IP address and port.</p>
+<p>Discv5 employs a kademlia-like routing table to store and manage discovered peers. The protocol
+allows for external IP discovery in NAT environments through regular PING/PONG’s with
+discovered nodes. Nodes return the external IP address that they have received and a simple
+majority is chosen as our external IP address. If an external IP address is updated, this is
+produced as an event.</p>
+<p>For a simple CLI discovery service see <a href="https://github.com/AgeManning/discv5-cli">discv5-cli</a></p>
+<p>This protocol is split into four main layers:</p>
+<ul>
+<li><a href="socket/index.html" title="mod discv5::socket"><code>socket</code></a>: Responsible for opening the underlying UDP socket. It creates individual tasks
+for sending/encoding and receiving/decoding packets from the UDP socket.</li>
+<li><a href="handler/index.html" title="mod discv5::handler"><code>handler</code></a>: The protocol’s communication is encrypted with <code>AES_GCM</code>. All node communication
+undergoes a handshake, which results in a <code>Session</code>. These are established when needed and get
+dropped after a timeout. The creation and maintenance of sessions between nodes and the
+encryption/decryption of packets from the socket is realised by the <a href="handler/struct.Handler.html" title="struct discv5::handler::Handler"><code>handler::Handler</code></a> struct
+runnning in its own task.</li>
+<li><a href="service/index.html" title="mod discv5::service"><code>service</code></a>: Contains the protocol-level logic. The <a href="service/struct.Service.html" title="struct discv5::service::Service"><code>service::Service</code></a> manages the routing
+table of known ENR’s, and performs parallel queries for peer discovery. It also runs in it’s
+own task.</li>
+<li><a href="struct.Discv5.html" title="struct discv5::Discv5"><code>Discv5</code></a>: The application level. Manages the user-facing API. It starts/stops the underlying
+tasks, allows initiating queries and obtain metrics about the underlying server.</li>
+</ul>
+<h3 id="event-stream"><a href="#event-stream">Event Stream</a></h3>
+<p>The <a href="struct.Discv5.html" title="struct discv5::Discv5"><code>Discv5</code></a> struct provides access to an event-stream which allows the user to listen to
+<a href="enum.Event.html" title="enum discv5::Event"><code>Event</code></a> that get generated from the underlying server. The stream can be obtained from the
+<a href="struct.Discv5.html#method.event_stream" title="method discv5::Discv5::event_stream"><code>Discv5::event_stream</code></a> function.</p>
+<h3 id="runtimes"><a href="#runtimes">Runtimes</a></h3>
+<p>Discv5 requires a tokio runtime with timing and io enabled. An explicit runtime can be given
+via the configuration. See the <a href="struct.ConfigBuilder.html" title="struct discv5::ConfigBuilder"><code>ConfigBuilder</code></a> for further details. Such a runtime must
+implement the <a href="trait.Executor.html" title="trait discv5::Executor"><code>Executor</code></a> trait.</p>
+<p>If an explicit runtime is not provided via the configuration parameters, it is assumed that a
+tokio runtime is present when creating the <a href="struct.Discv5.html" title="struct discv5::Discv5"><code>Discv5</code></a> struct. The struct will use the existing
+runtime for spawning the underlying server tasks. If a runtime is not present, the creation of
+the <a href="struct.Discv5.html" title="struct discv5::Discv5"><code>Discv5</code></a> struct will panic.</p>
+<h2 id="usage"><a href="#usage">Usage</a></h2>
+<p>A simple example of creating this service is as follows:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>   <span class="kw">use </span>discv5::{enr, enr::{CombinedKey, NodeId}, TokioExecutor, Discv5, ConfigBuilder};
+   <span class="kw">use </span>discv5::socket::ListenConfig;
+   <span class="kw">use </span>std::net::{Ipv4Addr, SocketAddr};
+
+   <span class="comment">// construct a local ENR
+   </span><span class="kw">let </span>enr_key = CombinedKey::generate_secp256k1();
+   <span class="kw">let </span>enr = enr::EnrBuilder::new(<span class="string">"v4"</span>).build(<span class="kw-2">&amp;</span>enr_key).unwrap();
+
+   <span class="comment">// build the tokio executor
+   </span><span class="kw">let </span><span class="kw-2">mut </span>runtime = tokio::runtime::Builder::new_multi_thread()
+       .thread_name(<span class="string">"Discv5-example"</span>)
+       .enable_all()
+       .build()
+       .unwrap();
+
+   <span class="comment">// configuration for the sockets to listen on
+   </span><span class="kw">let </span>listen_config = ListenConfig::Ipv4 {
+       ip: Ipv4Addr::UNSPECIFIED,
+       port: <span class="number">9000</span>,
+   };
+
+   <span class="comment">// default configuration
+   </span><span class="kw">let </span>config = ConfigBuilder::new(listen_config).build();
+
+   <span class="comment">// construct the discv5 server
+   </span><span class="kw">let </span><span class="kw-2">mut </span>discv5: Discv5 = Discv5::new(enr, enr_key, config).unwrap();
+
+   <span class="comment">// In order to bootstrap the routing table an external ENR should be added
+   // This can be done via add_enr. I.e.:
+   // discv5.add_enr(&lt;ENR&gt;)
+
+   // start the discv5 server
+   </span>runtime.block_on(discv5.start());
+
+   <span class="comment">// run a find_node query
+   </span>runtime.block_on(<span class="kw">async </span>{
+      <span class="kw">let </span>found_nodes = discv5.find_node(NodeId::random()).<span class="kw">await</span>.unwrap();
+      <span class="macro">println!</span>(<span class="string">"Found nodes: {:?}"</span>, found_nodes);
+   });</code></pre></div>
+</div></details><h2 id="reexports" class="section-header"><a href="#reexports">Re-exports</a></h2><ul class="item-table"><li><div class="item-name" id="reexport.ConnectionDirection"><code>pub use kbucket::<a class="enum" href="handler/enum.ConnectionDirection.html" title="enum discv5::handler::ConnectionDirection">ConnectionDirection</a>;</code></div></li><li><div class="item-name" id="reexport.ConnectionState"><code>pub use kbucket::<a class="enum" href="kbucket/enum.ConnectionState.html" title="enum discv5::kbucket::ConnectionState">ConnectionState</a>;</code></div></li><li><div class="item-name" id="reexport.Key"><code>pub use kbucket::<a class="struct" href="kbucket/struct.Key.html" title="struct discv5::kbucket::Key">Key</a>;</code></div></li><li><div class="item-name" id="reexport.DefaultProtocolId"><code>pub use packet::<a class="struct" href="packet/struct.DefaultProtocolId.html" title="struct discv5::packet::DefaultProtocolId">DefaultProtocolId</a>;</code></div></li><li><div class="item-name" id="reexport.ProtocolIdentity"><code>pub use packet::<a class="trait" href="packet/trait.ProtocolIdentity.html" title="trait discv5::packet::ProtocolIdentity">ProtocolIdentity</a>;</code></div></li><li><div class="item-name" id="reexport.PermitBanList"><code>pub use permit_ban::<a class="struct" href="permit_ban/struct.PermitBanList.html" title="struct discv5::permit_ban::PermitBanList">PermitBanList</a>;</code></div></li><li><div class="item-name" id="reexport.TalkRequest"><code>pub use service::<a class="struct" href="service/struct.TalkRequest.html" title="struct discv5::service::TalkRequest">TalkRequest</a>;</code></div></li><li><div class="item-name" id="reexport.ListenConfig"><code>pub use socket::<a class="enum" href="socket/enum.ListenConfig.html" title="enum discv5::socket::ListenConfig">ListenConfig</a>;</code></div></li><li><div class="item-name" id="reexport.RateLimiter"><code>pub use socket::<a class="struct" href="socket/struct.RateLimiter.html" title="struct discv5::socket::RateLimiter">RateLimiter</a>;</code></div></li><li><div class="item-name" id="reexport.RateLimiterBuilder"><code>pub use socket::<a class="struct" href="socket/struct.RateLimiterBuilder.html" title="struct discv5::socket::RateLimiterBuilder">RateLimiterBuilder</a>;</code></div></li><li><div class="item-name" id="reexport.enr"><code>pub use <a class="mod" href="../enr/index.html" title="mod enr">enr</a>;</code></div></li></ul><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="handler/index.html" title="mod discv5::handler">handler</a></div><div class="desc docblock-short">Session and packet handling for the Discv5 Discovery service.</div></li><li><div class="item-name"><a class="mod" href="kbucket/index.html" title="mod discv5::kbucket">kbucket</a></div><div class="desc docblock-short">Implementation of a Kademlia routing table as used by a single peer
+participating in a Kademlia DHT.</div></li><li><div class="item-name"><a class="mod" href="metrics/index.html" title="mod discv5::metrics">metrics</a></div></li><li><div class="item-name"><a class="mod" href="packet/index.html" title="mod discv5::packet">packet</a></div><div class="desc docblock-short">This module defines the raw UDP message packets for Discovery v5.1.</div></li><li><div class="item-name"><a class="mod" href="permit_ban/index.html" title="mod discv5::permit_ban">permit_ban</a></div></li><li><div class="item-name"><a class="mod" href="rpc/index.html" title="mod discv5::rpc">rpc</a></div></li><li><div class="item-name"><a class="mod" href="service/index.html" title="mod discv5::service">service</a></div><div class="desc docblock-short">The Discovery v5 protocol. See <code>lib.rs</code> for further details.</div></li><li><div class="item-name"><a class="mod" href="socket/index.html" title="mod discv5::socket">socket</a></div></li></ul><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.Config.html" title="struct discv5::Config">Config</a></div><div class="desc docblock-short">Configuration parameters that define the performance of the discovery network.</div></li><li><div class="item-name"><a class="struct" href="struct.ConfigBuilder.html" title="struct discv5::ConfigBuilder">ConfigBuilder</a></div></li><li><div class="item-name"><a class="struct" href="struct.Discv5.html" title="struct discv5::Discv5">Discv5</a></div><div class="desc docblock-short">The main Discv5 Service struct. This provides the user-level API for performing queries and
+interacting with the underlying service.</div></li><li><div class="item-name"><a class="struct" href="struct.TokioExecutor.html" title="struct discv5::TokioExecutor">TokioExecutor</a></div></li></ul><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.Error.html" title="enum discv5::Error">Error</a></div><div class="desc docblock-short">A general error that is used throughout the Discv5 library.</div></li><li><div class="item-name"><a class="enum" href="enum.Event.html" title="enum discv5::Event">Event</a></div><div class="desc docblock-short">Events that can be produced by the <code>Discv5</code> event stream.</div></li><li><div class="item-name"><a class="enum" href="enum.IpMode.html" title="enum discv5::IpMode">IpMode</a></div><div class="desc docblock-short">Sets the socket type to be established and also determines the type of ENRs that we will store
+in our routing table.
+We store ENR’s that have a <code>get_contractable_addr()</code> based on the <code>IpMode</code> set.</div></li><li><div class="item-name"><a class="enum" href="enum.QueryError.html" title="enum discv5::QueryError">QueryError</a></div></li><li><div class="item-name"><a class="enum" href="enum.RequestError.html" title="enum discv5::RequestError">RequestError</a></div></li><li><div class="item-name"><a class="enum" href="enum.ResponseError.html" title="enum discv5::ResponseError">ResponseError</a></div></li></ul><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.Executor.html" title="trait discv5::Executor">Executor</a></div></li></ul><h2 id="types" class="section-header"><a href="#types">Type Aliases</a></h2><ul class="item-table"><li><div class="item-name"><a class="type" href="type.Enr.html" title="type discv5::Enr">Enr</a></div></li></ul></section></div></main></body></html>

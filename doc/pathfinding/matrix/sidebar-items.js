@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["MatrixFormatError"],"mod":["directions"],"struct":["ColumnIterator","Matrix","RowIterator"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["config","db","errors","params","serde","tables","test_utils","types","utils"]};

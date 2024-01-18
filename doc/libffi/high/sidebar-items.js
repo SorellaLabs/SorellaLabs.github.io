@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ffi_abi_FFI_DEFAULT_ABI"],"mod":["arity0","arity1","arity10","arity11","arity12","arity2","arity3","arity4","arity5","arity6","arity7","arity8","arity9","call","types"],"type":["FfiAbi"]};

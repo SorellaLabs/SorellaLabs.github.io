@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ErrorKind","InvalidResponseKind"],"fn":["delete","get","head","options","patch","post","put","trace"],"mod":["body","header"],"struct":["Error","Method","PreparedRequest","ProxySettings","ProxySettingsBuilder","RequestBuilder","RequestInspector","Response","ResponseReader","Session","StatusCode"],"type":["Result"]};

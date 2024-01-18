@@ -1,0 +1,649 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/Users/user/.cargo/git/checkouts/reth-36d3ea1d1152b20c/9d65a4c/crates/storage/codecs/derive/src/compact/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="codecs_derive" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../../../static.files/src-script-1a1b62b930d385c3.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="icon" href="https://avatars0.githubusercontent.com/u/97369466?s=256"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../codecs_derive/index.html"><img src="https://raw.githubusercontent.com/paradigmxyz/reth/main/assets/reth-docs.png" alt="codecs_derive"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<a href="#2" id="2">2</a>
+<a href="#3" id="3">3</a>
+<a href="#4" id="4">4</a>
+<a href="#5" id="5">5</a>
+<a href="#6" id="6">6</a>
+<a href="#7" id="7">7</a>
+<a href="#8" id="8">8</a>
+<a href="#9" id="9">9</a>
+<a href="#10" id="10">10</a>
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+<a href="#48" id="48">48</a>
+<a href="#49" id="49">49</a>
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>proc_macro::{<span class="self">self</span>, TokenStream};
+<span class="kw">use </span>proc_macro2::{Ident, TokenStream <span class="kw">as </span>TokenStream2};
+<span class="kw">use </span>quote::{format_ident, quote};
+<span class="kw">use </span>syn::{parse_macro_input, Data, DeriveInput};
+
+<span class="kw">mod </span>generator;
+<span class="kw">use </span>generator::<span class="kw-2">*</span>;
+
+<span class="kw">mod </span>enums;
+<span class="kw">use </span>enums::<span class="kw-2">*</span>;
+
+<span class="kw">mod </span>flags;
+<span class="kw">use </span>flags::<span class="kw-2">*</span>;
+
+<span class="kw">mod </span>structs;
+<span class="kw">use </span>structs::<span class="kw-2">*</span>;
+
+<span class="comment">// Helper Alias type
+</span><span class="kw">type </span>IsCompact = bool;
+<span class="comment">// Helper Alias type
+</span><span class="kw">type </span>FieldName = String;
+<span class="comment">// Helper Alias type
+</span><span class="kw">type </span>FieldType = String;
+<span class="doccomment">/// `Compact` has alternative functions that can be used as a workaround for type
+/// specialization of fixed sized types.
+///
+/// Example: `Vec&lt;B256&gt;` vs `Vec&lt;U256&gt;`. The first does not
+/// require the len of the element, while the latter one does.
+</span><span class="kw">type </span>UseAlternative = bool;
+<span class="comment">// Helper Alias type
+</span><span class="kw">type </span>StructFieldDescriptor = (FieldName, FieldType, IsCompact, UseAlternative);
+<span class="comment">// Helper Alias type
+</span><span class="kw">type </span>FieldList = Vec&lt;FieldTypes&gt;;
+
+<span class="attr">#[derive(Debug, Clone, Eq, PartialEq)]
+</span><span class="kw">pub enum </span>FieldTypes {
+    StructField(StructFieldDescriptor),
+    EnumVariant(String),
+    EnumUnnamedField((FieldType, UseAlternative)),
+}
+
+<span class="doccomment">/// Derives the `Compact` trait and its from/to implementations.
+</span><span class="kw">pub fn </span>derive(input: TokenStream, is_zstd: bool) -&gt; TokenStream {
+    <span class="kw">let </span><span class="kw-2">mut </span>output = <span class="macro">quote! </span>{};
+
+    <span class="kw">let </span>DeriveInput { ident, data, .. } = <span class="macro">parse_macro_input!</span>(input);
+    <span class="kw">let </span>fields = get_fields(<span class="kw-2">&amp;</span>data);
+    output.extend(generate_flag_struct(<span class="kw-2">&amp;</span>ident, <span class="kw-2">&amp;</span>fields, is_zstd));
+    output.extend(generate_from_to(<span class="kw-2">&amp;</span>ident, <span class="kw-2">&amp;</span>fields, is_zstd));
+    output.into()
+}
+
+<span class="doccomment">/// Given a list of fields on a struct, extract their fields and types.
+</span><span class="kw">pub fn </span>get_fields(data: <span class="kw-2">&amp;</span>Data) -&gt; FieldList {
+    <span class="kw">let </span><span class="kw-2">mut </span>fields = <span class="macro">vec!</span>[];
+
+    <span class="kw">match </span>data {
+        Data::Struct(data) =&gt; <span class="kw">match </span>data.fields {
+            syn::Fields::Named(<span class="kw-2">ref </span>data_fields) =&gt; {
+                <span class="kw">for </span>field <span class="kw">in </span><span class="kw-2">&amp;</span>data_fields.named {
+                    load_field(field, <span class="kw-2">&amp;mut </span>fields, <span class="bool-val">false</span>);
+                }
+                <span class="macro">assert_eq!</span>(fields.len(), data_fields.named.len());
+            }
+            syn::Fields::Unnamed(<span class="kw-2">ref </span>data_fields) =&gt; {
+                <span class="macro">assert!</span>(
+                    data_fields.unnamed.len() == <span class="number">1</span>,
+                    <span class="string">"Compact only allows one unnamed field. Consider making it a struct."
+                </span>);
+                load_field(<span class="kw-2">&amp;</span>data_fields.unnamed[<span class="number">0</span>], <span class="kw-2">&amp;mut </span>fields, <span class="bool-val">false</span>);
+            }
+            syn::Fields::Unit =&gt; <span class="macro">todo!</span>(),
+        },
+        Data::Enum(data) =&gt; {
+            <span class="kw">for </span>variant <span class="kw">in </span><span class="kw-2">&amp;</span>data.variants {
+                fields.push(FieldTypes::EnumVariant(variant.ident.to_string()));
+
+                <span class="kw">match </span><span class="kw-2">&amp;</span>variant.fields {
+                    syn::Fields::Named(<span class="kw">_</span>) =&gt; {
+                        <span class="macro">panic!</span>(<span class="string">"Not allowed to have Enum Variants with multiple named fields. Make it a struct instead."</span>)
+                    }
+                    syn::Fields::Unnamed(data_fields) =&gt; {
+                        <span class="macro">assert!</span>(
+                            data_fields.unnamed.len() == <span class="number">1</span>,
+                            <span class="string">"Compact only allows one unnamed field. Consider making it a struct."
+                        </span>);
+                        load_field(<span class="kw-2">&amp;</span>data_fields.unnamed[<span class="number">0</span>], <span class="kw-2">&amp;mut </span>fields, <span class="bool-val">true</span>);
+                    }
+                    syn::Fields::Unit =&gt; (),
+                }
+            }
+        }
+        Data::Union(<span class="kw">_</span>) =&gt; <span class="macro">todo!</span>(),
+    }
+
+    fields
+}
+
+<span class="kw">fn </span>load_field(field: <span class="kw-2">&amp;</span>syn::Field, fields: <span class="kw-2">&amp;mut </span>FieldList, is_enum: bool) {
+    <span class="kw">if let </span>syn::Type::Path(<span class="kw-2">ref </span>path) = field.ty {
+        <span class="kw">let </span>segments = <span class="kw-2">&amp;</span>path.path.segments;
+        <span class="kw">if </span>!segments.is_empty() {
+            <span class="kw">let </span><span class="kw-2">mut </span>ftype = String::new();
+
+            <span class="kw">let </span><span class="kw-2">mut </span>use_alt_impl: UseAlternative = <span class="bool-val">false</span>;
+
+            <span class="kw">for </span>(index, segment) <span class="kw">in </span>segments.iter().enumerate() {
+                ftype.push_str(<span class="kw-2">&amp;</span>segment.ident.to_string());
+                <span class="kw">if </span>index &lt; segments.len() - <span class="number">1 </span>{
+                    ftype.push_str(<span class="string">"::"</span>);
+                }
+
+                use_alt_impl = should_use_alt_impl(<span class="kw-2">&amp;</span>ftype, segment);
+            }
+
+            <span class="kw">if </span>is_enum {
+                fields.push(FieldTypes::EnumUnnamedField((ftype.to_string(), use_alt_impl)));
+            } <span class="kw">else </span>{
+                <span class="kw">let </span>should_compact = is_flag_type(<span class="kw-2">&amp;</span>ftype) ||
+                    field.attrs.iter().any(|attr| {
+                        attr.path().segments.iter().any(|path| path.ident == <span class="string">"maybe_zero"</span>)
+                    });
+
+                fields.push(FieldTypes::StructField((
+                    field.ident.as_ref().map(|i| i.to_string()).unwrap_or_default(),
+                    ftype,
+                    should_compact,
+                    use_alt_impl,
+                )));
+            }
+        }
+    }
+}
+
+<span class="doccomment">/// Since there's no impl specialization in rust stable atm, once we find we have a
+/// Vec/Option we try to find out if it's a Vec/Option of a fixed size data type, e.g. `Vec&lt;B256&gt;`.
+///
+/// If so, we use another impl to code/decode its data.
+</span><span class="kw">fn </span>should_use_alt_impl(ftype: <span class="kw-2">&amp;</span>String, segment: <span class="kw-2">&amp;</span>syn::PathSegment) -&gt; bool {
+    <span class="kw">if </span><span class="kw-2">*</span>ftype == <span class="string">"Vec" </span>|| <span class="kw-2">*</span>ftype == <span class="string">"Option" </span>{
+        <span class="kw">if let </span>syn::PathArguments::AngleBracketed(<span class="kw-2">ref </span>args) = segment.arguments {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(syn::GenericArgument::Type(syn::Type::Path(arg_path))) = args.args.last() {
+                <span class="kw">if let </span>(<span class="prelude-val">Some</span>(path), <span class="number">1</span>) =
+                    (arg_path.path.segments.first(), arg_path.path.segments.len())
+                {
+                    <span class="kw">if </span>[<span class="string">"B256"</span>, <span class="string">"Address"</span>, <span class="string">"Address"</span>, <span class="string">"Bloom"</span>, <span class="string">"TxHash"</span>]
+                        .contains(<span class="kw-2">&amp;</span>path.ident.to_string().as_str())
+                    {
+                        <span class="kw">return </span><span class="bool-val">true
+                    </span>}
+                }
+            }
+        }
+    }
+    <span class="bool-val">false
+</span>}
+
+<span class="doccomment">/// Given the field type in a string format, return the amount of bits necessary to save its maximum
+/// length.
+</span><span class="kw">pub fn </span>get_bit_size(ftype: <span class="kw-2">&amp;</span>str) -&gt; u8 {
+    <span class="kw">match </span>ftype {
+        <span class="string">"TransactionKind" </span>| <span class="string">"bool" </span>| <span class="string">"Option" </span>| <span class="string">"Signature" </span>=&gt; <span class="number">1</span>,
+        <span class="string">"TxType" </span>=&gt; <span class="number">2</span>,
+        <span class="string">"u64" </span>| <span class="string">"BlockNumber" </span>| <span class="string">"TxNumber" </span>| <span class="string">"ChainId" </span>| <span class="string">"NumTransactions" </span>=&gt; <span class="number">4</span>,
+        <span class="string">"u128" </span>=&gt; <span class="number">5</span>,
+        <span class="string">"U256" </span>=&gt; <span class="number">6</span>,
+        <span class="attr">#[cfg(not(feature = <span class="string">"optimism"</span>))]
+        </span><span class="string">"TxValue" </span>=&gt; <span class="number">5</span>, <span class="comment">// u128 for ethereum chains assuming high order bits are not used
+        </span><span class="attr">#[cfg(feature = <span class="string">"optimism"</span>)]
+        </span><span class="comment">// for fuzz/prop testing and chains that may require full 256 bits
+        </span><span class="string">"TxValue" </span>=&gt; <span class="number">6</span>,
+        <span class="kw">_ </span>=&gt; <span class="number">0</span>,
+    }
+}
+
+<span class="doccomment">/// Given the field type in a string format, checks if its type should be added to the
+/// StructFlags.
+</span><span class="kw">pub fn </span>is_flag_type(ftype: <span class="kw-2">&amp;</span>str) -&gt; bool {
+    get_bit_size(ftype) &gt; <span class="number">0
+</span>}
+
+<span class="attr">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span>pretty_assertions::assert_eq;
+    <span class="kw">use </span>syn::parse2;
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>gen() {
+        <span class="kw">let </span>f_struct = <span class="macro">quote! </span>{
+            <span class="attr">#[derive(Debug, PartialEq, Clone)]
+            </span><span class="kw">pub struct </span>TestStruct {
+                f_u64: u64,
+                f_u256: U256,
+                f_bool_t: bool,
+                f_bool_f: bool,
+                f_option_none: <span class="prelude-ty">Option</span>&lt;U256&gt;,
+                f_option_some: <span class="prelude-ty">Option</span>&lt;B256&gt;,
+                f_option_some_u64: <span class="prelude-ty">Option</span>&lt;u64&gt;,
+                f_vec_empty: Vec&lt;U256&gt;,
+                f_vec_some: Vec&lt;Address&gt;,
+            }
+        };
+
+        <span class="comment">// Generate code that will impl the `Compact` trait.
+        </span><span class="kw">let </span><span class="kw-2">mut </span>output = <span class="macro">quote! </span>{};
+        <span class="kw">let </span>DeriveInput { ident, data, .. } = parse2(f_struct).unwrap();
+        <span class="kw">let </span>fields = get_fields(<span class="kw-2">&amp;</span>data);
+        output.extend(generate_flag_struct(<span class="kw-2">&amp;</span>ident, <span class="kw-2">&amp;</span>fields, <span class="bool-val">false</span>));
+        output.extend(generate_from_to(<span class="kw-2">&amp;</span>ident, <span class="kw-2">&amp;</span>fields, <span class="bool-val">false</span>));
+
+        <span class="comment">// Expected output in a TokenStream format. Commas matter!
+        </span><span class="kw">let </span>should_output = <span class="macro">quote! </span>{
+            <span class="kw">pub use </span>TestStruct_flags::TestStructFlags;
+            <span class="attr">#[allow(non_snake_case)]
+            </span><span class="kw">mod </span>TestStruct_flags {
+                <span class="kw">use </span>bytes::Buf;
+                <span class="kw">use </span>modular_bitfield::prelude::<span class="kw-2">*</span>;
+                <span class="attr">#[doc = <span class="string">"Fieldset that facilitates compacting the parent type. Used bytes: 2 | Unused bits: 1"</span>]
+                #[bitfield]
+                #[derive(Clone, Copy, Debug, Default)]
+                </span><span class="kw">pub struct </span>TestStructFlags {
+                    <span class="kw">pub </span>f_u64_len: B4,
+                    <span class="kw">pub </span>f_u256_len: B6,
+                    <span class="kw">pub </span>f_bool_t_len: B1,
+                    <span class="kw">pub </span>f_bool_f_len: B1,
+                    <span class="kw">pub </span>f_option_none_len: B1,
+                    <span class="kw">pub </span>f_option_some_len: B1,
+                    <span class="kw">pub </span>f_option_some_u64_len: B1,
+                    <span class="attr">#[skip]
+                    </span>unused: B1,
+                }
+                <span class="kw">impl </span>TestStructFlags {
+                    <span class="attr">#[doc = <span class="string">r" Deserializes this fieldset and returns it, alongside the original slice in an advanced position."</span>]
+                    </span><span class="kw">pub fn </span>from(<span class="kw-2">mut </span>buf: <span class="kw-2">&amp;</span>[u8]) -&gt; (<span class="self">Self</span>, <span class="kw-2">&amp;</span>[u8]) {
+                        (
+                            TestStructFlags::from_bytes([buf.get_u8(), buf.get_u8(),]),
+                            buf
+                        )
+                    }
+                }
+            }
+            <span class="attr">#[cfg(test)]
+            #[allow(dead_code)]
+            #[test_fuzz::test_fuzz]
+            </span><span class="kw">fn </span>fuzz_test_test_struct(obj: TestStruct) {
+                <span class="kw">let </span><span class="kw-2">mut </span>buf = <span class="macro">vec!</span>[];
+                <span class="kw">let </span>len = obj.clone().to_compact(<span class="kw-2">&amp;mut </span>buf);
+                <span class="kw">let </span>(same_obj, buf) = TestStruct::from_compact(buf.as_ref(), len);
+                <span class="macro">assert_eq!</span>(obj, same_obj);
+            }
+            <span class="attr">#[test]
+            </span><span class="kw">pub fn </span>fuzz_test_struct() {
+                fuzz_test_test_struct(TestStruct::default())
+            }
+            <span class="kw">impl </span>Compact <span class="kw">for </span>TestStruct {
+                <span class="kw">fn </span>to_compact&lt;B&gt;(<span class="self">self</span>, buf: <span class="kw-2">&amp;mut </span>B) -&gt; usize <span class="kw">where </span>B: bytes::BufMut + AsMut&lt;[u8]&gt; {
+                    <span class="kw">let </span><span class="kw-2">mut </span>flags = TestStructFlags::default();
+                    <span class="kw">let </span><span class="kw-2">mut </span>total_length = <span class="number">0</span>;
+                    <span class="kw">let </span><span class="kw-2">mut </span>buffer = bytes::BytesMut::new();
+                    <span class="kw">let </span>f_u64_len = <span class="self">self</span>.f_u64.to_compact(<span class="kw-2">&amp;mut </span>buffer);
+                    flags.set_f_u64_len(f_u64_len <span class="kw">as </span>u8);
+                    <span class="kw">let </span>f_u256_len = <span class="self">self</span>.f_u256.to_compact(<span class="kw-2">&amp;mut </span>buffer);
+                    flags.set_f_u256_len(f_u256_len <span class="kw">as </span>u8);
+                    <span class="kw">let </span>f_bool_t_len = <span class="self">self</span>.f_bool_t.to_compact(<span class="kw-2">&amp;mut </span>buffer);
+                    flags.set_f_bool_t_len(f_bool_t_len <span class="kw">as </span>u8);
+                    <span class="kw">let </span>f_bool_f_len = <span class="self">self</span>.f_bool_f.to_compact(<span class="kw-2">&amp;mut </span>buffer);
+                    flags.set_f_bool_f_len(f_bool_f_len <span class="kw">as </span>u8);
+                    <span class="kw">let </span>f_option_none_len = <span class="self">self</span>.f_option_none.to_compact(<span class="kw-2">&amp;mut </span>buffer);
+                    flags.set_f_option_none_len(f_option_none_len <span class="kw">as </span>u8);
+                    <span class="kw">let </span>f_option_some_len = <span class="self">self</span>.f_option_some.specialized_to_compact(<span class="kw-2">&amp;mut </span>buffer);
+                    flags.set_f_option_some_len(f_option_some_len <span class="kw">as </span>u8);
+                    <span class="kw">let </span>f_option_some_u64_len = <span class="self">self</span>.f_option_some_u64.to_compact(<span class="kw-2">&amp;mut </span>buffer);
+                    flags.set_f_option_some_u64_len(f_option_some_u64_len <span class="kw">as </span>u8);
+                    <span class="kw">let </span>f_vec_empty_len = <span class="self">self</span>.f_vec_empty.to_compact(<span class="kw-2">&amp;mut </span>buffer);
+                    <span class="kw">let </span>f_vec_some_len = <span class="self">self</span>.f_vec_some.specialized_to_compact(<span class="kw-2">&amp;mut </span>buffer);
+                    <span class="kw">let </span>flags = flags.into_bytes();
+                    total_length += flags.len() + buffer.len();
+                    buf.put_slice(<span class="kw-2">&amp;</span>flags);
+                    buf.put(buffer);
+                    total_length
+                }
+                <span class="kw">fn </span>from_compact(<span class="kw-2">mut </span>buf: <span class="kw-2">&amp;</span>[u8], len: usize) -&gt; (<span class="self">Self</span>, <span class="kw-2">&amp;</span>[u8]) {
+                    <span class="kw">let </span>(flags, <span class="kw-2">mut </span>buf) = TestStructFlags::from(buf);
+                    <span class="kw">let </span>(f_u64, new_buf) = u64::from_compact(buf, flags.f_u64_len() <span class="kw">as </span>usize);
+                    buf = new_buf;
+                    <span class="kw">let </span>(f_u256, new_buf) = U256::from_compact(buf, flags.f_u256_len() <span class="kw">as </span>usize);
+                    buf = new_buf;
+                    <span class="kw">let </span>(f_bool_t, new_buf) = bool::from_compact(buf, flags.f_bool_t_len() <span class="kw">as </span>usize);
+                    buf = new_buf;
+                    <span class="kw">let </span>(f_bool_f, new_buf) = bool::from_compact(buf, flags.f_bool_f_len() <span class="kw">as </span>usize);
+                    buf = new_buf;
+                    <span class="kw">let </span>(f_option_none, new_buf) = Option::from_compact(buf, flags.f_option_none_len() <span class="kw">as </span>usize);
+                    buf = new_buf;
+                    <span class="kw">let </span>(f_option_some, new_buf) = Option::specialized_from_compact(buf, flags.f_option_some_len() <span class="kw">as </span>usize);
+                    buf = new_buf;
+                    <span class="kw">let </span>(f_option_some_u64, new_buf) = Option::from_compact(buf, flags.f_option_some_u64_len() <span class="kw">as </span>usize);
+                    buf = new_buf;
+                    <span class="kw">let </span>(f_vec_empty, new_buf) = Vec::from_compact(buf, buf.len());
+                    buf = new_buf;
+                    <span class="kw">let </span>(f_vec_some, new_buf) = Vec::specialized_from_compact(buf, buf.len());
+                    buf = new_buf;
+                    <span class="kw">let </span>obj = TestStruct {
+                        f_u64: f_u64,
+                        f_u256: f_u256,
+                        f_bool_t: f_bool_t,
+                        f_bool_f: f_bool_f,
+                        f_option_none: f_option_none,
+                        f_option_some: f_option_some,
+                        f_option_some_u64: f_option_some_u64,
+                        f_vec_empty: f_vec_empty,
+                        f_vec_some: f_vec_some,
+                    };
+                    (obj, buf)
+                }
+            }
+        };
+
+        <span class="macro">assert_eq!</span>(
+            syn::parse2::&lt;syn::File&gt;(output).unwrap(),
+            syn::parse2::&lt;syn::File&gt;(should_output).unwrap()
+        );
+    }
+}
+</code></pre></div></section></main></body></html>

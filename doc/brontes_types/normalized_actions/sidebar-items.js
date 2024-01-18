@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Actions"],"struct":["NormalizedBatch","NormalizedBurn","NormalizedCollect","NormalizedFlashLoan","NormalizedLiquidation","NormalizedLoan","NormalizedMint","NormalizedRepayment","NormalizedSwap","NormalizedTransfer"],"trait":["NormalizedAction"]};

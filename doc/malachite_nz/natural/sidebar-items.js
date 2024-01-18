@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["arithmetic","comparison","conversion","exhaustive","factorization","logic"],"struct":["Natural"]};

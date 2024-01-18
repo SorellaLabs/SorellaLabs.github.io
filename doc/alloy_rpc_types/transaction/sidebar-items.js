@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["kzg","request"],"struct":["AccessList","AccessListItem","AccessListWithGasUsed","OptimismTransactionFields","OptimismTransactionReceiptFields","Parity","Signature","Transaction","TransactionInfo","TransactionReceipt"]};

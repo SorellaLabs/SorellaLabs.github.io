@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Defines lexicographic unique tuple generators."><title>exhaustive_unique_tuples in malachite - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="malachite" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../static.files/storage-bc37acceda91d44a.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../malachite/index.html">malachite</a><span class="version">0.4.4</span></h2></div><div class="sidebar-elems"></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="index.html">malachite</a>::<wbr><a class="macro" href="#">exhaustive_unique_tuples</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/malachite_base/tuples/exhaustive.rs.html#2836">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><span class="macro">macro_rules! </span>exhaustive_unique_tuples {
+    (
+        ($(<span class="macro-nonterminal">$vis</span>:tt)<span class="kw-2">*</span>),
+        <span class="macro-nonterminal">$</span><span class="kw">struct</span>: <span class="macro-nonterminal">ident</span>,
+        <span class="macro-nonterminal">$k</span>: expr,
+        <span class="macro-nonterminal">$out_t</span>: ty,
+        <span class="macro-nonterminal">$</span><span class="kw">fn</span>: <span class="macro-nonterminal">ident</span>,
+        [$(<span class="macro-nonterminal">$i</span>: expr),<span class="kw-2">*</span>]
+    ) =&gt; { ... };
+}</pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Defines lexicographic unique tuple generators.</p>
+<p>Malachite provides <a href="tuples/exhaustive/fn.exhaustive_unique_pairs.html" title="fn malachite::tuples::exhaustive::exhaustive_unique_pairs"><code>exhaustive_unique_pairs</code></a>, but you can also define
+<code>exhaustive_unique_triples</code>, <code>lex_unique_quadruples</code>, and so on, in your program using the code
+below.</p>
+<p>See usage examples <a href="tuples/exhaustive/index.html#lex_unique_quadruples" title="mod malachite::tuples::exhaustive">here</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::iterators::{RulerSequence, ruler_sequence};
+<span class="kw">use </span>malachite_base::tuples::exhaustive::{ExhaustiveDependentPairs, exhaustive_dependent_pairs};
+<span class="kw">use </span>malachite_base::vecs::ExhaustiveVecPermutations;
+<span class="kw">use </span>malachite_base::vecs::exhaustive::{
+    ExhaustiveOrderedUniqueCollections,
+    ExhaustiveUniqueVecsGenerator,
+    exhaustive_ordered_unique_vecs_fixed_length
+};
+
+<span class="macro">exhaustive_unique_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveUniqueTriples,
+    <span class="number">3</span>,
+    (I::Item, I::Item, I::Item),
+    exhaustive_unique_triples,
+    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]
+);
+<span class="macro">exhaustive_unique_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveUniqueQuadruples,
+    <span class="number">4</span>,
+    (I::Item, I::Item, I::Item, I::Item),
+    exhaustive_unique_quadruples,
+    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+);
+<span class="macro">exhaustive_unique_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveUniqueQuintuples,
+    <span class="number">5</span>,
+    (I::Item, I::Item, I::Item, I::Item, I::Item),
+    exhaustive_unique_quintuples,
+    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]
+);
+<span class="macro">exhaustive_unique_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveUniqueSextuples,
+    <span class="number">6</span>,
+    (I::Item, I::Item, I::Item, I::Item, I::Item, I::Item),
+    exhaustive_unique_sextuples,
+    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+);
+<span class="macro">exhaustive_unique_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveUniqueSeptuples,
+    <span class="number">7</span>,
+    (
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item
+    ),
+    exhaustive_unique_septuples,
+    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]
+);
+<span class="macro">exhaustive_unique_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveUniqueOctuples,
+    <span class="number">8</span>,
+    (
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item
+    ),
+    exhaustive_unique_octuples,
+    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]
+);</code></pre></div>
+</div></details></section></div></main></body></html>

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["DEFAULT_CAPACITY","MAX_REBUCKET"],"enum":["CuckooError"],"struct":["CuckooFilter","ExportedCuckooFilter"]};

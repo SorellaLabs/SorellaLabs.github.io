@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["DnsResolver","MapResolver","ResolveError"],"trait":["Resolver"],"type":["TokioAsyncResolver"]};

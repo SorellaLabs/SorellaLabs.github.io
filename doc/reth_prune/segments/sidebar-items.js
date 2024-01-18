@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["AccountHistory","Headers","PruneInput","PruneOutput","Receipts","ReceiptsByLogs","SegmentSet","SenderRecovery","StorageHistory","TransactionLookup","Transactions"],"trait":["Segment"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["AaveV3Classifier","FlashloanImplV3","FlashloanSimpleImplV3","LiquidationCallImplV3"]};

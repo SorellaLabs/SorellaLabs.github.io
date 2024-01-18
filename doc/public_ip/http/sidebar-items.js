@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ALL","HTTP_IPIFY_ORG","HTTP_WHATISMYIPADDRESS_COM"],"enum":["Error","ExtractMethod"],"struct":["Details","Resolver"]};

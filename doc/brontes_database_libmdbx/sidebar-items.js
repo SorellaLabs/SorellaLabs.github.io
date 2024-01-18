@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"macro":["decode","table"],"mod":["implementation","initialize","tables","types"],"struct":["Libmdbx"]};

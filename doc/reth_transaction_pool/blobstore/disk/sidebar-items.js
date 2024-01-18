@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["DEFAULT_MAX_CACHED_BLOBS"],"enum":["DiskFileBlobStoreError","OpenDiskFileBlobStore"],"struct":["DiskFileBlobStore","DiskFileBlobStoreConfig"]};

@@ -1,0 +1,5 @@
+(function() {var implementors = {
+"malachite":[],
+"malachite_base":[],
+"malachite_nz":[["impl&lt;'a&gt; <a class=\"trait\" href=\"malachite_base/num/arithmetic/traits/trait.CeilingModPowerOf2.html\" title=\"trait malachite_base::num::arithmetic::traits::CeilingModPowerOf2\">CeilingModPowerOf2</a> for &amp;'a <a class=\"struct\" href=\"malachite_nz/integer/struct.Integer.html\" title=\"struct malachite_nz::integer::Integer\">Integer</a>"],["impl <a class=\"trait\" href=\"malachite_base/num/arithmetic/traits/trait.CeilingModPowerOf2.html\" title=\"trait malachite_base::num::arithmetic::traits::CeilingModPowerOf2\">CeilingModPowerOf2</a> for <a class=\"struct\" href=\"malachite_nz/integer/struct.Integer.html\" title=\"struct malachite_nz::integer::Integer\">Integer</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

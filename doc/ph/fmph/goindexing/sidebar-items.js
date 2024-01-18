@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["group_nr"],"struct":["Bits","Bits8","TwoToPowerBits","TwoToPowerBitsStatic"],"trait":["GroupSize","SeedSize"]};

@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Traits for finding the remainder of a number divided by $2^k$, subject to various rounding rules."><title>malachite::num::arithmetic::mod_power_of_2 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="malachite" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../../malachite/index.html">malachite</a><span class="version">0.4.4</span></h2></div><h2 class="location"><a href="#">Module mod_power_of_2</a></h2><div class="sidebar-elems"><h2><a href="../index.html">In malachite::num::arithmetic</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../../../index.html">malachite</a>::<wbr><a href="../../index.html">num</a>::<wbr><a href="../index.html">arithmetic</a>::<wbr><a class="mod" href="#">mod_power_of_2</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../../../src/malachite_base/num/arithmetic/mod.rs.html#1700">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Traits for finding the remainder of a number divided by $2^k$, subject to various rounding
+rules.</p>
+<p>These are the traits:</p>
+<div><table><thead><tr><th>rounding</th><th>by value or reference</th><th>by mutable reference (assignment)</th></tr></thead><tbody>
+<tr><td>towards $-\infty$</td><td><a href="../traits/trait.ModPowerOf2.html" title="trait malachite::num::arithmetic::traits::ModPowerOf2"><code>ModPowerOf2</code></a></td><td><a href="../traits/trait.ModPowerOf2Assign.html" title="trait malachite::num::arithmetic::traits::ModPowerOf2Assign"><code>ModPowerOf2Assign</code></a></td></tr>
+<tr><td>towards 0</td><td><a href="../traits/trait.RemPowerOf2.html" title="trait malachite::num::arithmetic::traits::RemPowerOf2"><code>RemPowerOf2</code></a></td><td><a href="../traits/trait.RemPowerOf2Assign.html" title="trait malachite::num::arithmetic::traits::RemPowerOf2Assign"><code>RemPowerOf2Assign</code></a></td></tr>
+<tr><td>towards $\infty$</td><td><a href="../traits/trait.CeilingModPowerOf2.html" title="trait malachite::num::arithmetic::traits::CeilingModPowerOf2"><code>CeilingModPowerOf2</code></a></td><td><a href="../traits/trait.CeilingModPowerOf2Assign.html" title="trait malachite::num::arithmetic::traits::CeilingModPowerOf2Assign"><code>CeilingModPowerOf2Assign</code></a></td></tr>
+<tr><td>towards $\infty$</td><td><a href="../traits/trait.NegModPowerOf2.html" title="trait malachite::num::arithmetic::traits::NegModPowerOf2"><code>NegModPowerOf2</code></a></td><td><a href="../traits/trait.NegModPowerOf2Assign.html" title="trait malachite::num::arithmetic::traits::NegModPowerOf2Assign"><code>NegModPowerOf2Assign</code></a></td></tr>
+</tbody></table>
+</div>
+<p><a href="../traits/trait.CeilingModPowerOf2.html" title="trait malachite::num::arithmetic::traits::CeilingModPowerOf2"><code>CeilingModPowerOf2</code></a> and
+<a href="../traits/trait.NegModPowerOf2.html" title="trait malachite::num::arithmetic::traits::NegModPowerOf2"><code>NegModPowerOf2</code></a> are similar. The difference is that
+<a href="../traits/trait.CeilingModPowerOf2.html" title="trait malachite::num::arithmetic::traits::CeilingModPowerOf2"><code>CeilingModPowerOf2</code></a> returns a remainder less than or equal to 0,
+so that the usual relation $x = q2^k + r$ is satisfied, while
+<a href="../traits/trait.NegModPowerOf2.html" title="trait malachite::num::arithmetic::traits::NegModPowerOf2"><code>NegModPowerOf2</code></a> returns a remainder greater than or equal to zero.
+This allows the remainder to have an unsigned type, but modifies the relation to
+$x = q2^k - r$.</p>
+<h2 id="mod_power_of_2"><a href="#mod_power_of_2">mod_power_of_2</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::arithmetic::traits::ModPowerOf2;
+
+<span class="comment">// 1 * 2^8 + 4 = 260
+</span><span class="macro">assert_eq!</span>(<span class="number">260u16</span>.mod_power_of_2(<span class="number">8</span>), <span class="number">4</span>);
+
+<span class="comment">// 100 * 2^4 + 11 = 1611
+</span><span class="macro">assert_eq!</span>(<span class="number">1611u32</span>.mod_power_of_2(<span class="number">4</span>), <span class="number">11</span>);
+
+<span class="comment">// 1 * 2^8 + 4 = 260
+</span><span class="macro">assert_eq!</span>(<span class="number">260i16</span>.mod_power_of_2(<span class="number">8</span>), <span class="number">4</span>);
+
+<span class="comment">// -101 * 2^4 + 5 = -1611
+</span><span class="macro">assert_eq!</span>((-<span class="number">1611i32</span>).mod_power_of_2(<span class="number">4</span>), <span class="number">5</span>);</code></pre></div>
+<h2 id="mod_power_of_2_assign"><a href="#mod_power_of_2_assign">mod_power_of_2_assign</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::arithmetic::traits::ModPowerOf2Assign;
+
+<span class="comment">// 1 * 2^8 + 4 = 260
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = <span class="number">260u16</span>;
+x.mod_power_of_2_assign(<span class="number">8</span>);
+<span class="macro">assert_eq!</span>(x, <span class="number">4</span>);
+
+<span class="comment">// 100 * 2^4 + 11 = 1611
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = <span class="number">1611u32</span>;
+x.mod_power_of_2_assign(<span class="number">4</span>);
+<span class="macro">assert_eq!</span>(x, <span class="number">11</span>);
+
+<span class="comment">// 1 * 2^8 + 4 = 260
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = <span class="number">260i16</span>;
+x.mod_power_of_2_assign(<span class="number">8</span>);
+<span class="macro">assert_eq!</span>(x, <span class="number">4</span>);
+
+<span class="comment">// -101 * 2^4 + 5 = -1611
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = -<span class="number">1611i32</span>;
+x.mod_power_of_2_assign(<span class="number">4</span>);
+<span class="macro">assert_eq!</span>(x, <span class="number">5</span>);</code></pre></div>
+<h2 id="rem_power_of_2"><a href="#rem_power_of_2">rem_power_of_2</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::arithmetic::traits::RemPowerOf2;
+
+<span class="comment">// 1 * 2^8 + 4 = 260
+</span><span class="macro">assert_eq!</span>(<span class="number">260u16</span>.rem_power_of_2(<span class="number">8</span>), <span class="number">4</span>);
+
+<span class="comment">// 100 * 2^4 + 11 = 1611
+</span><span class="macro">assert_eq!</span>(<span class="number">1611u32</span>.rem_power_of_2(<span class="number">4</span>), <span class="number">11</span>);
+
+<span class="comment">// 1 * 2^8 + 4 = 260
+</span><span class="macro">assert_eq!</span>(<span class="number">260i16</span>.rem_power_of_2(<span class="number">8</span>), <span class="number">4</span>);
+
+<span class="comment">// -100 * 2^4 + -11 = -1611
+</span><span class="macro">assert_eq!</span>((-<span class="number">1611i32</span>).rem_power_of_2(<span class="number">4</span>), -<span class="number">11</span>);</code></pre></div>
+<h2 id="rem_power_of_2_assign"><a href="#rem_power_of_2_assign">rem_power_of_2_assign</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::arithmetic::traits::RemPowerOf2Assign;
+
+<span class="comment">// 1 * 2^8 + 4 = 260
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = <span class="number">260u16</span>;
+x.rem_power_of_2_assign(<span class="number">8</span>);
+<span class="macro">assert_eq!</span>(x, <span class="number">4</span>);
+
+<span class="comment">// 100 * 2^4 + 11 = 1611
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = <span class="number">1611u32</span>;
+x.rem_power_of_2_assign(<span class="number">4</span>);
+<span class="macro">assert_eq!</span>(x, <span class="number">11</span>);
+
+<span class="comment">// 1 * 2^8 + 4 = 260
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = <span class="number">260i16</span>;
+x.rem_power_of_2_assign(<span class="number">8</span>);
+<span class="macro">assert_eq!</span>(x, <span class="number">4</span>);
+
+<span class="comment">// -100 * 2^4 + -11 = -1611
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = -<span class="number">1611i32</span>;
+x.rem_power_of_2_assign(<span class="number">4</span>);
+<span class="macro">assert_eq!</span>(x, -<span class="number">11</span>);</code></pre></div>
+<h2 id="neg_mod_power_of_2"><a href="#neg_mod_power_of_2">neg_mod_power_of_2</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::arithmetic::traits::NegModPowerOf2;
+
+<span class="comment">// 2 * 2^8 - 252 = 260
+</span><span class="macro">assert_eq!</span>(<span class="number">260u16</span>.neg_mod_power_of_2(<span class="number">8</span>), <span class="number">252</span>);
+
+<span class="comment">// 101 * 2^4 - 5 = 1611
+</span><span class="macro">assert_eq!</span>(<span class="number">1611u32</span>.neg_mod_power_of_2(<span class="number">4</span>), <span class="number">5</span>);</code></pre></div>
+<h2 id="neg_mod_power_of_2_assign"><a href="#neg_mod_power_of_2_assign">neg_mod_power_of_2_assign</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::arithmetic::traits::NegModPowerOf2Assign;
+
+<span class="comment">// 2 * 2^8 - 252 = 260
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = <span class="number">260u16</span>;
+x.neg_mod_power_of_2_assign(<span class="number">8</span>);
+<span class="macro">assert_eq!</span>(x, <span class="number">252</span>);
+
+<span class="comment">// 101 * 2^4 - 5 = 1611
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = <span class="number">1611u32</span>;
+x.neg_mod_power_of_2_assign(<span class="number">4</span>);
+<span class="macro">assert_eq!</span>(x, <span class="number">5</span>);</code></pre></div>
+<h2 id="ceiling_mod_power_of_2"><a href="#ceiling_mod_power_of_2">ceiling_mod_power_of_2</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::arithmetic::traits::CeilingModPowerOf2;
+
+<span class="comment">// 2 * 2^8 + -252 = 260
+</span><span class="macro">assert_eq!</span>(<span class="number">260i16</span>.ceiling_mod_power_of_2(<span class="number">8</span>), -<span class="number">252</span>);
+
+<span class="comment">// -100 * 2^4 + -11 = -1611
+</span><span class="macro">assert_eq!</span>((-<span class="number">1611i32</span>).ceiling_mod_power_of_2(<span class="number">4</span>), -<span class="number">11</span>);</code></pre></div>
+<h2 id="ceiling_mod_power_of_2_assign"><a href="#ceiling_mod_power_of_2_assign">ceiling_mod_power_of_2_assign</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::arithmetic::traits::CeilingModPowerOf2Assign;
+
+<span class="comment">// 2 * 2^8 + -252 = 260
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = <span class="number">260i16</span>;
+x.ceiling_mod_power_of_2_assign(<span class="number">8</span>);
+<span class="macro">assert_eq!</span>(x, -<span class="number">252</span>);
+
+<span class="comment">// -100 * 2^4 + -11 = -1611
+</span><span class="kw">let </span><span class="kw-2">mut </span>x = -<span class="number">1611i32</span>;
+x.ceiling_mod_power_of_2_assign(<span class="number">4</span>);
+<span class="macro">assert_eq!</span>(x, -<span class="number">11</span>);</code></pre></div>
+</div></details></section></div></main></body></html>
