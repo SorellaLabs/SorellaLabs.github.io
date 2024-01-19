@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AddAnyPortError","AddPortError","Error","GetExternalIpError","GetGenericPortMappingEntryError","PortMappingProtocol","RemovePortError","RequestError","SearchError"],"fn":["search_gateway"],"mod":["aio"],"struct":["Gateway","PortMappingEntry","SearchOptions"],"type":["Result"]};

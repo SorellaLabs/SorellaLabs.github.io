@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="`dns_lookup`"><title>dns_lookup - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="dns_lookup" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../dns_lookup/index.html">dns_lookup</a><span class="version">1.0.8</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#functions">Functions</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">dns_lookup</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/dns_lookup/lib.rs.html#1-100">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="dns_lookup"><a href="#dns_lookup"><code>dns_lookup</code></a></h2>
+<p>A small wrapper for libc to perform simple DNS lookups.</p>
+<p>Two main functions are provided.</p>
+<p>PS: If you only need a single result, consider <a href="https://doc.rust-lang.org/std/net/trait.ToSocketAddrs.html">ToSocketAddrs</a> in libstd.</p>
+<h2 id="lookup_host"><a href="#lookup_host"><code>lookup_host</code></a></h2>
+<p>Given a hostname, return an Iterator the IP Addresses associated with
+it.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>  <span class="kw">use </span>dns_lookup::lookup_host;
+
+  <span class="kw">let </span>hostname = <span class="string">"localhost"</span>;
+  <span class="kw">let </span>ips: Vec&lt;std::net::IpAddr&gt; = lookup_host(hostname).unwrap();
+  <span class="macro">assert!</span>(ips.contains(<span class="kw-2">&amp;</span><span class="string">"127.0.0.1"</span>.parse().unwrap()));</code></pre></div>
+<h2 id="lookup_addr"><a href="#lookup_addr"><code>lookup_addr</code></a></h2>
+<p>Given an IP Address, return the reverse DNS entry (hostname) for the
+given IP Address.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>  <span class="kw">use </span>dns_lookup::lookup_addr;
+
+  <span class="kw">let </span>ip: std::net::IpAddr = <span class="string">"127.0.0.1"</span>.parse().unwrap();
+  <span class="kw">let </span>host = lookup_addr(<span class="kw-2">&amp;</span>ip).unwrap();
+
+  <span class="comment">// The string "localhost" on unix, and the hostname on Windows.</span></code></pre></div>
+<h2 id="getaddrinfo"><a href="#getaddrinfo"><code>getaddrinfo</code></a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>  <span class="kw">extern crate </span>dns_lookup;
+
+  <span class="kw">use </span>dns_lookup::{getaddrinfo, AddrInfoHints, SockType};
+
+  <span class="kw">fn </span>main() {
+    <span class="kw">let </span>hostname = <span class="string">"localhost"</span>;
+    <span class="kw">let </span>service = <span class="string">"ssh"</span>;
+    <span class="kw">let </span>hints = AddrInfoHints {
+      socktype: SockType::Stream.into(),
+      .. AddrInfoHints::default()
+    };
+    <span class="kw">let </span>sockets =
+      getaddrinfo(<span class="prelude-val">Some</span>(hostname), <span class="prelude-val">Some</span>(service), <span class="prelude-val">Some</span>(hints))
+        .unwrap().collect::&lt;std::io::Result&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;&gt;().unwrap();
+
+    <span class="kw">for </span>socket <span class="kw">in </span>sockets {
+      <span class="comment">// Try connecting to socket
+      </span><span class="kw">let _ </span>= socket;
+    }
+  }</code></pre></div>
+<h2 id="getnameinfo"><a href="#getnameinfo"><code>getnameinfo</code></a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>  <span class="kw">use </span>dns_lookup::getnameinfo;
+  <span class="kw">use </span>std::net::{IpAddr, SocketAddr};
+
+  <span class="kw">let </span>ip: IpAddr = <span class="string">"127.0.0.1"</span>.parse().unwrap();
+  <span class="kw">let </span>port = <span class="number">22</span>;
+  <span class="kw">let </span>socket: SocketAddr = (ip, port).into();
+
+  <span class="kw">let </span>(name, service) = <span class="kw">match </span>getnameinfo(<span class="kw-2">&amp;</span>socket, <span class="number">0</span>) {
+    <span class="prelude-val">Ok</span>((n, s)) =&gt; (n, s),
+    <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">panic!</span>(<span class="string">"Failed to lookup socket {:?}"</span>, e),
+  };
+
+  <span class="macro">println!</span>(<span class="string">"{:?} {:?}"</span>, name, service);
+  <span class="kw">let _ </span>= (name, service);</code></pre></div>
+</div></details><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.AddrInfo.html" title="struct dns_lookup::AddrInfo">AddrInfo</a></div><div class="desc docblock-short">Struct that stores socket information, as returned by getaddrinfo.</div></li><li><div class="item-name"><a class="struct" href="struct.AddrInfoHints.html" title="struct dns_lookup::AddrInfoHints">AddrInfoHints</a></div><div class="desc docblock-short">A struct used as the hints argument to getaddrinfo.</div></li><li><div class="item-name"><a class="struct" href="struct.AddrInfoIter.html" title="struct dns_lookup::AddrInfoIter">AddrInfoIter</a></div><div class="desc docblock-short">An iterator of <code>AddrInfo</code> structs, wrapping a linked-list
+returned by getaddrinfo.</div></li><li><div class="item-name"><a class="struct" href="struct.LookupError.html" title="struct dns_lookup::LookupError">LookupError</a></div><div class="desc docblock-short">Struct that stores a lookup error from <code>getaddrinfo</code>
+or <code>getnameinfo</code>. Can automatically be coerced to an io::Error using <code>?</code>.</div></li></ul><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.AddrFamily.html" title="enum dns_lookup::AddrFamily">AddrFamily</a></div><div class="desc docblock-short">Address Family</div></li><li><div class="item-name"><a class="enum" href="enum.LookupErrorKind.html" title="enum dns_lookup::LookupErrorKind">LookupErrorKind</a></div><div class="desc docblock-short">Different kinds of lookup errors that <code>getaddrinfo</code> and
+<code>getnameinfo</code> can return. These can be a little inconsitant
+between platforms, so it’s recommended not to rely on them.</div></li><li><div class="item-name"><a class="enum" href="enum.Protocol.html" title="enum dns_lookup::Protocol">Protocol</a></div><div class="desc docblock-short">Socket Protocol</div></li><li><div class="item-name"><a class="enum" href="enum.SockType.html" title="enum dns_lookup::SockType">SockType</a></div><div class="desc docblock-short">Socket Type</div></li></ul><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.get_hostname.html" title="fn dns_lookup::get_hostname">get_hostname</a></div><div class="desc docblock-short">Fetch the local hostname.</div></li><li><div class="item-name"><a class="fn" href="fn.getaddrinfo.html" title="fn dns_lookup::getaddrinfo">getaddrinfo</a></div><div class="desc docblock-short">Retrieve socket information for a host, service, or both. Acts as a thin
+wrapper around the libc getaddrinfo.</div></li><li><div class="item-name"><a class="fn" href="fn.getnameinfo.html" title="fn dns_lookup::getnameinfo">getnameinfo</a></div><div class="desc docblock-short">Retrieve the name for a given IP and Service. Acts as a thin wrapper around
+the libc getnameinfo.</div></li><li><div class="item-name"><a class="fn" href="fn.lookup_addr.html" title="fn dns_lookup::lookup_addr">lookup_addr</a></div><div class="desc docblock-short">Lookup the hostname of a given IP Address via DNS.</div></li><li><div class="item-name"><a class="fn" href="fn.lookup_host.html" title="fn dns_lookup::lookup_host">lookup_host</a></div><div class="desc docblock-short">Lookup the address for a given hostname via DNS.</div></li></ul></section></div></main></body></html>

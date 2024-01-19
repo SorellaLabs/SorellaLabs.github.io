@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="crates.io docs.rs MIT License Build Test Audit"><title>metrics_process - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="metrics_process" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../metrics_process/index.html">metrics_process</a><span class="version">1.2.0</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#structs">Structs</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">metrics_process</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/metrics_process/lib.rs.html#1-203">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><a href="https://crates.io/crates/metrics-process"><img src="https://img.shields.io/crates/v/metrics-process.svg" alt="crates.io" /></a>
+<a href="https://docs.rs/metrics-process"><img src="https://docs.rs/metrics-process/badge.svg" alt="docs.rs" /></a>
+<a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
+<a href="https://github.com/lambdalisue/rs-metrics-process/actions/workflows/build.yml"><img src="https://github.com/lambdalisue/rs-metrics-process/actions/workflows/build.yml/badge.svg" alt="Build" /></a>
+<a href="https://github.com/lambdalisue/rs-metrics-process/actions/workflows/test.yml"><img src="https://github.com/lambdalisue/rs-metrics-process/actions/workflows/test.yml/badge.svg" alt="Test" /></a>
+<a href="https://github.com/lambdalisue/rs-metrics-process/actions/workflows/audit.yml"><img src="https://github.com/lambdalisue/rs-metrics-process/actions/workflows/audit.yml/badge.svg" alt="Audit" /></a></p>
+<h2 id="-metrics-process"><a href="#-metrics-process">⏱ metrics-process</a></h2>
+<p>This crate provides a <a href="https://prometheus.io/">Prometheus</a>-style <a href="https://prometheus.io/docs/instrumenting/writing_clientlibs/#process-metrics">process metrics</a> collector for the
+<a href="https://crates.io/crates/metrics">metrics</a> crate, supporting Linux, macOS, and Windows. The collector code is
+manually rewritten in Rust from the official Prometheus client for Go
+(<a href="https://github.com/prometheus/client_golang">client_golang</a>).</p>
+<h3 id="supported-metrics"><a href="#supported-metrics">Supported Metrics</a></h3>
+<p>This crate supports the following metrics provided by <a href="https://prometheus.io/">Prometheus</a> for
+<a href="https://prometheus.io/docs/instrumenting/writing_clientlibs/#process-metrics">process metrics</a>.</p>
+<div><table><thead><tr><th>Metric name</th><th>Help string</th></tr></thead><tbody>
+<tr><td><code>process_cpu_seconds_total</code></td><td>Total user and system CPU time spent in seconds.</td></tr>
+<tr><td><code>process_open_fds</code></td><td>Number of open file descriptors.</td></tr>
+<tr><td><code>process_max_fds</code></td><td>Maximum number of open file descriptors.</td></tr>
+<tr><td><code>process_virtual_memory_bytes</code></td><td>Virtual memory size in bytes.</td></tr>
+<tr><td><code>process_virtual_memory_max_bytes</code></td><td>Maximum amount of virtual memory available in bytes.</td></tr>
+<tr><td><code>process_resident_memory_bytes</code></td><td>Resident memory size in bytes.</td></tr>
+<tr><td><code>process_heap_bytes</code></td><td>Process heap size in bytes.</td></tr>
+<tr><td><code>process_start_time_seconds</code></td><td>Start time of the process since the Unix epoch in seconds.</td></tr>
+<tr><td><code>process_threads</code></td><td>Number of OS threads in the process.</td></tr>
+</tbody></table>
+</div>
+<p>For each platform, it is equivalent to what the official Prometheus client for
+Go (<a href="https://github.com/prometheus/client_golang">client_golang</a>) provides.</p>
+<div><table><thead><tr><th>Metric name</th><th>Linux</th><th>macOS</th><th>Windows</th></tr></thead><tbody>
+<tr><td><code>process_cpu_seconds_total</code></td><td>x</td><td>x</td><td>x</td></tr>
+<tr><td><code>process_open_fds</code></td><td>x</td><td>x</td><td>x</td></tr>
+<tr><td><code>process_max_fds</code></td><td>x</td><td>x</td><td>x</td></tr>
+<tr><td><code>process_virtual_memory_bytes</code></td><td>x</td><td>x</td><td>x</td></tr>
+<tr><td><code>process_virtual_memory_max_bytes</code></td><td>x</td><td>x</td><td></td></tr>
+<tr><td><code>process_resident_memory_bytes</code></td><td>x</td><td>x</td><td>x</td></tr>
+<tr><td><code>process_heap_bytes</code></td><td></td><td></td><td></td></tr>
+<tr><td><code>process_start_time_seconds</code></td><td>x</td><td>x</td><td>x</td></tr>
+<tr><td><code>process_threads</code></td><td>x</td><td>x</td><td></td></tr>
+</tbody></table>
+</div>
+<p>Please note that if you only need to compile this crate on non-supported
+platforms, you can use the <code>dummy</code> feature. Enabling this feature activates a
+dummy collector, which returns an empty <code>Metrics</code>.</p>
+<h3 id="usage"><a href="#usage">Usage</a></h3>
+<p>Use this crate with <a href="https://crates.io/crates/metrics-exporter-prometheus">metrics-exporter-prometheus</a> as an exporter like:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::thread;
+<span class="kw">use </span>std::time::{Duration, Instant};
+
+<span class="kw">use </span>metrics_exporter_prometheus::PrometheusBuilder;
+<span class="kw">use </span>metrics_process::Collector;
+
+<span class="kw">let </span>builder = PrometheusBuilder::new();
+builder
+    .install()
+    .expect(<span class="string">"failed to install Prometheus recorder"</span>);
+
+<span class="kw">let </span>collector = Collector::default();
+<span class="comment">// Call `describe()` method to register help string.
+</span>collector.describe();
+
+<span class="kw">loop </span>{
+    <span class="kw">let </span>s = Instant::now();
+    <span class="comment">// Periodically call `collect()` method to update information.
+    </span>collector.collect();
+    thread::sleep(Duration::from_millis(<span class="number">750</span>));
+}</code></pre></div>
+<p>Or with <a href="https://crates.io/crates/axum">axum</a> (or any web application framework you like) to collect metrics
+whenever the <code>/metrics</code> endpoint is invoked like:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>axum::{routing::get, Router};
+<span class="kw">use </span>metrics_exporter_prometheus::PrometheusBuilder;
+<span class="kw">use </span>metrics_process::Collector;
+<span class="kw">use </span>tokio::net::TcpListener;
+
+<span class="attr">#[tokio::main]
+</span><span class="kw">async fn </span>main() {
+    <span class="kw">let </span>builder = PrometheusBuilder::new();
+    <span class="kw">let </span>handle = builder
+        .install_recorder()
+        .expect(<span class="string">"failed to install Prometheus recorder"</span>);
+
+    <span class="kw">let </span>collector = Collector::default();
+    <span class="comment">// Call `describe()` method to register help string.
+    </span>collector.describe();
+
+    <span class="kw">let </span>app = Router::new().route(
+        <span class="string">"/metrics"</span>,
+        get(<span class="kw">move </span>|| {
+            <span class="comment">// Collect information just before handling '/metrics'
+            </span>collector.collect();
+            std::future::ready(handle.render())
+        }),
+    );
+    <span class="kw">let </span>listener = TcpListener::bind(<span class="string">"127.0.0.1:3000"</span>).<span class="kw">await</span>.unwrap();
+    axum::serve(listener, app).<span class="kw">await</span>.unwrap();
+}</code></pre></div>
+<h3 id="features"><a href="#features">Features</a></h3>
+<p>This crate offers the following features:</p>
+<div><table><thead><tr><th>Feature Name</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>dummy</code></td><td>Enables a dummy collector that returns an empty <code>Metrics</code> on non-supported platforms.</td></tr>
+</tbody></table>
+</div><h3 id="difference-from-metrics-process-promstyle"><a href="#difference-from-metrics-process-promstyle">Difference from metrics-process-promstyle</a></h3>
+<p>It appears that <a href="https://crates.io/crates/metrics-process-promstyle">metrics-process-promstyle</a> only supports Linux, but this crate
+(metrics-process) supports Linux, macOS, and Windows. Additionally, this crate
+supports <code>process_open_fds</code> and <code>process_max_fds</code> in addition to what
+metrics-process-promstyle supports.</p>
+<h2 id="license"><a href="#license">License</a></h2>
+<p>The code follows the MIT license written in <a href="./LICENSE">LICENSE</a>. Contributors
+need to agree that any modifications sent to this repository follow the license.</p>
+</div></details><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.Collector.html" title="struct metrics_process::Collector">Collector</a></div><div class="desc docblock-short">Prometheus style process metrics collector</div></li></ul></section></div></main></body></html>

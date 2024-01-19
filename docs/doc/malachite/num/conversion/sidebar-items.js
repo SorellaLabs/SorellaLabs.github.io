@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["digits","from","half","is_integer","mantissa_and_exponent","slice","string","traits"]};

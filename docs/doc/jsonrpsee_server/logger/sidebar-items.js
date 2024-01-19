@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["MethodKind","SuccessOrError","TransportProtocol"],"struct":["Body","Headers","Params"],"trait":["Logger"],"type":["HttpRequest"]};

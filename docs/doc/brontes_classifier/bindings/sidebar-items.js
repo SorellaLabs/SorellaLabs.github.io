@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AaveV2_Enum","AaveV3_Enum","CurveCryptoSwap_Enum","StaticBindings","StaticReturnBindings","SushiSwapV2_Enum","SushiSwapV3_Enum","UniswapV2_Enum","UniswapV3_Enum","UniswapX_Enum"],"trait":["TryDecodeSol"]};

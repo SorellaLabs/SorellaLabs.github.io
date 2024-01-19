@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Handle-Slow-Readers callback function to resolve database full/overflow issue due to a reader(s) which prevents the old data from being recycled."><title>HandleSlowReadersCallback in reth_libmdbx - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="reth_libmdbx" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../static.files/storage-bc37acceda91d44a.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="icon" href="https://avatars0.githubusercontent.com/u/97369466?s=256"></head><body class="rustdoc type"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../reth_libmdbx/index.html"><img src="https://raw.githubusercontent.com/paradigmxyz/reth/main/assets/reth-docs.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../reth_libmdbx/index.html"><img src="https://raw.githubusercontent.com/paradigmxyz/reth/main/assets/reth-docs.png" alt="logo"></a><h2><a href="../reth_libmdbx/index.html">reth_libmdbx</a><span class="version">0.1.0-alpha.14</span></h2></div><h2 class="location"><a href="#">HandleSlowReadersCallback</a></h2><div class="sidebar-elems"><h2><a href="index.html">In crate reth_libmdbx</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Type Alias <a href="index.html">reth_libmdbx</a>::<wbr><a class="type" href="#">HandleSlowReadersCallback</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/reth_libmdbx/environment.rs.html#541-548">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub type HandleSlowReadersCallback = <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.fn.html">fn</a>(process_id: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>, thread_id: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>, read_txn_id: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>, gap: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, space: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, retry: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.isize.html">isize</a>) -&gt; <a class="enum" href="enum.HandleSlowReadersReturnCode.html" title="enum reth_libmdbx::HandleSlowReadersReturnCode">HandleSlowReadersReturnCode</a>;</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Handle-Slow-Readers callback function to resolve database full/overflow issue due to a reader(s)
+which prevents the old data from being recycled.</p>
+<p>Read transactions prevent reuse of pages freed by newer write transactions, thus the database
+can grow quickly. This callback will be called when there is not enough space in the database
+(i.e. before increasing the database size or before <code>MDBX_MAP_FULL</code> error) and thus can be
+used to resolve issues with a “long-lived” read transacttions.</p>
+<p>Depending on the arguments and needs, your implementation may wait,
+terminate a process or thread that is performing a long read, or perform
+some other action. In doing so it is important that the returned code always
+corresponds to the performed action.</p>
+<h2 id="arguments"><a href="#arguments">Arguments</a></h2>
+<ul>
+<li><code>process_id</code> – A proceess id of the reader process.</li>
+<li><code>thread_id</code> – A thread id of the reader thread.</li>
+<li><code>read_txn_id</code> – An oldest read transaction number on which stalled.</li>
+<li><code>gap</code> – A lag from the last committed txn.</li>
+<li><code>space</code> – A space that actually become available for reuse after this reader finished. The
+callback function can take this value into account to evaluate the impact that a long-running
+transaction has.</li>
+<li><code>retry</code> – A retry number starting from 0. If callback has returned 0 at least once, then at
+end of current handling loop the callback function will be called additionally with negative
+<code>retry</code> value to notify about the end of loop. The callback function can use this fact to
+implement timeout reset logic while waiting for a readers.</li>
+</ul>
+<h2 id="returns"><a href="#returns">Returns</a></h2>
+<p>A return code that determines the further actions for MDBX and must match the action which
+was executed by the callback:</p>
+<ul>
+<li><code>-2</code> or less – An error condition and the reader was not killed.</li>
+<li><code>-1</code> – The callback was unable to solve the problem and agreed on <code>MDBX_MAP_FULL</code> error; MDBX
+should increase the database size or return <code>MDBX_MAP_FULL</code> error.</li>
+<li><code>0</code> – The callback solved the problem or just waited for a while, libmdbx should rescan the
+reader lock table and retry. This also includes a situation when corresponding transaction
+terminated in normal way by <code>mdbx_txn_abort()</code> or <code>mdbx_txn_reset()</code>, and may be restarted.
+I.e. reader slot isn’t needed to be cleaned from transaction.</li>
+<li><code>1</code> – Transaction aborted asynchronous and reader slot should be cleared immediately, i.e.
+read transaction will not continue but <code>mdbx_txn_abort()</code> nor <code>mdbx_txn_reset()</code> will be
+called later.</li>
+<li><code>2</code> or greater – The reader process was terminated or killed, and MDBX should entirely reset
+reader registration.</li>
+</ul>
+</div></details></section></div></main></body></html>

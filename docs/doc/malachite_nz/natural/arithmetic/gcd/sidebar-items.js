@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["extended_gcd","half_gcd","matrix_2_2"]};

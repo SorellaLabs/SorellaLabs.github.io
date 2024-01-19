@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["build_path","dijkstra","dijkstra_all","dijkstra_partial","dijkstra_reach"],"struct":["DijkstraReachable","DijkstraReachableItem"]};

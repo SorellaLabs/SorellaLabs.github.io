@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["PropertyAccess","PropertyAccessField"],"struct":["PrivatePropertyAccess","SimplePropertyAccess","SuperPropertyAccess"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"derive":["Row"],"enum":["Compression"],"mod":["error","fixed_string","insert","inserter","query","serde","sql"],"struct":["ClickhouseTestingClient","Client","Credentials"],"trait":["InsertRow","Primitive","Row"]};

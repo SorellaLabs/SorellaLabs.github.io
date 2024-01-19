@@ -1,0 +1,359 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="clickhouse.rs"><title>clickhouse - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="clickhouse" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../clickhouse/index.html">clickhouse</a><span class="version">0.11.5</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#derives">Derive Macros</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">clickhouse</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/clickhouse/lib.rs.html#1-225">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="clickhousers"><a href="#clickhousers">clickhouse.rs</a></h2>
+<p>A typed client for ClickHouse.</p>
+<p><a href="https://crates.io/crates/clickhouse"><img src="https://img.shields.io/crates/v/clickhouse.svg" alt="Crates.io" /></a>
+<a href="https://docs.rs/clickhouse"><img src="https://docs.rs/clickhouse/badge.svg" alt="Documentation" /></a>
+<a href="https://github.com/loyd/clickhouse.rs/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT licensed" /></a>
+<a href="https://github.com/loyd/clickhouse.rs/actions/workflows/ci.yml"><img src="https://github.com/loyd/clickhouse.rs/actions/workflows/ci.yml/badge.svg" alt="Build Status" /></a></p>
+<ul>
+<li>Uses <code>serde</code> for encoding/decoding rows.</li>
+<li>Uses <code>RowBinary</code> encoding.</li>
+<li>Supports HTTP and HTTPS.</li>
+<li>Provides API for selecting.</li>
+<li>Provides API for inserting.</li>
+<li>Provides API for infinite transactional (see below) inserting.</li>
+<li>Provides API for watching live views.</li>
+<li>Compression and decompression (LZ4).</li>
+<li>Provides mocks for unit testing.</li>
+</ul>
+<h3 id="usage"><a href="#usage">Usage</a></h3>
+<p>To use the crate, add this to your <code>Cargo.toml</code>:</p>
+<div class="example-wrap"><pre class="language-toml"><code>[dependencies]
+clickhouse = &quot;0.11.5&quot;
+
+[dev-dependencies]
+clickhouse = { version = &quot;0.11.5&quot;, features = [&quot;test-util&quot;] }
+</code></pre></div><details>
+<summary>
+<h4 id="note-about-clickhouse-prior-to-v226"><a href="#note-about-clickhouse-prior-to-v226">Note about ClickHouse prior to v22.6</a></h4></summary>
+<p>CH server older than v22.6 (2022-06-16) handles <code>RowBinary</code> <a href="https://github.com/ClickHouse/ClickHouse/issues/37420">incorrectly</a> in some rare cases. Enable <code>wa-37420</code> feature to solve this problem. Don’t use it for newer versions.</p>
+</details>
+<details>
+<summary>
+<h4 id="create-a-client"><a href="#create-a-client">Create a client</a></h4></summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>clickhouse::Client;
+
+<span class="kw">let </span>client = Client::default()
+    .with_url(<span class="string">"http://localhost:8123"</span>)
+    .with_user(<span class="string">"name"</span>)
+    .with_password(<span class="string">"123"</span>)
+    .with_database(<span class="string">"test"</span>);</code></pre></div>
+<ul>
+<li>Reuse created clients or clone them in order to reuse a connection pool.</li>
+</ul>
+</details>
+<details>
+<summary>
+<h4 id="select-rows"><a href="#select-rows">Select rows</a></h4></summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>serde::Deserialize;
+<span class="kw">use </span>clickhouse::Row;
+
+<span class="attr">#[derive(Row, Deserialize)]
+</span><span class="kw">struct </span>MyRow&lt;<span class="lifetime">'a</span>&gt; {
+    no: u32,
+    name: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>str,
+}
+
+<span class="kw">let </span><span class="kw-2">mut </span>cursor = client
+    .query(<span class="string">"SELECT ?fields FROM some WHERE no BETWEEN ? AND ?"</span>)
+    .bind(<span class="number">500</span>)
+    .bind(<span class="number">504</span>)
+    .fetch::&lt;MyRow&lt;<span class="lifetime">'_</span>&gt;&gt;()<span class="question-mark">?</span>;
+
+<span class="kw">while let </span><span class="prelude-val">Some</span>(row) = cursor.next().<span class="kw">await</span><span class="question-mark">? </span>{ .. }</code></pre></div>
+<ul>
+<li>Placeholder <code>?fields</code> is replaced with <code>no, name</code> (fields of <code>Row</code>).</li>
+<li>Placeholder <code>?</code> is replaced with values in following <code>bind()</code> calls.</li>
+<li>Convenient <code>fetch_one::&lt;Row&gt;()</code> and <code>fetch_all::&lt;Row&gt;()</code> can be used to get a first row or all rows correspondingly.</li>
+<li><code>sql::Identifier</code> can be used to bind table names.</li>
+<li>Note: <code>FixedString(_)</code> types should be called with <code>SELECT toString(col)</code> instead of <code>SELECT col</code>. See <code>FixedString</code> for more details.</li>
+</ul>
+<p>Note that cursors can return an error even after producing some rows. To avoid this, use <code>client.with_option(&quot;wait_end_of_query&quot;, &quot;1&quot;)</code> in order to enable buffering on the server-side. <a href="https://clickhouse.com/docs/en/interfaces/http/#response-buffering">More details</a>. The <code>buffer_size</code> option can be useful too.</p>
+</details>
+<details>
+<summary>
+<h4 id="insert-a-batch"><a href="#insert-a-batch">Insert a batch</a></h4></summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>serde::Serialize;
+<span class="kw">use </span>clickhouse::Row;
+
+<span class="attr">#[derive(Row, Serialize)]
+</span><span class="kw">struct </span>MyRow {
+    no: u32,
+    name: String,
+}
+
+<span class="kw">let </span><span class="kw-2">mut </span>insert = client.insert(<span class="string">"some"</span>)<span class="question-mark">?</span>;
+insert.write(<span class="kw-2">&amp;</span>MyRow { no: <span class="number">0</span>, name: <span class="string">"foo"</span>.into() }).<span class="kw">await</span><span class="question-mark">?</span>;
+insert.write(<span class="kw-2">&amp;</span>MyRow { no: <span class="number">1</span>, name: <span class="string">"bar"</span>.into() }).<span class="kw">await</span><span class="question-mark">?</span>;
+insert.end().<span class="kw">await</span><span class="question-mark">?</span>;</code></pre></div>
+<ul>
+<li>If <code>end()</code> isn’t called, the <code>INSERT</code> is aborted.</li>
+<li>Rows are being sent progressively to spread network load.</li>
+<li>ClickHouse inserts batches atomically only if all rows fit in the same partition and their number is less <a href="https://clickhouse.tech/docs/en/operations/settings/settings/#settings-max_insert_block_size"><code>max_insert_block_size</code></a>.</li>
+<li><a href="https://github.com/loyd/ch2rs">ch2rs</a> is useful to generate a row type from ClickHouse.</li>
+<li>Note: <code>FixedString(_)</code> types should be wrapped in a <code>FixedString</code> Struct to be properly imported. See <code>FixedString</code> for more details.</li>
+</ul>
+</details>
+<details>
+<summary>
+<h4 id="infinite-inserting"><a href="#infinite-inserting">Infinite inserting</a></h4></summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">let </span><span class="kw-2">mut </span>inserter = client.inserter(<span class="string">"some"</span>)<span class="question-mark">?
+    </span>.with_timeouts(<span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">5</span>)), <span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">20</span>)))
+    .with_max_entries(<span class="number">750_000</span>)
+    .with_period(<span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">15</span>)));
+
+inserter.write(<span class="kw-2">&amp;</span>MyRow { no: <span class="number">0</span>, name: <span class="string">"foo"</span>.into() }).<span class="kw">await</span><span class="question-mark">?</span>;
+inserter.write(<span class="kw-2">&amp;</span>MyRow { no: <span class="number">1</span>, name: <span class="string">"bar"</span>.into() }).<span class="kw">await</span><span class="question-mark">?</span>;
+<span class="kw">let </span>stats = inserter.commit().<span class="kw">await</span><span class="question-mark">?</span>;
+<span class="kw">if </span>stats.entries &gt; <span class="number">0 </span>{
+    <span class="macro">println!</span>(
+        <span class="string">"{} entries ({} transactions) have been inserted"</span>,
+        stats.entries, stats.transactions,
+    );
+}</code></pre></div>
+<ul>
+<li><code>Inserter</code> ends an active insert in <code>commit()</code> if thresholds (<code>max_entries</code>, <code>period</code>) are reached.</li>
+<li>The interval between ending active <code>INSERT</code>s can be biased by using <code>with_period_bias</code> to avoid load spikes by parallel inserters.</li>
+<li>All rows between <code>commit()</code> calls are inserted in the same <code>INSERT</code> statement.</li>
+<li>Do not forget to flush if you want to terminate inserting:</li>
+</ul>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code>inserter.end().<span class="kw">await</span><span class="question-mark">?</span>;</code></pre></div>
+</details>
+<details>
+<summary>
+<h4 id="perform-ddl"><a href="#perform-ddl">Perform DDL</a></h4></summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code>client.query(<span class="string">"DROP TABLE IF EXISTS some"</span>).execute().<span class="kw">await</span><span class="question-mark">?</span>;</code></pre></div>
+</details>
+<details>
+<summary>
+<h4 id="live-views"><a href="#live-views">Live views</a></h4></summary>
+<p>Requires the <code>watch</code> feature.</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">let </span><span class="kw-2">mut </span>cursor = client
+    .watch(<span class="string">"SELECT max(no), argMax(name, no) FROM some"</span>)
+    .fetch::&lt;Row&lt;<span class="lifetime">'_</span>&gt;&gt;()<span class="question-mark">?</span>;
+
+<span class="kw">let </span>(version, row) = cursor.next().<span class="kw">await</span><span class="question-mark">?</span>.unwrap();
+<span class="macro">println!</span>(<span class="string">"live view updated: version={}, row={:?}"</span>, version, row);
+
+<span class="comment">// Use `only_events()` to iterate over versions only.
+</span><span class="kw">let </span><span class="kw-2">mut </span>cursor = client.watch(<span class="string">"some_live_view"</span>).limit(<span class="number">20</span>).only_events().fetch()<span class="question-mark">?</span>;
+<span class="macro">println!</span>(<span class="string">"live view updated: version={:?}"</span>, cursor.next().<span class="kw">await</span><span class="question-mark">?</span>);</code></pre></div>
+<ul>
+<li>Use <a href="https://github.com/ClickHouse/ClickHouse/issues/28309#issuecomment-908666042">carefully</a>.</li>
+<li>This code uses or creates if not exists a temporary live view named <code>lv_{sha1(query)}</code> to reuse the same live view by parallel watchers.</li>
+<li>You can specify a name instead of a query.</li>
+<li>This API uses <code>JSONEachRowWithProgress</code> under the hood because of <a href="https://github.com/ClickHouse/ClickHouse/issues/22996">the issue</a>.</li>
+<li>Only struct rows can be used. Avoid <code>fetch::&lt;u64&gt;()</code> and other without specified names.</li>
+</ul>
+</details>
+<p>See <a href="https://github.com/loyd/clickhouse.rs/tree/master/examples">examples</a>.</p>
+<h3 id="feature-flags"><a href="#feature-flags">Feature Flags</a></h3>
+<ul>
+<li><code>lz4</code> (enabled by default) — enables <code>Compression::Lz4</code> and <code>Compression::Lz4Hc(_)</code> variants. If enabled, <code>Compression::Lz4</code> is used by default for all queries except for <code>WATCH</code>.</li>
+<li><code>tls</code> (enabled by default) — supports urls with the <code>HTTPS</code> schema.</li>
+<li><code>test-util</code> — adds mocks. See <a href="https://github.com/loyd/clickhouse.rs/tree/master/examples/mock.rs">the example</a>. Use it only in <code>dev-dependencies</code>.</li>
+<li><code>watch</code> — enables <code>client.watch</code> functionality. See the corresponding section for details.</li>
+<li><code>uuid</code> — adds <code>serde::uuid</code> to work with <a href="https://docs.rs/uuid/latest/uuid/">uuid</a> crate.</li>
+<li><code>time</code> — adds <code>serde::time</code> to work with <a href="https://docs.rs/time/latest/time/">time</a> crate.</li>
+<li><code>wa-37420</code> — implements a workaround for CH versions prior to v22.6. See the corresponding section for details.</li>
+</ul>
+<h3 id="data-types"><a href="#data-types">Data Types</a></h3>
+<ul>
+<li>
+<p><code>(U)Int(8|16|32|64|128)</code> maps to/from corresponding <code>(u|i)(8|16|32|64|128)</code> types or newtypes around them.</p>
+</li>
+<li>
+<p><code>(U)Int256</code> aren’t supported directly, but there is <a href="https://github.com/loyd/clickhouse.rs/issues/48">a workaround for it</a>.</p>
+</li>
+<li>
+<p><code>Float(32|64)</code> maps to/from corresponding <code>f(32|64)</code> or newtypes around them.</p>
+</li>
+<li>
+<p><code>Decimal(32|64|128)</code> maps to/from corresponding <code>i(32|64|128)</code> or newtypes around them. It’s more convenient to use <a href="https://github.com/loyd/fixnum">fixnum</a> or another implementation of signed fixed-point numbers.</p>
+</li>
+<li>
+<p><code>Boolean</code> maps to/from <code>bool</code> or newtypes around it.</p>
+</li>
+<li>
+<p><code>String</code> maps to/from any string or bytes types, e.g. <code>&amp;str</code>, <code>&amp;[u8]</code>, <code>String</code>, <code>Vec&lt;u8&gt;</code> or <a href="https://docs.rs/smartstring/latest/smartstring/struct.SmartString.html"><code>SmartString</code></a>. Newtypes are also supported. To store bytes, consider using <a href="https://docs.rs/serde_bytes/latest/serde_bytes/">serde_bytes</a>, because it’s more efficient.</p>
+<details>
+  <summary>Example</summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Debug, Serialize, Deserialize)]
+</span><span class="kw">struct </span>MyRow&lt;<span class="lifetime">'a</span>&gt; {
+    str: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>str,
+    string: String,
+    <span class="attr">#[serde(with = <span class="string">"serde_bytes"</span>)]
+    </span>bytes: Vec&lt;u8&gt;,
+    <span class="attr">#[serde(with = <span class="string">"serde_bytes"</span>)]
+    </span>byte_slice: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>[u8],
+}</code></pre></div>
+</details>
+</li>
+<li>
+<p><code>FixedString(_)</code> is now supported via a wrapper struct, <code>FixedString</code>, to allow for Rust - Clickhouse, String type differention.</p>
+</li>
+<li>
+<p><code>Enum(8|16)</code> are supported using <a href="https://docs.rs/serde_repr/latest/serde_repr/">serde_repr</a>.</p>
+<details>
+  <summary>Example</summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>serde_repr::{Deserialize_repr, Serialize_repr};
+
+<span class="attr">#[derive(Row, Serialize, Deserialize)]
+</span><span class="kw">struct </span>MyRow {
+    level: Level,
+}
+
+<span class="attr">#[derive(Debug, Serialize_repr, Deserialize_repr)]
+#[repr(u8)]
+</span><span class="kw">enum </span>Level {
+    Debug = <span class="number">1</span>,
+    Info = <span class="number">2</span>,
+    Warn = <span class="number">3</span>,
+    Error = <span class="number">4</span>,
+}</code></pre></div>
+</details>
+</li>
+<li>
+<p><code>UUID</code> maps to/from <a href="https://docs.rs/uuid/latest/uuid/struct.Uuid.html"><code>uuid::Uuid</code></a> by using <code>serde::uuid</code>. Requires the <code>uuid</code> feature.</p>
+<details>
+  <summary>Example</summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Row, Serialize, Deserialize)]
+</span><span class="kw">struct </span>MyRow {
+    <span class="attr">#[serde(with = <span class="string">"clickhouse::serde::uuid"</span>)]
+    </span>uuid: uuid::Uuid,
+}</code></pre></div>
+</details>
+</li>
+<li>
+<p><code>IPv6</code> maps to/from <a href="https://doc.rust-lang.org/stable/std/net/struct.Ipv6Addr.html"><code>std::net::Ipv6Addr</code></a>.</p>
+</li>
+<li>
+<p><code>IPv4</code> maps to/from <a href="https://doc.rust-lang.org/stable/std/net/struct.Ipv4Addr.html"><code>std::net::Ipv4Addr</code></a> by using <code>serde::ipv4</code>.</p>
+<details>
+  <summary>Example</summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Row, Serialize, Deserialize)]
+</span><span class="kw">struct </span>MyRow {
+    <span class="attr">#[serde(with = <span class="string">"clickhouse::serde::ipv4"</span>)]
+    </span>ipv4: std::net::Ipv4Addr,
+}</code></pre></div>
+</details>
+</li>
+<li>
+<p><code>Date</code> maps to/from <code>u16</code> or a newtype around it and represents a number of days elapsed since <code>1970-01-01</code>. Also, <a href="https://docs.rs/time/latest/time/struct.Date.html"><code>time::Date</code></a> is supported by using <code>serde::time::date</code>, that requires the <code>time</code> feature.</p>
+<details>
+  <summary>Example</summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Row, Serialize, Deserialize)]
+</span><span class="kw">struct </span>MyRow {
+    days: u16,
+    <span class="attr">#[serde(with = <span class="string">"clickhouse::serde::time::date"</span>)]
+    </span>date: Date,
+}</code></pre></div>
+</details>
+</li>
+<li>
+<p><code>Date32</code> maps to/from <code>i32</code> or a newtype around it and represents a number of days elapsed since <code>1970-01-01</code>. Also, <a href="https://docs.rs/time/latest/time/struct.Date.html"><code>time::Date</code></a> is supported by using <code>serde::time::date32</code>, that requires the <code>time</code> feature.</p>
+<details>
+  <summary>Example</summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Row, Serialize, Deserialize)]
+</span><span class="kw">struct </span>MyRow {
+    days: i32,
+    <span class="attr">#[serde(with = <span class="string">"clickhouse::serde::time::date32"</span>)]
+    </span>date: Date,
+}</code></pre></div>
+</details>
+</li>
+<li>
+<p><code>DateTime</code> maps to/from <code>u32</code> or a newtype around it and represents a number of seconds elapsed since UNIX epoch. Also, <a href="https://docs.rs/time/latest/time/struct.OffsetDateTime.html"><code>time::OffsetDateTime</code></a> is supported by using <code>serde::time::datetime</code>, that requires the <code>time</code> feature.</p>
+<details>
+  <summary>Example</summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Row, Serialize, Deserialize)]
+</span><span class="kw">struct </span>MyRow {
+    ts: u32,
+    <span class="attr">#[serde(with = <span class="string">"clickhouse::serde::time::datetime"</span>)]
+    </span>dt: OffsetDateTime,
+}</code></pre></div>
+</details>
+</li>
+<li>
+<p><code>DateTime64(_)</code> maps to/from <code>i32</code> or a newtype around it and represents a time elapsed since UNIX epoch. Also, <a href="https://docs.rs/time/latest/time/struct.OffsetDateTime.html"><code>time::OffsetDateTime</code></a> is supported by using <code>serde::time::datetime64::*</code>, that requires the <code>time</code> feature.</p>
+<details>
+  <summary>Example</summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Row, Serialize, Deserialize)]
+</span><span class="kw">struct </span>MyRow {
+    ts: i64, <span class="comment">// elapsed s/us/ms/ns depending on `DateTime64(X)`
+    </span><span class="attr">#[serde(with = <span class="string">"clickhouse::serde::time::datetime64::secs"</span>)]
+    </span>dt64s: OffsetDateTime,  <span class="comment">// `DateTime64(0)`
+    </span><span class="attr">#[serde(with = <span class="string">"clickhouse::serde::time::datetime64::millis"</span>)]
+    </span>dt64ms: OffsetDateTime, <span class="comment">// `DateTime64(3)`
+    </span><span class="attr">#[serde(with = <span class="string">"clickhouse::serde::time::datetime64::micros"</span>)]
+    </span>dt64us: OffsetDateTime, <span class="comment">// `DateTime64(6)`
+    </span><span class="attr">#[serde(with = <span class="string">"clickhouse::serde::time::datetime64::nanos"</span>)]
+    </span>dt64ns: OffsetDateTime, <span class="comment">// `DateTime64(9)`
+</span>}</code></pre></div>
+</details>
+</li>
+<li>
+<p><code>Typle(A, B, ...)</code> maps to/from <code>(A, B, ...)</code> or a newtype around it.</p>
+</li>
+<li>
+<p><code>Array(_)</code> maps to/from any slice, e.g. <code>Vec&lt;_&gt;</code>, <code>&amp;[_]</code>. Newtypes are also supported.</p>
+</li>
+<li>
+<p><code>Map(K, V)</code> behaves like <code>Array((K, V))</code>.</p>
+</li>
+<li>
+<p><code>LowCardinality(_)</code> is supported seamlessly.</p>
+</li>
+<li>
+<p><code>Nullable(_)</code> maps to/from <code>Option&lt;_&gt;</code>. For <code>clickhouse::serde::*</code> helpers add <code>::option</code>.</p>
+<details>
+  <summary>Example</summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Row, Serialize, Deserialize)]
+</span><span class="kw">struct </span>MyRow {
+    <span class="attr">#[serde(with = <span class="string">"clickhouse::serde::ipv4::option"</span>)]
+    </span>ipv4_opt: <span class="prelude-ty">Option</span>&lt;Ipv4Addr&gt;,
+}</code></pre></div>
+</details>
+</li>
+<li>
+<p><code>Nested</code> is supported by providing multiple arrays with renaming.</p>
+<details>
+  <summary>Example</summary>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="comment">// CREATE TABLE test(items Nested(name String, count UInt32))
+</span><span class="attr">#[derive(Row, Serialize, Deserialize)]
+</span><span class="kw">struct </span>MyRow {
+    <span class="attr">#[serde(rename = <span class="string">"items.name"</span>)]
+    </span>items_name: Vec&lt;String&gt;,
+    <span class="attr">#[serde(rename = <span class="string">"items.count"</span>)]
+    </span>items_count: Vec&lt;u32&gt;,
+}</code></pre></div>
+</details>
+</li>
+<li>
+<p><code>JSON</code> and <code>Geo</code> aren’t supported for now.</p>
+</li>
+</ul>
+<h3 id="mocking"><a href="#mocking">Mocking</a></h3>
+<p>The crate provides utils for mocking CH server and testing DDL, <code>SELECT</code>, <code>INSERT</code> and <code>WATCH</code> queries.</p>
+<p>The functionality can be enabled with the <code>test-util</code> feature. Use it <strong>only</strong> in dev-dependencies.</p>
+<p>See <a href="https://github.com/loyd/clickhouse.rs/tree/master/examples/mock.rs">the example</a>.</p>
+</div></details><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="error/index.html" title="mod clickhouse::error">error</a></div><div class="desc docblock-short">Contains <a href="error/enum.Error.html" title="enum clickhouse::error::Error"><code>Error</code></a> and corresponding <a href="error/type.Result.html" title="type clickhouse::error::Result"><code>Result</code></a>.</div></li><li><div class="item-name"><a class="mod" href="fixed_string/index.html" title="mod clickhouse::fixed_string">fixed_string</a></div></li><li><div class="item-name"><a class="mod" href="insert/index.html" title="mod clickhouse::insert">insert</a></div></li><li><div class="item-name"><a class="mod" href="inserter/index.html" title="mod clickhouse::inserter">inserter</a></div></li><li><div class="item-name"><a class="mod" href="query/index.html" title="mod clickhouse::query">query</a></div></li><li><div class="item-name"><a class="mod" href="serde/index.html" title="mod clickhouse::serde">serde</a></div><div class="desc docblock-short">Contains ser/de modules for different external types.</div></li><li><div class="item-name"><a class="mod" href="sql/index.html" title="mod clickhouse::sql">sql</a></div></li></ul><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.Client.html" title="struct clickhouse::Client">Client</a></div><div class="desc docblock-short">A client containing HTTP pool.
+Can be created by using <code>Client::default()</code> or <a href="struct.Client.html#method.with_http_client" title="associated function clickhouse::Client::with_http_client"><code>Client::with_http_client</code></a>.</div></li><li><div class="item-name"><a class="struct" href="struct.Credentials.html" title="struct clickhouse::Credentials">Credentials</a></div></li></ul><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.Compression.html" title="enum clickhouse::Compression">Compression</a></div></li></ul><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.InsertRow.html" title="trait clickhouse::InsertRow">InsertRow</a></div><div class="desc docblock-short">The InsertRow Trait is a ObjectSafe version of row that allows us to
+insert trait objects directly into the database</div></li><li><div class="item-name"><a class="trait" href="trait.Primitive.html" title="trait clickhouse::Primitive">Primitive</a></div></li><li><div class="item-name"><a class="trait" href="trait.Row.html" title="trait clickhouse::Row">Row</a></div></li></ul><h2 id="derives" class="section-header"><a href="#derives">Derive Macros</a></h2><ul class="item-table"><li><div class="item-name"><a class="derive" href="derive.Row.html" title="derive clickhouse::Row">Row</a></div></li></ul></section></div></main></body></html>

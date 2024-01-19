@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["bsd_info","file_info","kmesg_buffer","net_info","pid_rusage","proc_pid","task_info","thread_info","work_queue_info"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["scope","scoped"],"struct":["Scope","ScopeBuilder"]};

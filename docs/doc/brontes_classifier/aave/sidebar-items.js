@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["v2","v3"],"struct":["AaveV2Classifier","AaveV3Classifier","FlashloanImplV2","FlashloanImplV3","FlashloanSimpleImplV3","LiquidationCallImplV2","LiquidationCallImplV3"]};

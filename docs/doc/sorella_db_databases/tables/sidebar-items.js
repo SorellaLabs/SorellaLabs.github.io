@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["DatabaseTables"],"struct":["DatabaseTablesIter"],"trait":["FromDatabaseTables"]};

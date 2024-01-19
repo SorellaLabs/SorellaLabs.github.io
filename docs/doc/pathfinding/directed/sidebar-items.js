@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["astar","bfs","count_paths","cycle_detection","dfs","dijkstra","edmonds_karp","fringe","idastar","iddfs","strongly_connected_components","topological_sort","yen"]};

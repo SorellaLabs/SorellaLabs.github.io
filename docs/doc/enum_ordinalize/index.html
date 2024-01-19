@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Enum Ordinalize"><title>enum_ordinalize - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="enum_ordinalize" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../enum_ordinalize/index.html">enum_ordinalize</a><span class="version">3.1.15</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#derives">Derive Macros</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">enum_ordinalize</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/enum_ordinalize/lib.rs.html#1-476">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="enum-ordinalize"><a href="#enum-ordinalize">Enum Ordinalize</a></h2>
+<p>This crates provides a procedural macro to let enums not only get its variants’ ordinal but also be constructed from an ordinal.</p>
+<h3 id="ordinalize"><a href="#ordinalize">Ordinalize</a></h3>
+<p>Use <code>#[derive(Ordinalize)]</code> to make an enum (which must only has unit variants) have <code>from_ordinal_unsafe</code>, <code>from_ordinal</code>, <code>variants</code>, and <code>variant_count</code> associated functions and a <code>ordinal</code> method.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>enum_ordinalize::Ordinalize;
+
+<span class="attr">#[derive(Debug, PartialEq, Eq, Ordinalize)]
+</span><span class="kw">enum </span>MyEnum {
+    Zero,
+    One,
+    Two,
+}
+
+<span class="macro">assert_eq!</span>(<span class="number">0i8</span>, MyEnum::Zero.ordinal());
+<span class="macro">assert_eq!</span>(<span class="number">1i8</span>, MyEnum::One.ordinal());
+<span class="macro">assert_eq!</span>(<span class="number">2i8</span>, MyEnum::Two.ordinal());
+
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::Zero), MyEnum::from_ordinal(<span class="number">0i8</span>));
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::One), MyEnum::from_ordinal(<span class="number">1i8</span>));
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::Two), MyEnum::from_ordinal(<span class="number">2i8</span>));
+
+<span class="macro">assert_eq!</span>(MyEnum::Zero, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(<span class="number">0i8</span>) });
+<span class="macro">assert_eq!</span>(MyEnum::One, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(<span class="number">1i8</span>) });
+<span class="macro">assert_eq!</span>(MyEnum::Two, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(<span class="number">2i8</span>) });</code></pre></div>
+<h4 id="get-variants"><a href="#get-variants">Get Variants</a></h4>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>enum_ordinalize::Ordinalize;
+
+<span class="attr">#[derive(Debug, PartialEq, Eq, Ordinalize)]
+</span><span class="kw">enum </span>MyEnum {
+    Zero,
+    One,
+    Two,
+}
+
+<span class="macro">assert_eq!</span>([MyEnum::Zero, MyEnum::One, MyEnum::Two], MyEnum::variants());
+<span class="macro">assert_eq!</span>(<span class="number">3</span>, MyEnum::variant_count());</code></pre></div>
+<p><code>variants</code> and <code>variant_count</code> are constant functions.</p>
+<h3 id="the-ordinal-size-of-an-enum"><a href="#the-ordinal-size-of-an-enum">The (Ordinal) Size of an Enum</a></h3>
+<p>The ordinal value is an integer whose size is determined by the enum itself. The larger (or the smaller if it’s negative) the variants’ values are, the bigger the enum size is.</p>
+<p>For example,</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>enum_ordinalize::Ordinalize;
+
+<span class="attr">#[derive(Debug, PartialEq, Eq, Ordinalize)]
+</span><span class="kw">enum </span>MyEnum {
+    Zero,
+    One,
+    Two,
+    Thousand = <span class="number">1000</span>,
+}
+
+<span class="macro">assert_eq!</span>(<span class="number">0i16</span>, MyEnum::Zero.ordinal());
+<span class="macro">assert_eq!</span>(<span class="number">1i16</span>, MyEnum::One.ordinal());
+<span class="macro">assert_eq!</span>(<span class="number">2i16</span>, MyEnum::Two.ordinal());
+
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::Zero), MyEnum::from_ordinal(<span class="number">0i16</span>));
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::One), MyEnum::from_ordinal(<span class="number">1i16</span>));
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::Two), MyEnum::from_ordinal(<span class="number">2i16</span>));
+
+<span class="macro">assert_eq!</span>(MyEnum::Zero, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(<span class="number">0i16</span>) });
+<span class="macro">assert_eq!</span>(MyEnum::One, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(<span class="number">1i16</span>) });
+<span class="macro">assert_eq!</span>(MyEnum::Two, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(<span class="number">2i16</span>) });</code></pre></div>
+<p>In order to store <code>1000</code>, the size of <code>MyEnum</code> grows. Thus, the ordinal is in <code>i16</code> instead of <code>i8</code>.</p>
+<p>You can use the <code>#[repr(type)]</code> attribute to control the size explicitly. For instance,</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>enum_ordinalize::Ordinalize;
+
+<span class="attr">#[derive(Debug, PartialEq, Eq, Ordinalize)]
+#[repr(usize)]
+</span><span class="kw">enum </span>MyEnum {
+    Zero,
+    One,
+    Two,
+    Thousand = <span class="number">1000</span>,
+}
+
+<span class="macro">assert_eq!</span>(<span class="number">0usize</span>, MyEnum::Zero.ordinal());
+<span class="macro">assert_eq!</span>(<span class="number">1usize</span>, MyEnum::One.ordinal());
+<span class="macro">assert_eq!</span>(<span class="number">2usize</span>, MyEnum::Two.ordinal());
+
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::Zero), MyEnum::from_ordinal(<span class="number">0usize</span>));
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::One), MyEnum::from_ordinal(<span class="number">1usize</span>));
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::Two), MyEnum::from_ordinal(<span class="number">2usize</span>));
+
+<span class="macro">assert_eq!</span>(MyEnum::Zero, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(<span class="number">0usize</span>) });
+<span class="macro">assert_eq!</span>(MyEnum::One, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(<span class="number">1usize</span>) });
+<span class="macro">assert_eq!</span>(MyEnum::Two, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(<span class="number">2usize</span>) });</code></pre></div>
+<h3 id="useful-increment"><a href="#useful-increment">Useful Increment</a></h3>
+<p>The integers represented by variants are extended in successive increments and can be set explicitly from anywhere.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>enum_ordinalize::Ordinalize;
+
+<span class="attr">#[derive(Debug, PartialEq, Eq, Ordinalize)]
+</span><span class="kw">enum </span>MyEnum {
+    Two   = <span class="number">2</span>,
+    Three,
+    Four,
+    Eight = <span class="number">8</span>,
+    Nine,
+    NegativeTen = -<span class="number">10</span>,
+    NegativeNine,
+}
+
+<span class="macro">assert_eq!</span>(<span class="number">4i8</span>, MyEnum::Four.ordinal());
+<span class="macro">assert_eq!</span>(<span class="number">9i8</span>, MyEnum::Nine.ordinal());
+<span class="macro">assert_eq!</span>(-<span class="number">9i8</span>, MyEnum::NegativeNine.ordinal());
+
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::Four), MyEnum::from_ordinal(<span class="number">4i8</span>));
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::Nine), MyEnum::from_ordinal(<span class="number">9i8</span>));
+<span class="macro">assert_eq!</span>(<span class="prelude-val">Some</span>(MyEnum::NegativeNine), MyEnum::from_ordinal(-<span class="number">9i8</span>));
+
+<span class="macro">assert_eq!</span>(MyEnum::Four, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(<span class="number">4i8</span>) });
+<span class="macro">assert_eq!</span>(MyEnum::Nine, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(<span class="number">9i8</span>) });
+<span class="macro">assert_eq!</span>(MyEnum::NegativeNine, <span class="kw">unsafe </span>{ MyEnum::from_ordinal_unsafe(-<span class="number">9i8</span>) });</code></pre></div>
+</div></details><h2 id="derives" class="section-header"><a href="#derives">Derive Macros</a></h2><ul class="item-table"><li><div class="item-name"><a class="derive" href="derive.Ordinalize.html" title="derive enum_ordinalize::Ordinalize">Ordinalize</a></div></li></ul></section></div></main></body></html>

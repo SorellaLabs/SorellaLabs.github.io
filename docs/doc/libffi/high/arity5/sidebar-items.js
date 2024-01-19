@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["Cif5","Closure5","ClosureMut5","ClosureOnce5","FnPtr5"],"type":["Callback5","CallbackMut5","CallbackOnce5"]};

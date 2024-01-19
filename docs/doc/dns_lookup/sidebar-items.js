@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AddrFamily","LookupErrorKind","Protocol","SockType"],"fn":["get_hostname","getaddrinfo","getnameinfo","lookup_addr","lookup_host"],"struct":["AddrInfo","AddrInfoHints","AddrInfoIter","LookupError"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["NUM_OF_INDICES_IN_SHARD"],"struct":["StorageShardedKey"]};

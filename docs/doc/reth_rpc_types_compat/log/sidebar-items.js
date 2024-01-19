@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["from_primitive_log","to_primitive_log"]};

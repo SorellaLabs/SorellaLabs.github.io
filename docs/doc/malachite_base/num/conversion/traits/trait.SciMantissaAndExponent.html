@@ -1,0 +1,607 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Converts a number to or from a scientific mantissa and exponent."><title>SciMantissaAndExponent in malachite_base::num::conversion::traits - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="malachite_base" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (de686cbc6 2023-12-14)" data-channel="nightly" data-search-js="search-874d56868bf05518.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../../malachite_base/index.html">malachite_base</a><span class="version">0.4.4</span></h2></div><h2 class="location"><a href="#">SciMantissaAndExponent</a></h2><div class="sidebar-elems"><section><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.from_sci_mantissa_and_exponent">from_sci_mantissa_and_exponent</a></li><li><a href="#tymethod.sci_mantissa_and_exponent">sci_mantissa_and_exponent</a></li></ul><h3><a href="#provided-methods">Provided Methods</a></h3><ul class="block"><li><a href="#method.sci_exponent">sci_exponent</a></li><li><a href="#method.sci_mantissa">sci_mantissa</a></li></ul><h3><a href="#foreign-impls">Implementations on Foreign Types</a></h3><ul class="block"><li><a href="#impl-SciMantissaAndExponent%3Cf32,+i64%3E-for-f32">f32</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf64,+i64%3E-for-f64">f64</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u128">u128</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u128">u128</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u16">u16</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u16">u16</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u32">u32</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u32">u32</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u64">u64</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u64">u64</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u8">u8</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u8">u8</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-usize">usize</a></li><li><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-usize">usize</a></li></ul><h3><a href="#object-safety">Object Safety</a></h3><h3><a href="#implementors">Implementors</a></h3></section><h2><a href="index.html">In malachite_base::num::conversion::traits</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Trait <a href="../../../index.html">malachite_base</a>::<wbr><a href="../../index.html">num</a>::<wbr><a href="../index.html">conversion</a>::<wbr><a href="index.html">traits</a>::<wbr><a class="trait" href="#">SciMantissaAndExponent</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../../../src/malachite_base/num/conversion/traits.rs.html#360-376">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub trait SciMantissaAndExponent&lt;M, E, T = Self&gt;: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> {
+    // Required methods
+    fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(M, E)</a>;
+<span class="item-spacer"></span>    fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+        sci_mantissa: M,
+        sci_exponent: E
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;T&gt;;
+
+    // Provided methods
+    fn <a href="#method.sci_mantissa" class="fn">sci_mantissa</a>(self) -&gt; M { ... }
+<span class="item-spacer"></span>    fn <a href="#method.sci_exponent" class="fn">sci_exponent</a>(self) -&gt; E { ... }
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Converts a number to or from a scientific mantissa and exponent.</p>
+<p>See <a href="../../basic/floats/trait.PrimitiveFloat.html" title="trait malachite_base::num::basic::floats::PrimitiveFloat">here</a> for a definition of scientific mantissa
+and exponent.</p>
+</div></details><h2 id="required-methods" class="section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="tymethod.sci_mantissa_and_exponent" class="method"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/traits.rs.html#362">source</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(M, E)</a></h4></section></summary><div class="docblock"><p>Extracts the scientific mantissa and exponent from a number.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.from_sci_mantissa_and_exponent" class="method"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/traits.rs.html#375">source</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(sci_mantissa: M, sci_exponent: E) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;T&gt;</h4></section></summary><div class="docblock"><p>Constructs a number from its scientific mantissa and exponent.</p>
+</div></details></div><h2 id="provided-methods" class="section-header">Provided Methods<a href="#provided-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa" class="method"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/traits.rs.html#365-367">source</a><h4 class="code-header">fn <a href="#method.sci_mantissa" class="fn">sci_mantissa</a>(self) -&gt; M</h4></section></summary><div class="docblock"><p>Extracts the scientific mantissa from a number.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.sci_exponent" class="method"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/traits.rs.html#370-372">source</a><h4 class="code-header">fn <a href="#method.sci_exponent" class="fn">sci_exponent</a>(self) -&gt; E</h4></section></summary><div class="docblock"><p>Extracts the scientific exponent from a number.</p>
+</div></details></div><h2 id="object-safety" class="section-header">Object Safety<a href="#object-safety" class="anchor">§</a></h2><div class="object-safety-info">This trait is <b>not</b> <a href="https://doc.rust-lang.org/nightly/reference/items/traits.html#object-safety">object safe</a>.</div><h2 id="foreign-impls" class="section-header">Implementations on Foreign Types<a href="#foreign-impls" class="anchor">§</a></h2><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf32,+i64%3E-for-f32" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#901">source</a><a href="#impl-SciMantissaAndExponent%3Cf32,+i64%3E-for-f32" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#901">source</a><a href="#method.sci_mantissa_and_exponent" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, nonzero, and finite, we can write $x = 2^{e_s}m_s$, where
+$e_s$ is an integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. If $x$ is
+a valid float, the scientific mantissa $m_s$ is always exactly representable as a
+float of the same type. We have
+$$
+f(x) = (\frac{x}{2^{\lfloor \log_2 x \rfloor}}, \lfloor \log_2 x \rfloor).
+$$</p>
+<p>The inverse operation is <code>from_sci_mantissa_and_exponent</code>.</p>
+<h5 id="worst-case-complexity"><a href="#worst-case-complexity">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics"><a href="#panics">Panics</a></h5>
+<p>Panics if <code>self</code> is zero, infinite, or <code>NaN</code>.</p>
+<h5 id="examples"><a href="#examples">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa-1" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#901">source</a><a href="#method.sci_mantissa-1" class="anchor">§</a><h4 class="code-header">fn <a href="#method.sci_mantissa" class="fn">sci_mantissa</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a></h4></section></summary><div class="docblock"><p>Returns the scientific mantissa.</p>
+<p>When $x$ is positive, nonzero, and finite, we can write $x = 2^{e_s}m_s$, where
+$e_s$ is an integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. If $x$
+is a valid float, the scientific mantissa $m_s$ is always exactly representable as
+a float of the same type. We have
+$$
+f(x) = \frac{x}{2^{\lfloor \log_2 x \rfloor}}.
+$$</p>
+<h5 id="worst-case-complexity-1"><a href="#worst-case-complexity-1">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-1"><a href="#panics-1">Panics</a></h5>
+<p>Panics if <code>self</code> is zero, infinite, or <code>NaN</code>.</p>
+<h5 id="examples-1"><a href="#examples-1">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.sci_exponent-1" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#901">source</a><a href="#method.sci_exponent-1" class="anchor">§</a><h4 class="code-header">fn <a href="#method.sci_exponent" class="fn">sci_exponent</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>Returns the scientific exponent.</p>
+<p>When $x$ is positive, nonzero, and finite, we can write $x = 2^{e_s}m_s$, where
+$e_s$ is an integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We have
+$$
+f(x) = \lfloor \log_2 x \rfloor.
+$$</p>
+<h5 id="worst-case-complexity-2"><a href="#worst-case-complexity-2">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-2"><a href="#panics-2">Panics</a></h5>
+<p>Panics if <code>self</code> is zero, infinite, or <code>NaN</code>.</p>
+<h5 id="examples-2"><a href="#examples-2">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#901">source</a><a href="#method.from_sci_mantissa_and_exponent" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a float from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, nonzero, and finite, we can write $x = 2^{e_s}m_s$, where
+$e_s$ is an integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$.</p>
+<p>$$
+f(x) = 2^{e_s}m_s,
+$$
+or <code>None</code> if the result cannot be exactly represented as a float of the desired
+type (this happens if the exponent is too large or too small, if the mantissa is
+not in the range $[1, 2)$, or if the mantissa’s precision is too high for the
+exponent).</p>
+<h5 id="worst-case-complexity-3"><a href="#worst-case-complexity-3">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-3"><a href="#panics-3">Panics</a></h5>
+<p>Panics if <code>mantissa</code> is zero, infinite, or <code>NaN</code>.</p>
+<h5 id="examples-3"><a href="#examples-3">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u8" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u8" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-1" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-1" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-4"><a href="#worst-case-complexity-4">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-4"><a href="#panics-4">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-4"><a href="#examples-4">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-1" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-1" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-5"><a href="#worst-case-complexity-5">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-5"><a href="#panics-5">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-5"><a href="#examples-5">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u16" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u16" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-2" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-2" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-6"><a href="#worst-case-complexity-6">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-6"><a href="#panics-6">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-6"><a href="#examples-6">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-2" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-2" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-7"><a href="#worst-case-complexity-7">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-7"><a href="#panics-7">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-7"><a href="#examples-7">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u32" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u32" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-3" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-3" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-8"><a href="#worst-case-complexity-8">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-8"><a href="#panics-8">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-8"><a href="#examples-8">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-3" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-3" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-9"><a href="#worst-case-complexity-9">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-9"><a href="#panics-9">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-9"><a href="#examples-9">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u64" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u64" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-4" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-4" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-10"><a href="#worst-case-complexity-10">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-10"><a href="#panics-10">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-10"><a href="#examples-10">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-4" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-4" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-11"><a href="#worst-case-complexity-11">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-11"><a href="#panics-11">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-11"><a href="#examples-11">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u128" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-u128" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u128.html">u128</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-5" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-5" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-12"><a href="#worst-case-complexity-12">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-12"><a href="#panics-12">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-12"><a href="#examples-12">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-5" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-5" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u128.html">u128</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-13"><a href="#worst-case-complexity-13">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-13"><a href="#panics-13">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-13"><a href="#examples-13">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-usize" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf32,+u64%3E-for-usize" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-6" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-6" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-14"><a href="#worst-case-complexity-14">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-14"><a href="#panics-14">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-14"><a href="#examples-14">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-6" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-6" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-15"><a href="#worst-case-complexity-15">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-15"><a href="#panics-15">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-15"><a href="#examples-15">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf64,+i64%3E-for-f64" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#901">source</a><a href="#impl-SciMantissaAndExponent%3Cf64,+i64%3E-for-f64" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-7" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#901">source</a><a href="#method.sci_mantissa_and_exponent-7" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, nonzero, and finite, we can write $x = 2^{e_s}m_s$, where
+$e_s$ is an integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. If $x$ is
+a valid float, the scientific mantissa $m_s$ is always exactly representable as a
+float of the same type. We have
+$$
+f(x) = (\frac{x}{2^{\lfloor \log_2 x \rfloor}}, \lfloor \log_2 x \rfloor).
+$$</p>
+<p>The inverse operation is <code>from_sci_mantissa_and_exponent</code>.</p>
+<h5 id="worst-case-complexity-16"><a href="#worst-case-complexity-16">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-16"><a href="#panics-16">Panics</a></h5>
+<p>Panics if <code>self</code> is zero, infinite, or <code>NaN</code>.</p>
+<h5 id="examples-16"><a href="#examples-16">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa-2" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#901">source</a><a href="#method.sci_mantissa-2" class="anchor">§</a><h4 class="code-header">fn <a href="#method.sci_mantissa" class="fn">sci_mantissa</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a></h4></section></summary><div class="docblock"><p>Returns the scientific mantissa.</p>
+<p>When $x$ is positive, nonzero, and finite, we can write $x = 2^{e_s}m_s$, where
+$e_s$ is an integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. If $x$
+is a valid float, the scientific mantissa $m_s$ is always exactly representable as
+a float of the same type. We have
+$$
+f(x) = \frac{x}{2^{\lfloor \log_2 x \rfloor}}.
+$$</p>
+<h5 id="worst-case-complexity-17"><a href="#worst-case-complexity-17">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-17"><a href="#panics-17">Panics</a></h5>
+<p>Panics if <code>self</code> is zero, infinite, or <code>NaN</code>.</p>
+<h5 id="examples-17"><a href="#examples-17">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.sci_exponent-2" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#901">source</a><a href="#method.sci_exponent-2" class="anchor">§</a><h4 class="code-header">fn <a href="#method.sci_exponent" class="fn">sci_exponent</a>(self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a></h4></section></summary><div class="docblock"><p>Returns the scientific exponent.</p>
+<p>When $x$ is positive, nonzero, and finite, we can write $x = 2^{e_s}m_s$, where
+$e_s$ is an integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We have
+$$
+f(x) = \lfloor \log_2 x \rfloor.
+$$</p>
+<h5 id="worst-case-complexity-18"><a href="#worst-case-complexity-18">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-18"><a href="#panics-18">Panics</a></h5>
+<p>Panics if <code>self</code> is zero, infinite, or <code>NaN</code>.</p>
+<h5 id="examples-18"><a href="#examples-18">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-7" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#901">source</a><a href="#method.from_sci_mantissa_and_exponent-7" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i64.html">i64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a float from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, nonzero, and finite, we can write $x = 2^{e_s}m_s$, where
+$e_s$ is an integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$.</p>
+<p>$$
+f(x) = 2^{e_s}m_s,
+$$
+or <code>None</code> if the result cannot be exactly represented as a float of the desired
+type (this happens if the exponent is too large or too small, if the mantissa is
+not in the range $[1, 2)$, or if the mantissa’s precision is too high for the
+exponent).</p>
+<h5 id="worst-case-complexity-19"><a href="#worst-case-complexity-19">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-19"><a href="#panics-19">Panics</a></h5>
+<p>Panics if <code>mantissa</code> is zero, infinite, or <code>NaN</code>.</p>
+<h5 id="examples-19"><a href="#examples-19">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u8" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u8" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-8" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-8" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-20"><a href="#worst-case-complexity-20">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-20"><a href="#panics-20">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-20"><a href="#examples-20">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-8" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-8" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-21"><a href="#worst-case-complexity-21">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-21"><a href="#panics-21">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-21"><a href="#examples-21">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u16" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u16" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-9" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-9" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-22"><a href="#worst-case-complexity-22">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-22"><a href="#panics-22">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-22"><a href="#examples-22">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-9" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-9" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-23"><a href="#worst-case-complexity-23">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-23"><a href="#panics-23">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-23"><a href="#examples-23">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u32" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u32" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-10" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-10" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-24"><a href="#worst-case-complexity-24">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-24"><a href="#panics-24">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-24"><a href="#examples-24">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-10" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-10" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-25"><a href="#worst-case-complexity-25">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-25"><a href="#panics-25">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-25"><a href="#examples-25">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u64" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u64" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-11" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-11" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-26"><a href="#worst-case-complexity-26">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-26"><a href="#panics-26">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-26"><a href="#examples-26">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-11" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-11" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-27"><a href="#worst-case-complexity-27">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-27"><a href="#panics-27">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-27"><a href="#examples-27">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u128" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-u128" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u128.html">u128</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-12" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-12" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-28"><a href="#worst-case-complexity-28">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-28"><a href="#panics-28">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-28"><a href="#examples-28">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-12" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-12" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u128.html">u128</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-29"><a href="#worst-case-complexity-29">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-29"><a href="#panics-29">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-29"><a href="#examples-29">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-usize" class="impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#impl-SciMantissaAndExponent%3Cf64,+u64%3E-for-usize" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent">SciMantissaAndExponent</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt; for <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.sci_mantissa_and_exponent-13" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.sci_mantissa_and_exponent-13" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.sci_mantissa_and_exponent" class="fn">sci_mantissa_and_exponent</a>(self) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>)</h4></section></summary><div class="docblock"><p>Returns the scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. We represent
+the rational mantissa as a float. The conversion might not be exact, so we
+round to the nearest float using the <code>Nearest</code> rounding mode. To use other
+rounding modes, use <a href="../mantissa_and_exponent/fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round"><code>sci_mantissa_and_exponent_round</code></a>.</p>
+<p>If the result cannot be expressed as an integer of the specified type,
+<code>None</code> is returned.
+$$
+f(x) \approx (\frac{x}{2^{\lfloor \log_2 x \rfloor}},
+\lfloor \log_2 x \rfloor).
+$$</p>
+<h5 id="worst-case-complexity-30"><a href="#worst-case-complexity-30">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-30"><a href="#panics-30">Panics</a></h5>
+<p>Panics if <code>self</code> is zero.</p>
+<h5 id="examples-30"><a href="#examples-30">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.from_sci_mantissa_and_exponent-13" class="method trait-impl"><a class="src rightside" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#567">source</a><a href="#method.from_sci_mantissa_and_exponent-13" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_sci_mantissa_and_exponent" class="fn">from_sci_mantissa_and_exponent</a>(
+    sci_mantissa: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>,
+    sci_exponent: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>&gt;</h4></section></summary><div class="docblock"><p>Constructs a primitive integer from its scientific mantissa and exponent.</p>
+<p>When $x$ is positive, we can write $x = 2^{e_s}m_s$, where $e_s$ is an
+integer and $m_s$ is a rational number with $1 \leq m_s &lt; 2$. Here, the
+rational mantissa is provided as a float. If the mantissa is outside the
+range $[1, 2)$, <code>None</code> is returned.</p>
+<p>Some combinations of mantissas and exponents do not specify an integer, in
+which case the resulting value is rounded to an integer using the <code>Nearest</code>
+rounding mode. To specify other rounding modes, use
+<a href="../mantissa_and_exponent/fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round"><code>from_sci_mantissa_and_exponent_round</code></a>.</p>
+<p>$$
+f(x) \approx 2^{e_s}m_s.
+$$</p>
+<h5 id="worst-case-complexity-31"><a href="#worst-case-complexity-31">Worst-case complexity</a></h5>
+<p>Constant time and additional memory.</p>
+<h5 id="panics-31"><a href="#panics-31">Panics</a></h5>
+<p>Panics if <code>sci_mantissa</code> is zero.</p>
+<h5 id="examples-31"><a href="#examples-31">Examples</a></h5>
+<p>See <a href="../mantissa_and_exponent/index.html#from_sci_mantissa_and_exponent" title="mod malachite_base::num::conversion::mantissa_and_exponent">here</a>.</p>
+</div></details></div></details><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"></div><script src="../../../../trait.impl/malachite_base/num/conversion/traits/trait.SciMantissaAndExponent.js" data-ignore-extern-crates="std" async></script></section></div></main></body></html>

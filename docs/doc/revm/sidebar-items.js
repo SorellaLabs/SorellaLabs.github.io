@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["CALL_STACK_LIMIT"],"enum":["JournalEntry"],"fn":["evm_inner","inspector_instruction","new"],"mod":["db","handler","inspectors","interpreter","precompile","primitives"],"struct":["EVM","EVMData","EVMImpl","JournalCheckpoint","JournaledState"],"trait":["Database","DatabaseCommit","DatabaseRef","Inspector","Transact"],"type":["DummyStateDB"]};

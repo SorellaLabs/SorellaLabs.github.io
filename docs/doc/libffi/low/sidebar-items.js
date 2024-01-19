@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ffi_abi_FFI_DEFAULT_ABI"],"enum":["Error"],"fn":["call","closure_alloc","closure_free","prep_cif","prep_cif_var","prep_closure","prep_closure_mut"],"mod":["type_tag","types"],"struct":["CodePtr","ffi_cif","ffi_closure","ffi_type"],"type":["Callback","CallbackMut","RawCallback","Result","ffi_abi","ffi_arg","ffi_sarg","ffi_status"]};

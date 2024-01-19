@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["CapabilityMessage","SharedCapability","SharedCapabilityError"],"fn":["shared_capability_offsets"],"struct":["Capabilities","Capability","RawCapabilityMessage","SharedCapabilities","UnsupportedCapabilityError"]};

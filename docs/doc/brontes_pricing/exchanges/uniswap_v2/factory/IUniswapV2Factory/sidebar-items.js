@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["IUniswapV2FactoryEvents"],"struct":["PairCreated"]};

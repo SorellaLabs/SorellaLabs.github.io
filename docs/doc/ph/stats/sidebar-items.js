@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["BuildStatsPrinter"],"trait":["AccessStatsCollector","BuildStatsCollector"]};

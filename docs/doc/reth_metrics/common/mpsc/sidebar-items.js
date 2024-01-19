@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["metered_channel","metered_unbounded_channel"],"struct":["MeteredPollSender","MeteredReceiver","MeteredSender","UnboundedMeteredReceiver","UnboundedMeteredSender"]};

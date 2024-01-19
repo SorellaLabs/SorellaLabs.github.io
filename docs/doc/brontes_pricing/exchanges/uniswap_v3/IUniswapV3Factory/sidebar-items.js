@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["IUniswapV3FactoryCalls","IUniswapV3FactoryEvents"],"struct":["PoolCreated","getPoolCall","getPoolReturn"]};

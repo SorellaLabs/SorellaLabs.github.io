@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"derive":["Metrics"],"mod":["prometheus_exporter"]};

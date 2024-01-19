@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["edmonds_karp","edmonds_karp_dense","edmonds_karp_sparse"],"struct":["Common","DenseCapacity","SparseCapacity"],"trait":["EdmondsKarp"],"type":["EKFlows","Edge"]};
