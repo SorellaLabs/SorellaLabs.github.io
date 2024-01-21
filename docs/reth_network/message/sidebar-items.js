@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["BlockRequest","PeerMessage","PeerRequest","PeerResponse","PeerResponseResult"],"struct":["NewBlockMessage","PeerRequestSender"]};

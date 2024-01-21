@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["LongTailInspector","PossibleSandwich"]};
+window.SIDEBAR_ITEMS = {"struct":["PossibleSandwich","SandwichInspector"]};

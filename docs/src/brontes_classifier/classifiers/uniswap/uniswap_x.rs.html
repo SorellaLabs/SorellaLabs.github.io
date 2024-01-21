@@ -35,8 +35,9 @@
 <a href="#35" id="35">35</a>
 <a href="#36" id="36">36</a>
 <a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>alloy_primitives::Address;
-<span class="kw">use </span>brontes_database_libmdbx::implementation::tx::LibmdbxTx;
+<span class="kw">use </span>brontes_database::libmdbx::tx::CompressedLibmdbxTx;
 <span class="kw">use </span>brontes_macros::{action_dispatch, action_impl};
 <span class="kw">use </span>brontes_types::normalized_actions::NormalizedBatch;
 <span class="kw">use </span>reth_db::mdbx::RO;
@@ -54,9 +55,10 @@
     |trace_index,
     from_address: Address,
     target_address: Address,
+    msg_sender: Address,
     call_data: executeCall,
     logs: UniXExecuteImplBatch,
-    db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;| {
+    db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;| {
         <span class="kw">let </span>logs = logs.Fill_field;
 
         <span class="comment">//TODO: Finish implementing this

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["address_to_factory","address_to_protocol","address_to_tokens","cex_price","dex_price","metadata","mev_block","pool_creation_block","subgraphs","token_decimals"],"trait":["LibmdbxData","LibmdbxDupData"]};

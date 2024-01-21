@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["BlockStatus","BlockValidationKind","CanonicalOutcome","InsertPayloadOk"],"mod":["error"],"trait":["BlockchainTreeEngine","BlockchainTreeViewer"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["SyncTarget"],"fn":["validate_header_download"],"trait":["HeaderDownloader"]};

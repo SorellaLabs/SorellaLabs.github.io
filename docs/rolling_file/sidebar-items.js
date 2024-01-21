@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["RollingFrequency"],"struct":["RollingConditionBasic","RollingFileAppender"],"trait":["RollingCondition"],"type":["BasicRollingFileAppender"]};

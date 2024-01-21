@@ -199,11 +199,15 @@
 <a href="#199" id="199">199</a>
 <a href="#200" id="200">200</a>
 <a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>alloy_sol_macro::sol;
 <span class="kw">use </span>alloy_sol_types::SolCall;
 <span class="kw">use </span>brontes_types::traits::TracingProvider;
+<span class="kw">use </span>eyre::anyhow;
+<span class="kw">use </span>futures::TryFutureExt;
 <span class="kw">use </span>reth_rpc_types::{CallInput, CallRequest};
 
 <span class="kw">use </span><span class="kw">super</span>::UniswapV2Pool;
@@ -288,10 +292,10 @@
 
     <span class="kw">let </span>res = middleware
         .eth_call(req, block.map(|i| i.into()), <span class="prelude-val">None</span>, <span class="prelude-val">None</span>)
-        .<span class="kw">await
-        </span>.unwrap();
+        .map_err(|<span class="kw">_</span>| <span class="macro">eyre::eyre!</span>(<span class="string">"v2 state call failed"</span>))
+        .<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>return_data = data_constructorCall::abi_decode_returns(<span class="kw-2">&amp;*</span>res, <span class="bool-val">false</span>).unwrap();
+    <span class="kw">let </span><span class="kw-2">mut </span>return_data = data_constructorCall::abi_decode_returns(<span class="kw-2">&amp;*</span>res, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
     <span class="kw-2">*</span>pool = populate_pool_data_from_tokens(pool.to_owned(), return_data._0.remove(<span class="number">0</span>));
     <span class="prelude-val">Ok</span>(())
 }

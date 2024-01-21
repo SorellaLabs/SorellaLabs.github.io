@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["Composer"],"type":["ComposerResults"]};
+window.SIDEBAR_ITEMS = {"fn":["compose_mev_results"],"type":["ComposerResults"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["Fanout","FanoutBuilder","Filter","FilterLayer","Prefix","PrefixLayer","Router","RouterBuilder","Stack"],"trait":["Layer"]};

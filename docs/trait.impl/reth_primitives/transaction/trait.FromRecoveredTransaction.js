@@ -1,4 +1,0 @@
-(function() {var implementors = {
-"reth_primitives":[],
-"reth_transaction_pool":[["impl <a class=\"trait\" href=\"reth_primitives/transaction/trait.FromRecoveredTransaction.html\" title=\"trait reth_primitives::transaction::FromRecoveredTransaction\">FromRecoveredTransaction</a> for <a class=\"enum\" href=\"reth_transaction_pool/test_utils/enum.MockTransaction.html\" title=\"enum reth_transaction_pool::test_utils::MockTransaction\">MockTransaction</a>"],["impl <a class=\"trait\" href=\"reth_primitives/transaction/trait.FromRecoveredTransaction.html\" title=\"trait reth_primitives::transaction::FromRecoveredTransaction\">FromRecoveredTransaction</a> for <a class=\"struct\" href=\"reth_transaction_pool/struct.EthPooledTransaction.html\" title=\"struct reth_transaction_pool::EthPooledTransaction\">EthPooledTransaction</a>"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

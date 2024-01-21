@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["BlobStoreError","BlobStoreUpdates"],"mod":["disk"],"struct":["BlobStoreCanonTracker","InMemoryBlobStore","NoopBlobStore"],"trait":["BlobStore"]};

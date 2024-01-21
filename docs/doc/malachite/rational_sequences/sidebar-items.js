@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["access","cmp","conversion","exhaustive","to_string"],"struct":["RationalSequence"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["ban_list","bandwidth_meter","ratelimit","stream"]};

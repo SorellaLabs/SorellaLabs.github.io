@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Hook","MaybeOwnedInspector"],"struct":["InspectorStack","InspectorStackConfig"]};

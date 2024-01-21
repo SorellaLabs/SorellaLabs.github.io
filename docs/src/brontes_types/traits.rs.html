@@ -38,7 +38,11 @@
 <a href="#38" id="38">38</a>
 <a href="#39" id="39">39</a>
 <a href="#40" id="40">40</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>reth_interfaces::provider::ProviderResult;
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>alloy_primitives::TxHash;
+<span class="kw">use </span>reth_interfaces::provider::ProviderResult;
 <span class="kw">use </span>reth_primitives::{BlockId, BlockNumber, BlockNumberOrTag, Bytes, Header, B256};
 <span class="kw">use </span>reth_rpc::eth::error::EthResult;
 <span class="kw">use </span>reth_rpc_types::{
@@ -77,5 +81,7 @@
     <span class="kw">async fn </span>header_by_number(<span class="kw-2">&amp;</span><span class="self">self</span>, number: BlockNumber) -&gt; ProviderResult&lt;<span class="prelude-ty">Option</span>&lt;Header&gt;&gt;;
 
     <span class="kw">async fn </span>logs_from_filter(<span class="kw-2">&amp;</span><span class="self">self</span>, filter: Filter) -&gt; ProviderResult&lt;Vec&lt;Log&gt;&gt;;
+
+    <span class="kw">async fn </span>block_and_tx_index(<span class="kw-2">&amp;</span><span class="self">self</span>, hash: TxHash) -&gt; ProviderResult&lt;(u64, usize)&gt;;
 }
 </code></pre></div></section></main></body></html>

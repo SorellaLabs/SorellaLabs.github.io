@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["IUniswapV3PoolCalls","IUniswapV3PoolEvents"],"struct":["Burn","Mint","Swap","feeCall","feeReturn","liquidityCall","liquidityReturn","slot0Call","slot0Return","swapCall","swapReturn","tickBitmapCall","tickBitmapReturn","tickSpacingCall","tickSpacingReturn","ticksCall","ticksReturn","token0Call","token0Return","token1Call","token1Return"]};

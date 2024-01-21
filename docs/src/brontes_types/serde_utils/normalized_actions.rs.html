@@ -225,6 +225,14 @@
 <a href="#225" id="225">225</a>
 <a href="#226" id="226">226</a>
 <a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>alloy_primitives::TxHash;
 <span class="kw">use </span>itertools::Itertools;
 <span class="kw">use </span>sorella_db_databases::clickhouse::fixed_string::FixedString;
@@ -414,13 +422,14 @@
 }
 
 <span class="kw">pub struct </span>ClickhouseVecNormalizedLiquidation {
-    <span class="kw">pub </span>trace_index:      Vec&lt;u64&gt;,
-    <span class="kw">pub </span>pool:             Vec&lt;FixedString&gt;,
-    <span class="kw">pub </span>liquidator:       Vec&lt;FixedString&gt;,
-    <span class="kw">pub </span>debtor:           Vec&lt;FixedString&gt;,
-    <span class="kw">pub </span>collateral_asset: Vec&lt;FixedString&gt;,
-    <span class="kw">pub </span>debt_asset:       Vec&lt;FixedString&gt;,
-    <span class="kw">pub </span>amount:           Vec&lt;[u8; <span class="number">32</span>]&gt;,
+    <span class="kw">pub </span>trace_index:           Vec&lt;u64&gt;,
+    <span class="kw">pub </span>pool:                  Vec&lt;FixedString&gt;,
+    <span class="kw">pub </span>liquidator:            Vec&lt;FixedString&gt;,
+    <span class="kw">pub </span>debtor:                Vec&lt;FixedString&gt;,
+    <span class="kw">pub </span>collateral_asset:      Vec&lt;FixedString&gt;,
+    <span class="kw">pub </span>debt_asset:            Vec&lt;FixedString&gt;,
+    <span class="kw">pub </span>covered_debt:          Vec&lt;[u8; <span class="number">32</span>]&gt;,
+    <span class="kw">pub </span>liquidated_collateral: Vec&lt;[u8; <span class="number">32</span>]&gt;,
 }
 
 <span class="kw">impl </span>From&lt;Vec&lt;NormalizedLiquidation&gt;&gt; <span class="kw">for </span>ClickhouseVecNormalizedLiquidation {
@@ -440,15 +449,22 @@
                 .map(|val| <span class="macro">format!</span>(<span class="string">"{:?}"</span>, val.debtor).into())
                 .collect(),
 
-            collateral_asset: value
+            collateral_asset:      value
                 .iter()
                 .map(|val| <span class="macro">format!</span>(<span class="string">"{:?}"</span>, val.collateral_asset).into())
                 .collect(),
-            debt_asset:       value
+            debt_asset:            value
                 .iter()
                 .map(|val| <span class="macro">format!</span>(<span class="string">"{:?}"</span>, val.debt_asset).into())
                 .collect(),
-            amount:           value.iter().map(|val| val.amount.to_le_bytes()).collect(),
+            covered_debt:          value
+                .iter()
+                .map(|val| val.covered_debt.to_le_bytes())
+                .collect(),
+            liquidated_collateral: value
+                .iter()
+                .map(|val| val.liquidated_collateral.to_le_bytes())
+                .collect(),
         }
     }
 }

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["address","calldatacopy","calldataload","calldatasize","caller","callvalue","codecopy","codesize","gas","keccak256","returndatacopy","returndatasize"]};

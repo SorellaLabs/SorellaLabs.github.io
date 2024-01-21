@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ConnectionDirection","HandlerIn","HandlerOut"],"struct":["Challenge","Handler","NodeAddress","NodeContact","WhoAreYouRef"]};

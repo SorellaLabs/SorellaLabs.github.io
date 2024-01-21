@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["from_block","from_block_full","from_block_with_tx_hashes","from_primitive_with_hash","uncle_block_from_header"]};

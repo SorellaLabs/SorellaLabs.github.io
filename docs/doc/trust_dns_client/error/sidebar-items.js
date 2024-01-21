@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ClientErrorKind","DnsSecErrorKind","LexerErrorKind","ParseErrorKind"],"struct":["ClientError","DnsSecError","LexerError","ParseError"],"type":["ClientResult","DnsSecResult","LexerResult","ParseResult"]};

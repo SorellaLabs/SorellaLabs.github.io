@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["emit","emit_pre_sig","read"],"struct":["SIG"]};

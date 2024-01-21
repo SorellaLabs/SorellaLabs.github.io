@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["PrimitivePowerOf2DigitIterator"]};

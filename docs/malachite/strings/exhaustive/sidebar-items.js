@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["exhaustive_fixed_length_strings","exhaustive_fixed_length_strings_using_chars","exhaustive_strings","exhaustive_strings_using_chars","lex_fixed_length_strings","lex_fixed_length_strings_using_chars","shortlex_strings","shortlex_strings_using_chars"]};

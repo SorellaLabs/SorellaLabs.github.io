@@ -192,40 +192,12 @@
 <a href="#192" id="192">192</a>
 <a href="#193" id="193">193</a>
 <a href="#194" id="194">194</a>
-<a href="#195" id="195">195</a>
-<a href="#196" id="196">196</a>
-<a href="#197" id="197">197</a>
-<a href="#198" id="198">198</a>
-<a href="#199" id="199">199</a>
-<a href="#200" id="200">200</a>
-<a href="#201" id="201">201</a>
-<a href="#202" id="202">202</a>
-<a href="#203" id="203">203</a>
-<a href="#204" id="204">204</a>
-<a href="#205" id="205">205</a>
-<a href="#206" id="206">206</a>
-<a href="#207" id="207">207</a>
-<a href="#208" id="208">208</a>
-<a href="#209" id="209">209</a>
-<a href="#210" id="210">210</a>
-<a href="#211" id="211">211</a>
-<a href="#212" id="212">212</a>
-<a href="#213" id="213">213</a>
-<a href="#214" id="214">214</a>
-<a href="#215" id="215">215</a>
-<a href="#216" id="216">216</a>
-<a href="#217" id="217">217</a>
-<a href="#218" id="218">218</a>
-<a href="#219" id="219">219</a>
-<a href="#220" id="220">220</a>
-<a href="#221" id="221">221</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::{HashMap, HashSet},
     sync::Arc,
 };
 
-<span class="kw">use </span>brontes_database::Metadata;
-<span class="kw">use </span>brontes_database_libmdbx::Libmdbx;
+<span class="kw">use </span>brontes_database::libmdbx::Libmdbx;
 <span class="kw">use </span>brontes_types::{
     classified_mev::{AtomicBackrun, MevType},
     normalized_actions::Actions,
@@ -237,7 +209,9 @@
 <span class="kw">use </span>rayon::iter::{IntoParallelIterator, ParallelIterator};
 <span class="kw">use </span>reth_primitives::{Address, B256};
 
-<span class="kw">use crate</span>::{shared_utils::SharedInspectorUtils, ClassifiedMev, Inspector, SpecificMev};
+<span class="kw">use crate</span>::{
+    shared_utils::SharedInspectorUtils, ClassifiedMev, Inspector, MetadataCombined, SpecificMev,
+};
 
 <span class="kw">pub struct </span>AtomicBackrunInspector&lt;<span class="lifetime">'db</span>&gt; {
     inner: SharedInspectorUtils&lt;<span class="lifetime">'db</span>&gt;,
@@ -254,8 +228,8 @@
     <span class="kw">async fn </span>process_tree(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         tree: Arc&lt;BlockTree&lt;Actions&gt;&gt;,
-        meta_data: Arc&lt;Metadata&gt;,
-    ) -&gt; Vec&lt;(ClassifiedMev, Box&lt;<span class="kw">dyn </span>SpecificMev&gt;)&gt; {
+        meta_data: Arc&lt;MetadataCombined&gt;,
+    ) -&gt; Vec&lt;(ClassifiedMev, SpecificMev)&gt; {
         <span class="kw">let </span>intersting_state = tree.collect_all(|node| {
             (
                 node.data.is_swap() || node.data.is_transfer(),
@@ -319,25 +293,10 @@
         idx: usize,
         eoa: Address,
         mev_contract: Address,
-        metadata: Arc&lt;Metadata&gt;,
+        metadata: Arc&lt;MetadataCombined&gt;,
         gas_details: GasDetails,
         searcher_actions: Vec&lt;Vec&lt;Actions&gt;&gt;,
-    ) -&gt; <span class="prelude-ty">Option</span>&lt;(ClassifiedMev, Box&lt;<span class="kw">dyn </span>SpecificMev&gt;)&gt; {
-        <span class="kw">let </span>deltas = <span class="self">self</span>.inner.calculate_token_deltas(<span class="kw-2">&amp;</span>searcher_actions);
-
-        <span class="kw">let </span>addr_usd_deltas =
-            <span class="self">self</span>.inner
-                .usd_delta_by_address(idx, deltas, metadata.clone(), <span class="bool-val">false</span>)<span class="question-mark">?</span>;
-
-        <span class="kw">let </span>mev_profit_collector = <span class="self">self</span>.inner.profit_collectors(<span class="kw-2">&amp;</span>addr_usd_deltas);
-
-        <span class="kw">let </span>rev_usd = addr_usd_deltas
-            .values()
-            .fold(Rational::ZERO, |acc, delta| acc + delta);
-
-        <span class="kw">let </span>gas_used = gas_details.gas_paid();
-        <span class="kw">let </span>gas_used_usd = metadata.get_gas_price_usd(gas_used);
-
+    ) -&gt; <span class="prelude-ty">Option</span>&lt;(ClassifiedMev, SpecificMev)&gt; {
         <span class="kw">let </span>unique_tokens = searcher_actions
             .iter()
             .flatten()
@@ -358,6 +317,21 @@
             <span class="kw">return </span><span class="prelude-val">None
         </span>}
 
+        <span class="kw">let </span>deltas = <span class="self">self</span>.inner.calculate_token_deltas(<span class="kw-2">&amp;</span>searcher_actions);
+
+        <span class="kw">let </span>addr_usd_deltas =
+            <span class="self">self</span>.inner
+                .usd_delta_by_address(idx, deltas, metadata.clone(), <span class="bool-val">false</span>)<span class="question-mark">?</span>;
+
+        <span class="kw">let </span>mev_profit_collector = <span class="self">self</span>.inner.profit_collectors(<span class="kw-2">&amp;</span>addr_usd_deltas);
+
+        <span class="kw">let </span>rev_usd = addr_usd_deltas
+            .values()
+            .fold(Rational::ZERO, |acc, delta| acc + delta);
+
+        <span class="kw">let </span>gas_used = gas_details.gas_paid();
+        <span class="kw">let </span>gas_used_usd = metadata.get_gas_price_usd(gas_used);
+
         <span class="comment">// Can change this later to check if people are subsidising arbs to kill ops for
         // competitors
         </span><span class="kw">if </span><span class="kw-2">&amp;</span>rev_usd - <span class="kw-2">&amp;</span>gas_used_usd &lt;= Rational::ZERO {
@@ -365,6 +339,7 @@
         </span>}
 
         <span class="kw">let </span>classified = ClassifiedMev {
+            mev_tx_index: idx <span class="kw">as </span>u64,
             mev_type: MevType::Backrun,
             tx_hash,
             mev_contract,
@@ -382,62 +357,33 @@
             .map(|s| s.force_swap())
             .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
-        <span class="kw">let </span>backrun = Box::new(AtomicBackrun { tx_hash, gas_details, swaps });
+        <span class="kw">let </span>backrun = AtomicBackrun { tx_hash, gas_details, swaps };
 
-        <span class="prelude-val">Some</span>((classified, backrun))
+        <span class="prelude-val">Some</span>((classified, SpecificMev::AtomicBackrun(backrun)))
     }
 }
 
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests {
-    <span class="kw">use </span>std::{env, str::FromStr, time::SystemTime};
-
-    <span class="kw">use </span>brontes_classifier::Classifier;
-    <span class="kw">use </span>brontes_core::{init_tracing, test_utils::init_trace_parser};
-    <span class="kw">use </span>brontes_database::clickhouse::Clickhouse;
-    <span class="kw">use </span>brontes_database_libmdbx::Libmdbx;
+    <span class="kw">use </span>alloy_primitives::hex;
     <span class="kw">use </span>serial_test::serial;
-    <span class="kw">use </span>tokio::sync::mpsc::unbounded_channel;
 
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span><span class="kw">crate</span>::test_utils::{InspectorTestUtils, InspectorTxRunConfig, USDC_ADDRESS};
 
     <span class="attr">#[tokio::test]
     #[serial]
     </span><span class="kw">async fn </span>test_backrun() {
-        dotenv::dotenv().ok();
-        init_tracing();
-        <span class="kw">let </span>block_num = <span class="number">18522278</span>;
-        <span class="kw">let </span>brontes_db_endpoint = env::var(<span class="string">"BRONTES_DB_PATH"</span>).expect(<span class="string">"No BRONTES_DB_PATH in .env"</span>);
-        <span class="kw">let </span>libmdbx = Libmdbx::init_db(brontes_db_endpoint, <span class="prelude-val">None</span>).unwrap();
-        <span class="kw">let </span>(tx, _rx) = unbounded_channel();
+        <span class="kw">let </span>inspector_util = InspectorTestUtils::new(USDC_ADDRESS, <span class="number">0.5</span>);
 
-        <span class="kw">let </span>tracer = init_trace_parser(tokio::runtime::Handle::current().clone(), tx, <span class="kw-2">&amp;</span>libmdbx);
-        <span class="kw">let </span>db = Clickhouse::default();
+        <span class="kw">let </span>tx = <span class="macro">hex!</span>(<span class="string">"76971a4f00a0a836322c9825b6edf06c8c49bf4261ef86fc88893154283a7124"</span>).into();
+        <span class="kw">let </span>config = InspectorTxRunConfig::new(MevType::Backrun)
+            .with_mev_tx_hashes(<span class="macro">vec!</span>[tx])
+            .with_dex_prices()
+            .with_expected_profit_usd(<span class="number">0.188588</span>)
+            .with_expected_gas_used(<span class="number">71.632668</span>);
 
-        <span class="kw">let </span>classifier = Classifier::new(<span class="kw-2">&amp;</span>libmdbx);
-
-        <span class="kw">let </span>block = tracer.execute_block(block_num).<span class="kw">await</span>.unwrap();
-        <span class="kw">let </span>metadata = db.get_metadata(block_num).<span class="kw">await</span>;
-
-        <span class="kw">let </span>tx = block.<span class="number">0</span>.clone().into_iter().take(<span class="number">60</span>).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-        <span class="kw">let </span>(missing_token_decimals, tree) = classifier.build_block_tree(tx, block.<span class="number">1</span>);
-        <span class="kw">let </span>tree = Arc::new(tree);
-
-        <span class="kw">let </span>USDC = Address::from_str(<span class="string">"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"</span>).unwrap();
-
-        <span class="kw">let </span>inspector = Box::new(AtomicBackrunInspector::new(USDC)) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>Inspector&gt;;
-
-        <span class="kw">let </span>t0 = SystemTime::now();
-        <span class="kw">let </span>mev = inspector.process_tree(tree.clone(), metadata.into()).<span class="kw">await</span>;
-        <span class="kw">let </span>t1 = SystemTime::now();
-        <span class="kw">let </span>delta = t1.duration_since(t0).unwrap().as_micros();
-        <span class="macro">println!</span>(<span class="string">"backrun inspector took: {} us"</span>, delta);
-
-        <span class="comment">// assert!(
-        //     mev[0].0.tx_hash
-        //         == B256::from_str(
-
-        </span><span class="macro">println!</span>(<span class="string">"{:#?}"</span>, mev);
+        inspector_util.run_inspector(config, <span class="prelude-val">None</span>).<span class="kw">await</span>.unwrap();
     }
 }
 </code></pre></div></section></main></body></html>

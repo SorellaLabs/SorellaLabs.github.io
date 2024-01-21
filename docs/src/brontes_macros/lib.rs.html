@@ -79,6 +79,7 @@
 <a href="#79" id="79">79</a>
 <a href="#80" id="80">80</a>
 <a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>action_classifier;
 <span class="kw">mod </span>discovery_classifier;
 <span class="kw">use </span>proc_macro::TokenStream;
@@ -101,7 +102,7 @@
 ///     [Swap],
 ///     UniswapV2,
 ///     logs: true,
-///     |index, from_address: Address, target_address: Address, log_data: (Swap)| { &lt;body&gt; });
+///     |index, from_address: Address, target_address: Address, msg_sender: Address, log_data: (Swap)| { &lt;body&gt; });
 ///
 /// action_impl!(
 ///     V2MintImpl,
@@ -114,6 +115,7 @@
 ///     |index,
 ///      from_address: Address,
 ///      target_address: Address,
+///      msg_sender: Address,
 ///      call_data: mintCall,
 ///      log_data: (Mint)|  { &lt;body&gt; });
 ///

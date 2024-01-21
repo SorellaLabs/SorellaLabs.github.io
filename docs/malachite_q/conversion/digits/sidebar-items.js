@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["digits","from_digits","from_power_of_2_digits","power_of_2_digits","to_digits","to_power_of_2_digits"]};

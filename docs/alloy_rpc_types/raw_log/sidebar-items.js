@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["logs_bloom"],"struct":["Log"]};

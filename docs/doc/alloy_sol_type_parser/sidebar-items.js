@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["IDENT_REGEX"],"enum":["Storage","TypeStem"],"fn":["is_id_continue","is_id_start","is_valid_identifier"],"mod":["utils"],"struct":["Error","ParameterSpecifier","Parameters","RootType","TupleSpecifier","TypeSpecifier"],"type":["Result"]};

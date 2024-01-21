@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["HashBuilderValue"],"struct":["HashBuilder","HashBuilderState","ProofRetainer"]};

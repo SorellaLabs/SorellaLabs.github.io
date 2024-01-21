@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["EMPTY_BYTES"],"fn":["decode","decode_params","decode_sequence","encode","encode_params","encode_sequence"],"mod":["token"],"struct":["Decoder","Encoder"]};

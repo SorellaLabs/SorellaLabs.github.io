@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["StaticBindingsDb"]};
+window.SIDEBAR_ITEMS = {"enum":["ArchivedStaticBindingsDb","StaticBindingsDb","StaticBindingsDbResolver"]};

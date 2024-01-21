@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"macro":["BitArr","bitarr","bitbox","bits","bitvec"],"struct":["BitArray","BitBox","BitPtr","BitPtrRange","BitRef","BitSlice","BitVec","LocalBits","Lsb0","Msb0"],"trait":["AsBits","AsMutBits","BitOrder","BitStore","_"]};

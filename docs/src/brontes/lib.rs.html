@@ -233,7 +233,7 @@
 <a href="#233" id="233">233</a>
 <a href="#234" id="234">234</a>
 <a href="#235" id="235">235</a>
-</pre></div><pre class="rust"><code><span class="comment">//TODO: Finish this once all other crates have been documented.
+</pre></div><pre class="rust"><code><span class="comment">//TODO: (Ludwig) Finish this once all other crates have been documented.
 
 </span><span class="doccomment">//! # Brontes
 //!
@@ -269,15 +269,15 @@
 
 <span class="kw">use </span>brontes_classifier::Classifier;
 <span class="kw">use </span>brontes_core::decoding::{Parser, TracingProvider};
-<span class="kw">use </span>brontes_database::clickhouse::Clickhouse;
-<span class="kw">use </span>brontes_database_libmdbx::Libmdbx;
+<span class="kw">use </span>brontes_database::{clickhouse::Clickhouse, libmdbx::Libmdbx};
 <span class="kw">use </span>brontes_inspect::Inspector;
 <span class="kw">use </span>futures::{stream::FuturesUnordered, Future, FutureExt, StreamExt};
 <span class="kw">use </span>tracing::info;
 
 <span class="kw">mod </span>banner;
 <span class="kw">mod </span>block_inspector;
-<span class="kw">mod </span>tip_inspector;
+<span class="attr">#[allow(unused_imports)]
+</span><span class="kw">mod </span>tip_inspector;
 
 <span class="kw">mod </span>data_batching;
 <span class="kw">use </span>block_inspector::BlockInspector;
@@ -292,7 +292,7 @@
     Tip,
 }
 
-<span class="kw">pub struct </span>Brontes&lt;<span class="lifetime">'inspector</span>, <span class="kw">const </span>N: usize, T: TracingProvider&gt; {
+<span class="kw">pub struct </span>Brontes&lt;<span class="lifetime">'inspector</span>, T: TracingProvider&gt; {
     current_block:    u64,
     end_block:        <span class="prelude-ty">Option</span>&lt;u64&gt;,
     chain_tip:        u64,
@@ -300,14 +300,14 @@
     max_tasks:        u64,
     parser:           <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Parser&lt;<span class="lifetime">'inspector</span>, T&gt;,
     classifier:       <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Classifier&lt;<span class="lifetime">'inspector</span>, T&gt;,
-    inspectors:       <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>[<span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Box&lt;<span class="kw">dyn </span>Inspector&gt;; N],
+    inspectors:       <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>[<span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Box&lt;<span class="kw">dyn </span>Inspector&gt;],
     clickhouse:       <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Clickhouse,
     database:         <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Libmdbx,
-    block_inspectors: FuturesUnordered&lt;BlockInspector&lt;<span class="lifetime">'inspector</span>, N, T&gt;&gt;,
-    tip_inspector:    <span class="prelude-ty">Option</span>&lt;TipInspector&lt;<span class="lifetime">'inspector</span>, N, T&gt;&gt;,
+    block_inspectors: FuturesUnordered&lt;BlockInspector&lt;<span class="lifetime">'inspector</span>, T&gt;&gt;,
+    tip_inspector:    <span class="prelude-ty">Option</span>&lt;TipInspector&lt;<span class="lifetime">'inspector</span>, T&gt;&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">'inspector</span>, <span class="kw">const </span>N: usize, T: TracingProvider&gt; Brontes&lt;<span class="lifetime">'inspector</span>, N, T&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'inspector</span>, T: TracingProvider&gt; Brontes&lt;<span class="lifetime">'inspector</span>, T&gt; {
     <span class="kw">pub fn </span>new(
         init_block: u64,
         end_block: <span class="prelude-ty">Option</span>&lt;u64&gt;,
@@ -317,7 +317,7 @@
         clickhouse: <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Clickhouse,
         database: <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Libmdbx,
         classifier: <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Classifier&lt;<span class="lifetime">'_</span>, T&gt;,
-        inspectors: <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>[<span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Box&lt;<span class="kw">dyn </span>Inspector&gt;; N],
+        inspectors: <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>[<span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Box&lt;<span class="kw">dyn </span>Inspector&gt;],
     ) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>brontes = <span class="self">Self </span>{
             current_block: init_block,
@@ -415,7 +415,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>N: usize, T: TracingProvider&gt; Future <span class="kw">for </span>Brontes&lt;<span class="lifetime">'_</span>, N, T&gt; {
+<span class="kw">impl</span>&lt;T: TracingProvider&gt; Future <span class="kw">for </span>Brontes&lt;<span class="lifetime">'_</span>, T&gt; {
     <span class="kw">type </span>Output = ();
 
     <span class="comment">//TODO: Fix this comment

@@ -84,7 +84,7 @@
 <a href="#84" id="84">84</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{pin::Pin, sync::Arc};
 
-<span class="kw">use </span>brontes_database_libmdbx::{implementation::tx::LibmdbxTx, Libmdbx};
+<span class="kw">use </span>brontes_database::libmdbx::{tx::CompressedLibmdbxTx, Libmdbx};
 <span class="kw">use </span>brontes_types::structured_trace::TxTrace;
 <span class="kw">pub use </span>brontes_types::traits::TracingProvider;
 <span class="kw">use </span>futures::Future;
@@ -126,7 +126,7 @@
         metrics_tx: UnboundedSender&lt;PoirotMetricEvents&gt;,
         libmdbx: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>Libmdbx,
         tracing: T,
-        should_fetch: Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>Address, <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;) -&gt; bool + Send + Sync&gt;,
+        should_fetch: Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>Address, <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;) -&gt; bool + Send + Sync&gt;,
     ) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>executor = Executor::new();
 

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TraceLoaderError"],"fn":["store_traces_for_block"],"struct":["BlockTracesWithHeaderAnd","TraceLoader","TxTracesWithHeaderAnd"]};

@@ -304,15 +304,43 @@
 <a href="#304" id="304">304</a>
 <a href="#305" id="305">305</a>
 <a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>core::hash::Hash;
 <span class="kw">use </span>std::{
     collections::{hash_map::Entry, HashMap},
     sync::Arc,
 };
 
-<span class="kw">use </span>brontes_database::{Metadata, Pair};
-<span class="kw">use </span>brontes_database_libmdbx::Libmdbx;
+<span class="kw">use </span>alloy_primitives::U256;
+<span class="kw">use </span>brontes_database::libmdbx::{tables::TokenDecimals, Libmdbx};
 <span class="kw">use </span>brontes_types::{
+    extra_processing::Pair,
     normalized_actions::{Actions, NormalizedTransfer},
     ToScaledRational,
 };
@@ -321,7 +349,9 @@
     Rational,
 };
 <span class="kw">use </span>reth_primitives::Address;
-<span class="kw">use </span>tracing::debug;
+<span class="kw">use </span>tracing::error;
+
+<span class="kw">use </span><span class="kw">crate</span>::MetadataCombined;
 
 <span class="attr">#[derive(Debug)]
 </span><span class="kw">pub struct </span>SharedInspectorUtils&lt;<span class="lifetime">'db</span>&gt; {
@@ -335,7 +365,8 @@
     }
 
     <span class="kw">pub fn </span>try_get_decimals(<span class="kw-2">&amp;</span><span class="self">self</span>, address: Address) -&gt; <span class="prelude-ty">Option</span>&lt;u8&gt; {
-        <span class="self">self</span>.db.try_get_decimals(address)
+        <span class="kw">let </span>tx = <span class="self">self</span>.db.ro_tx().unwrap();
+        tx.get::&lt;TokenDecimals&gt;(address).unwrap()
     }
 }
 
@@ -353,12 +384,12 @@
             <span class="comment">// If the action is a swap, get the decimals to scale the amount in and out
             // properly.
             </span><span class="kw">if let </span>Actions::Swap(swap) = action {
-                <span class="kw">let </span><span class="prelude-val">Some</span>(decimals_in) = <span class="self">self</span>.db.try_get_decimals(swap.token_in) <span class="kw">else </span>{
-                    <span class="macro">debug!</span>(<span class="string">"token decimals not found"</span>);
+                <span class="kw">let </span><span class="prelude-val">Some</span>(decimals_in) = <span class="self">self</span>.try_get_decimals(swap.token_in) <span class="kw">else </span>{
+                    <span class="macro">error!</span>(<span class="question-mark">?</span>swap.token_in, <span class="string">"token decimals not found"</span>);
                     <span class="kw">continue</span>;
                 };
-                <span class="kw">let </span><span class="prelude-val">Some</span>(decimals_out) = <span class="self">self</span>.db.try_get_decimals(swap.token_out) <span class="kw">else </span>{
-                    <span class="macro">debug!</span>(<span class="string">"token decimals not found"</span>);
+                <span class="kw">let </span><span class="prelude-val">Some</span>(decimals_out) = <span class="self">self</span>.try_get_decimals(swap.token_out) <span class="kw">else </span>{
+                    <span class="macro">error!</span>(<span class="question-mark">?</span>swap.token_out, <span class="string">"token decimals not found"</span>);
                     <span class="kw">continue</span>;
                 };
 
@@ -403,7 +434,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         tx_position: usize,
         deltas: SwapTokenDeltas,
-        metadata: Arc&lt;Metadata&gt;,
+        metadata: Arc&lt;MetadataCombined&gt;,
         cex: bool,
     ) -&gt; <span class="prelude-ty">Option</span>&lt;HashMap&lt;Address, Rational&gt;&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>usd_deltas = HashMap::new();
@@ -415,7 +446,7 @@
                     <span class="comment">// Fetch CEX price
                     </span>metadata.cex_quotes.get_binance_quote(<span class="kw-2">&amp;</span>pair)<span class="question-mark">?</span>.best_ask()
                 } <span class="kw">else </span>{
-                    metadata.dex_quotes.price_after(pair, tx_position)<span class="question-mark">?
+                    metadata.dex_quotes.price_at_or_before(pair, tx_position)<span class="question-mark">?
                 </span>};
 
                 <span class="kw">let </span>usd_amount = amount * price;
@@ -427,18 +458,42 @@
         <span class="prelude-val">Some</span>(usd_deltas)
     }
 
+    <span class="kw">pub fn </span>calculate_dex_usd_amount(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        block_position: usize,
+        token_address: Address,
+        amount: U256,
+        metadata: <span class="kw-2">&amp;</span>Arc&lt;MetadataCombined&gt;,
+    ) -&gt; <span class="prelude-ty">Option</span>&lt;Rational&gt; {
+        <span class="kw">let </span><span class="prelude-val">Some</span>(decimals) = <span class="self">self</span>.try_get_decimals(token_address) <span class="kw">else </span>{
+            <span class="macro">error!</span>(<span class="string">"token decimals not found for calcuate dex usd amount"</span>);
+            <span class="kw">return </span><span class="prelude-val">None
+        </span>};
+        <span class="kw">if </span>token_address == <span class="self">self</span>.quote {
+            <span class="kw">return </span><span class="prelude-val">Some</span>(Rational::ONE * amount.to_scaled_rational(decimals))
+        }
+
+        <span class="kw">let </span>pair = Pair(token_address, <span class="self">self</span>.quote);
+        <span class="prelude-val">Some</span>(
+            metadata
+                .dex_quotes
+                .price_at_or_before(pair, block_position)<span class="question-mark">?
+                </span>* amount.to_scaled_rational(decimals),
+        )
+    }
+
     <span class="kw">pub fn </span>get_dex_usd_price(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         block_position: usize,
         token_address: Address,
-        metadata: Arc&lt;Metadata&gt;,
+        metadata: Arc&lt;MetadataCombined&gt;,
     ) -&gt; <span class="prelude-ty">Option</span>&lt;Rational&gt; {
         <span class="kw">if </span>token_address == <span class="self">self</span>.quote {
             <span class="kw">return </span><span class="prelude-val">Some</span>(Rational::ONE)
         }
 
         <span class="kw">let </span>pair = Pair(token_address, <span class="self">self</span>.quote);
-        metadata.dex_quotes.price_after(pair, block_position)
+        metadata.dex_quotes.price_at_or_before(pair, block_position)
     }
 
     <span class="kw">pub fn </span>profit_collectors(<span class="kw-2">&amp;</span><span class="self">self</span>, addr_usd_deltas: <span class="kw-2">&amp;</span>HashMap&lt;Address, Rational&gt;) -&gt; Vec&lt;Address&gt; {
@@ -454,8 +509,8 @@
     </span><span class="kw">fn </span>transfer_deltas(<span class="kw-2">&amp;</span><span class="self">self</span>, transfers: Vec&lt;<span class="kw-2">&amp;</span>NormalizedTransfer&gt;, deltas: <span class="kw-2">&amp;mut </span>SwapTokenDeltas) {
         <span class="kw">for </span>transfer <span class="kw">in </span>transfers.into_iter() {
             <span class="comment">// normalize token decimals
-            </span><span class="kw">let </span><span class="prelude-val">Some</span>(decimals) = <span class="self">self</span>.db.try_get_decimals(transfer.token) <span class="kw">else </span>{
-                <span class="macro">debug!</span>(<span class="string">"token decimals not found"</span>);
+            </span><span class="kw">let </span><span class="prelude-val">Some</span>(decimals) = <span class="self">self</span>.try_get_decimals(transfer.token) <span class="kw">else </span>{
+                <span class="macro">error!</span>(<span class="string">"token decimals not found"</span>);
                 <span class="kw">continue</span>;
             };
             <span class="kw">let </span>adjusted_amount = transfer.amount.to_scaled_rational(decimals);
@@ -469,8 +524,7 @@
                 <span class="comment">// add to transfer recipient
                 </span><span class="kw">let </span><span class="kw-2">mut </span>inner = deltas.entry(transfer.to).or_default();
                 apply_entry(transfer.token, adjusted_amount.clone(), <span class="kw-2">&amp;mut </span>inner);
-                <span class="kw">continue
-            </span>}
+            }
 
             <span class="comment">// fill backwards
             </span><span class="kw">if </span>deltas.contains_key(<span class="kw-2">&amp;</span>transfer.to) {

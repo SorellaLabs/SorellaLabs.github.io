@@ -789,10 +789,81 @@
 <a href="#789" id="789">789</a>
 <a href="#790" id="790">790</a>
 <a href="#791" id="791">791</a>
+<a href="#792" id="792">792</a>
+<a href="#793" id="793">793</a>
+<a href="#794" id="794">794</a>
+<a href="#795" id="795">795</a>
+<a href="#796" id="796">796</a>
+<a href="#797" id="797">797</a>
+<a href="#798" id="798">798</a>
+<a href="#799" id="799">799</a>
+<a href="#800" id="800">800</a>
+<a href="#801" id="801">801</a>
+<a href="#802" id="802">802</a>
+<a href="#803" id="803">803</a>
+<a href="#804" id="804">804</a>
+<a href="#805" id="805">805</a>
+<a href="#806" id="806">806</a>
+<a href="#807" id="807">807</a>
+<a href="#808" id="808">808</a>
+<a href="#809" id="809">809</a>
+<a href="#810" id="810">810</a>
+<a href="#811" id="811">811</a>
+<a href="#812" id="812">812</a>
+<a href="#813" id="813">813</a>
+<a href="#814" id="814">814</a>
+<a href="#815" id="815">815</a>
+<a href="#816" id="816">816</a>
+<a href="#817" id="817">817</a>
+<a href="#818" id="818">818</a>
+<a href="#819" id="819">819</a>
+<a href="#820" id="820">820</a>
+<a href="#821" id="821">821</a>
+<a href="#822" id="822">822</a>
+<a href="#823" id="823">823</a>
+<a href="#824" id="824">824</a>
+<a href="#825" id="825">825</a>
+<a href="#826" id="826">826</a>
+<a href="#827" id="827">827</a>
+<a href="#828" id="828">828</a>
+<a href="#829" id="829">829</a>
+<a href="#830" id="830">830</a>
+<a href="#831" id="831">831</a>
+<a href="#832" id="832">832</a>
+<a href="#833" id="833">833</a>
+<a href="#834" id="834">834</a>
+<a href="#835" id="835">835</a>
+<a href="#836" id="836">836</a>
+<a href="#837" id="837">837</a>
+<a href="#838" id="838">838</a>
+<a href="#839" id="839">839</a>
+<a href="#840" id="840">840</a>
+<a href="#841" id="841">841</a>
+<a href="#842" id="842">842</a>
+<a href="#843" id="843">843</a>
+<a href="#844" id="844">844</a>
+<a href="#845" id="845">845</a>
+<a href="#846" id="846">846</a>
+<a href="#847" id="847">847</a>
+<a href="#848" id="848">848</a>
+<a href="#849" id="849">849</a>
+<a href="#850" id="850">850</a>
+<a href="#851" id="851">851</a>
+<a href="#852" id="852">852</a>
+<a href="#853" id="853">853</a>
+<a href="#854" id="854">854</a>
+<a href="#855" id="855">855</a>
+<a href="#856" id="856">856</a>
+<a href="#857" id="857">857</a>
+<a href="#858" id="858">858</a>
+<a href="#859" id="859">859</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::{HashMap, HashSet};
 
-<span class="kw">use </span>malachite::Rational;
-<span class="kw">use </span>rayon::prelude::{IntoParallelRefIterator, IntoParallelRefMutIterator, ParallelIterator};
+<span class="kw">use </span>rayon::{
+    iter::IntoParallelIterator,
+    prelude::{IntoParallelRefIterator, IntoParallelRefMutIterator, ParallelIterator},
+};
+<span class="kw">use </span>redefined::{self_convert_redefined, RedefinedConvert};
 <span class="kw">use </span>reth_primitives::{Address, Header, B256};
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>sorella_db_databases::clickhouse::{<span class="self">self</span>, Row};
@@ -805,12 +876,11 @@
     <span class="kw">pub </span>tx_roots:         Vec&lt;Root&lt;V&gt;&gt;,
     <span class="kw">pub </span>header:           Header,
     <span class="kw">pub </span>avg_priority_fee: u128,
-    <span class="kw">pub </span>eth_price:        Rational,
 }
 
 <span class="kw">impl</span>&lt;V: NormalizedAction&gt; BlockTree&lt;V&gt; {
-    <span class="kw">pub fn </span>new(header: Header, tx_num: usize, eth_price: Rational) -&gt; <span class="self">Self </span>{
-        <span class="self">Self </span>{ tx_roots: Vec::with_capacity(tx_num), header, eth_price, avg_priority_fee: <span class="number">0 </span>}
+    <span class="kw">pub fn </span>new(header: Header, tx_num: usize) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ tx_roots: Vec::with_capacity(tx_num), header, avg_priority_fee: <span class="number">0 </span>}
     }
 
     <span class="kw">pub fn </span>get_root(<span class="kw-2">&amp;</span><span class="self">self</span>, tx_hash: B256) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Root&lt;V&gt;&gt; {
@@ -871,12 +941,15 @@
         <span class="self">self</span>.tx_roots.iter().map(|r| r.tx_hash).collect()
     }
 
-    <span class="kw">pub fn </span>inspect&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, hash: B256, call: F) -&gt; Vec&lt;Vec&lt;V&gt;&gt;
+    <span class="doccomment">/// Collects all subsets of actions that match the action criteria specified
+    /// by the closure. This is useful for collecting the subtrees of a
+    /// transaction that contain the wanted actions.
+    </span><span class="kw">pub fn </span>collect_spans&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, hash: B256, call: F) -&gt; Vec&lt;Vec&lt;V&gt;&gt;
     <span class="kw">where
         </span>F: Fn(<span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; bool,
     {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(root) = <span class="self">self</span>.tx_roots.iter().find(|r| r.tx_hash == hash) {
-            root.inspect(<span class="kw-2">&amp;</span>call)
+            root.collect_spans(<span class="kw-2">&amp;</span>call)
         } <span class="kw">else </span>{
             <span class="macro">vec!</span>[]
         }
@@ -908,13 +981,14 @@
     /// child nodes of the action index if and only if they are specified in
     /// the classification function of the action index node.
     </span><span class="kw">pub fn </span>collect_and_classify(<span class="kw-2">&amp;mut </span><span class="self">self</span>, search_params: <span class="kw-2">&amp;</span>Vec&lt;<span class="prelude-ty">Option</span>&lt;(usize, Vec&lt;u64&gt;)&gt;&gt;) {
-        <span class="kw">let </span><span class="kw-2">mut </span>a = <span class="self">self
+        <span class="kw">let </span><span class="kw-2">mut </span>roots_with_search_params = <span class="self">self
             </span>.tx_roots
             .iter_mut()
             .zip(search_params.iter())
             .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
-        a.par_iter_mut()
+        roots_with_search_params
+            .par_iter_mut()
             .filter_map(|(root, opt)| <span class="prelude-val">Some</span>((root, opt.as_ref()<span class="question-mark">?</span>)))
             .for_each(|(root, (<span class="kw">_</span>, subtraces))| {
                 root.collect_child_traces_and_classify(subtraces);
@@ -924,13 +998,13 @@
     <span class="doccomment">/// Collects all subsets of actions that match the action criteria specified
     /// by the closure. This is useful for collecting the subtrees of a
     /// transaction that contain the wanted actions.
-    </span><span class="kw">pub fn </span>collect_spans&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, call: F) -&gt; HashMap&lt;B256, Vec&lt;Vec&lt;V&gt;&gt;&gt;
+    </span><span class="kw">pub fn </span>collect_spans_all&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, call: F) -&gt; HashMap&lt;B256, Vec&lt;Vec&lt;V&gt;&gt;&gt;
     <span class="kw">where
         </span>F: Fn(<span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; bool + Send + Sync,
     {
         <span class="self">self</span>.tx_roots
             .par_iter()
-            .map(|r| (r.tx_hash, r.inspect(<span class="kw-2">&amp;</span>call)))
+            .map(|r| (r.tx_hash, r.collect_spans(<span class="kw-2">&amp;</span>call)))
             .collect()
     }
 
@@ -947,6 +1021,16 @@
             .par_iter_mut()
             .flat_map(|root| root.dyn_classify(<span class="kw-2">&amp;</span>find, <span class="kw-2">&amp;</span>call))
             .collect()
+    }
+
+    <span class="kw">pub fn </span>modify_node_if_contains_childs&lt;T, F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, find: T, modify: F)
+    <span class="kw">where
+        </span>T: Fn(<span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; (bool, bool) + Send + Sync,
+        F: Fn(<span class="kw-2">&amp;mut </span>Node&lt;V&gt;) + Send + Sync,
+    {
+        <span class="self">self</span>.tx_roots
+            .par_iter_mut()
+            .for_each(|r| r.modify_node_if_contains_childs(<span class="kw-2">&amp;</span>find, <span class="kw-2">&amp;</span>modify));
     }
 
     <span class="kw">pub fn </span>remove_duplicate_data&lt;FindActionHead, FindRemoval, ClassifyRemovalIndex, WantedData, R&gt;(
@@ -985,12 +1069,12 @@
         <span class="self">self</span>.head.insert(node)
     }
 
-    <span class="kw">pub fn </span>inspect&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, call: <span class="kw-2">&amp;</span>F) -&gt; Vec&lt;Vec&lt;V&gt;&gt;
+    <span class="kw">pub fn </span>collect_spans&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, call: <span class="kw-2">&amp;</span>F) -&gt; Vec&lt;Vec&lt;V&gt;&gt;
     <span class="kw">where
         </span>F: Fn(<span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; bool,
     {
         <span class="kw">let </span><span class="kw-2">mut </span>result = Vec::new();
-        <span class="self">self</span>.head.inspect(<span class="kw-2">&amp;mut </span>result, call);
+        <span class="self">self</span>.head.collect_spans(<span class="kw-2">&amp;mut </span>result, call);
 
         result
     }
@@ -1004,6 +1088,14 @@
             .collect(<span class="kw-2">&amp;mut </span>result, call, <span class="kw-2">&amp;</span>|data| data.data.clone());
 
         result
+    }
+
+    <span class="kw">pub fn </span>modify_node_if_contains_childs&lt;T, F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, find: <span class="kw-2">&amp;</span>T, modify: <span class="kw-2">&amp;</span>F)
+    <span class="kw">where
+        </span>T: Fn(<span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; (bool, bool),
+        F: Fn(<span class="kw-2">&amp;mut </span>Node&lt;V&gt;),
+    {
+        <span class="self">self</span>.head.modify_node_if_contains_childs(find, modify);
     }
 
     <span class="kw">pub fn </span>collect_child_traces_and_classify(<span class="kw-2">&amp;mut </span><span class="self">self</span>, heads: <span class="kw-2">&amp;</span>Vec&lt;u64&gt;) {
@@ -1020,21 +1112,22 @@
         info: <span class="kw-2">&amp;</span>T,
         removal: <span class="kw-2">&amp;</span>Re,
     ) <span class="kw">where
-        </span>T: Fn(<span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; R,
-        C: Fn(<span class="kw-2">&amp;</span>Vec&lt;R&gt;, <span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; Vec&lt;u64&gt;,
+        </span>T: Fn(<span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; R + Sync,
+        C: Fn(<span class="kw-2">&amp;</span>Vec&lt;R&gt;, <span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; Vec&lt;u64&gt; + Sync,
         F: Fn(<span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; (bool, bool),
         Re: Fn(<span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; (bool, bool) + Sync,
     {
         <span class="kw">let </span><span class="kw-2">mut </span>find_res = Vec::new();
         <span class="self">self</span>.head.collect(<span class="kw-2">&amp;mut </span>find_res, find, <span class="kw-2">&amp;</span>|data| data.clone());
 
-        <span class="kw">let </span><span class="kw-2">mut </span>bad_res = Vec::new();
-        <span class="self">self</span>.head.collect(<span class="kw-2">&amp;mut </span>bad_res, removal, info);
-
-        <span class="kw">let </span><span class="kw-2">mut </span>indexes: HashSet&lt;u64&gt; = HashSet::default();
-        <span class="kw">for </span>node <span class="kw">in </span>find_res {
-            indexes.extend(classify(<span class="kw-2">&amp;</span>bad_res, <span class="kw-2">&amp;</span>node).into_iter());
-        }
+        <span class="kw">let </span>indexes = find_res
+            .into_par_iter()
+            .flat_map(|node| {
+                <span class="kw">let </span><span class="kw-2">mut </span>bad_res = Vec::new();
+                node.collect(<span class="kw-2">&amp;mut </span>bad_res, removal, info);
+                classify(<span class="kw-2">&amp;</span>bad_res, <span class="kw-2">&amp;</span>node)
+            })
+            .collect::&lt;HashSet&lt;<span class="kw">_</span>&gt;&gt;();
 
         indexes
             .into_iter()
@@ -1058,13 +1151,26 @@
     }
 }
 
-<span class="attr">#[derive(Debug, Clone, Copy, Serialize, Deserialize, Row, Default)]
+<span class="attr">#[derive(
+    Debug,
+    Clone,
+    Copy,
+    Serialize,
+    Deserialize,
+    Row,
+    Default,
+    rkyv::Serialize,
+    rkyv::Deserialize,
+    rkyv::Archive,
+)]
 </span><span class="kw">pub struct </span>GasDetails {
     <span class="kw">pub </span>coinbase_transfer:   <span class="prelude-ty">Option</span>&lt;u128&gt;,
     <span class="kw">pub </span>priority_fee:        u128,
     <span class="kw">pub </span>gas_used:            u128,
     <span class="kw">pub </span>effective_gas_price: u128,
 }
+
+<span class="macro">self_convert_redefined!</span>(GasDetails);
 
 <span class="kw">impl </span>GasDetails {
     <span class="kw">pub fn </span>gas_paid(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u128 {
@@ -1140,17 +1246,17 @@
     </span><span class="kw">pub fn </span>get_all_children_for_complex_classification(<span class="kw-2">&amp;mut </span><span class="self">self</span>, head: u64) {
         <span class="kw">if </span>head == <span class="self">self</span>.index {
             <span class="kw">let </span><span class="kw-2">mut </span>results = Vec::new();
-            results.push((<span class="self">self</span>.index, <span class="self">self</span>.data.clone()));
-
             <span class="kw">let </span>classification = <span class="self">self</span>.data.continued_classification_types();
 
-            <span class="kw">let </span>fixed = |node: <span class="kw-2">&amp;</span>Node&lt;V&gt;| {
-                ((classification)(<span class="kw-2">&amp;</span>node.data), node.subactions.iter().any(|i| (classification)(i)))
+            <span class="kw">let </span>collect_fn = |node: <span class="kw-2">&amp;</span>Node&lt;V&gt;| {
+                (
+                    (classification)(<span class="kw-2">&amp;</span>node.data),
+                    node.get_all_sub_actions()
+                        .iter()
+                        .any(|i| (classification)(i)),
+                )
             };
-
-            <span class="kw">for </span>child <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.inner {
-                child.collect(<span class="kw-2">&amp;mut </span>results, <span class="kw-2">&amp;</span>fixed, <span class="kw-2">&amp;</span>|a| (a.index, a.data.clone()))
-            }
+            <span class="self">self</span>.collect(<span class="kw-2">&amp;mut </span>results, <span class="kw-2">&amp;</span>collect_fn, <span class="kw-2">&amp;</span>|a| (a.index, a.data.clone()));
             <span class="comment">// Now that we have the child actions of interest we can finalize the parent
             // node's classification which mutates the parents data in place &amp; returns the
             // indexes of child nodes that should be removed
@@ -1159,13 +1265,14 @@
             prune_collapsed_nodes.into_iter().for_each(|index| {
                 <span class="self">self</span>.remove_node_and_children(index);
             });
-        }
+
+            <span class="kw">return
+        </span>}
 
         <span class="kw">if </span><span class="self">self</span>.inner.len() &lt;= <span class="number">1 </span>{
             <span class="kw">if let </span><span class="prelude-val">Some</span>(inner) = <span class="self">self</span>.inner.first_mut() {
                 <span class="kw">return </span>inner.get_all_children_for_complex_classification(head)
             }
-
             <span class="macro">error!</span>(<span class="string">"was not able to find node in tree"</span>);
             <span class="kw">return
         </span>}
@@ -1207,8 +1314,37 @@
             <span class="kw">return </span>last.get_all_children_for_complex_classification(head)
         }
 
-        <span class="macro">error!</span>(<span class="string">"was not able to find node in tree"</span>);
+        <span class="macro">error!</span>(<span class="string">"was not able to find node in tree, should be unreachable"</span>);
     }
+
+    <span class="kw">pub fn </span>modify_node_if_contains_childs&lt;T, F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, find: <span class="kw-2">&amp;</span>T, modify: <span class="kw-2">&amp;</span>F) -&gt; bool
+    <span class="kw">where
+        </span>T: Fn(<span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; (bool, bool),
+        F: Fn(<span class="kw-2">&amp;mut </span><span class="self">Self</span>),
+    {
+        <span class="kw">let </span>(is_parent_node, has_lower_set) = find(<span class="kw-2">&amp;</span><span class="self">self</span>);
+        <span class="kw">if </span>!has_lower_set {
+            <span class="kw">return </span><span class="bool-val">false
+        </span>}
+
+        <span class="kw">let </span>lower_classification_results = <span class="self">self
+            </span>.inner
+            .iter_mut()
+            .map(|node| node.modify_node_if_contains_childs(find, modify))
+            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+
+        <span class="kw">if </span>!lower_classification_results.into_iter().any(|n| n) {
+            <span class="comment">// if we don't collect because of parent node
+            // we return false
+            </span><span class="kw">if </span>is_parent_node {
+                modify(<span class="self">self</span>);
+                <span class="kw">return </span><span class="bool-val">true
+            </span>} <span class="kw">else </span>{
+                <span class="kw">return </span><span class="bool-val">false
+            </span>}
+        }
+        <span class="bool-val">false
+    </span>}
 
     <span class="kw">pub fn </span>finalize(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.finalized = <span class="bool-val">false</span>;
@@ -1239,15 +1375,15 @@
         <span class="kw">if </span><span class="self">self</span>.finalized {
             <span class="self">self</span>.subactions.clone()
         } <span class="kw">else </span>{
-            <span class="kw">let </span><span class="kw-2">mut </span>inner = <span class="self">self
-                </span>.inner
-                .iter()
-                .flat_map(|inner| inner.get_all_sub_actions())
-                .collect::&lt;Vec&lt;V&gt;&gt;();
+            <span class="kw">let </span><span class="kw-2">mut </span>res = <span class="macro">vec!</span>[<span class="self">self</span>.data.clone()];
+            res.extend(
+                <span class="self">self</span>.inner
+                    .iter()
+                    .flat_map(|inner| inner.get_all_sub_actions())
+                    .collect::&lt;Vec&lt;V&gt;&gt;(),
+            );
 
-            inner.push(<span class="self">self</span>.data.clone());
-
-            inner
+            res
         }
     }
 
@@ -1321,7 +1457,7 @@
     }
 
     <span class="comment">// only grabs the lowest subset of specified actions
-    </span><span class="kw">pub fn </span>inspect&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, result: <span class="kw-2">&amp;mut </span>Vec&lt;Vec&lt;V&gt;&gt;, call: <span class="kw-2">&amp;</span>F) -&gt; bool
+    </span><span class="kw">pub fn </span>collect_spans&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, result: <span class="kw-2">&amp;mut </span>Vec&lt;Vec&lt;V&gt;&gt;, call: <span class="kw-2">&amp;</span>F) -&gt; bool
     <span class="kw">where
         </span>F: Fn(<span class="kw-2">&amp;</span>Node&lt;V&gt;) -&gt; bool,
     {
@@ -1333,7 +1469,7 @@
         <span class="kw">let </span>lower_has_better_collect = <span class="self">self
             </span>.inner
             .iter()
-            .map(|i| i.inspect(result, call))
+            .map(|i| i.collect_spans(result, call))
             .collect::&lt;Vec&lt;bool&gt;&gt;();
 
         <span class="kw">let </span>lower_has_better = lower_has_better_collect.into_iter().any(|f| f);
@@ -1417,7 +1553,7 @@ mod tests {
     use brontes_classifier::test_utils::build_raw_test_tree;
     use brontes_core::{decoding::parser::TraceParser, test_utils::init_trace_parser};
     use brontes_database::clickhouse::Clickhouse;
-    use brontes_database_libmdbx::Libmdbx;
+    use brontes_database::libmdbx::Libmdbx;
     use reth_primitives::{revm_primitives::db::Database, Address};
     use reth_rpc_types::trace::parity::{TraceType, TransactionTrace};
     use serial_test::serial;

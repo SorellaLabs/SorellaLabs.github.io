@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["exhaustive_orderings","orderings_increasing"],"type":["ExhaustiveOrderings"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["DatabaseError","DatabaseWriteOperation"],"fn":["init_db","is_database_empty","open_db","open_db_read_only"],"macro":["add_snapshot_mask","dupsort","impl_fixed_arbitrary","table"],"mod":["abstraction","mdbx","snapshot","tables","test_utils","version"]};

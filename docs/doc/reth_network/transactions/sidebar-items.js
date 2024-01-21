@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["NetworkTransactionEvent"],"struct":["TransactionsHandle","TransactionsManager"],"type":["PoolImportFuture"]};

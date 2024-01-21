@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["address_string","vec_address_string"]};

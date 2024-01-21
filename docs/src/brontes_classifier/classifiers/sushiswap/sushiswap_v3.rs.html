@@ -144,13 +144,17 @@
 <a href="#144" id="144">144</a>
 <a href="#145" id="145">145</a>
 <a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>alloy_primitives::{Address, U256};
-<span class="kw">use </span>brontes_database_libmdbx::{implementation::tx::LibmdbxTx, tables::AddressToTokens};
+<span class="kw">use </span>brontes_database::libmdbx::{tables::AddressToTokens, tx::CompressedLibmdbxTx};
 <span class="kw">use </span>brontes_macros::{action_dispatch, action_impl};
 <span class="kw">use </span>brontes_types::normalized_actions::{
     NormalizedBurn, NormalizedCollect, NormalizedMint, NormalizedSwap,
 };
-<span class="kw">use </span>reth_db::{mdbx::RO, transaction::DbTx};
+<span class="kw">use </span>reth_db::mdbx::RO;
 
 <span class="kw">use </span><span class="kw">crate</span>::SushiSwapV3::{
     burnCall, burnReturn, collectCall, collectReturn, mintCall, mintReturn, swapCall, swapReturn,
@@ -167,9 +171,10 @@
     |trace_index,
     from_address: Address,
     target_address: Address,
+     msg_sender: Address,
     call_data: swapCall,
     return_data: swapReturn,
-    db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;| {
+    db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;| {
         <span class="kw">let </span>token_0_delta = return_data.amount0;
         <span class="kw">let </span>token_1_delta = return_data.amount1;
         <span class="kw">let </span>recipient = call_data.recipient;
@@ -214,8 +219,9 @@
     |trace_index,
      from_address: Address,
      target_address: Address,
+     msg_sender: Address,
      call_data: mintCall,
-     return_data: mintReturn,  db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;| {
+     return_data: mintReturn,  db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;| {
         <span class="kw">let </span>token_0_delta = return_data.amount0;
         <span class="kw">let </span>token_1_delta = return_data.amount1;
         <span class="kw">let </span>tokens = db_tx.get::&lt;AddressToTokens&gt;(target_address).ok()<span class="question-mark">??</span>;
@@ -241,8 +247,9 @@
     |trace_index,
     from_address: Address,
     target_address: Address,
+     msg_sender: Address,
     return_data: burnReturn,
-    db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;| {
+    db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;| {
         <span class="kw">let </span>token_0_delta = return_data.amount0;
         <span class="kw">let </span>token_1_delta = return_data.amount1;
 
@@ -273,8 +280,9 @@
     trace_index,
     from_addr: Address,
     to_addr: Address,
+     msg_sender: Address,
     call_data: collectCall,
-    return_data: collectReturn,  db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;
+    return_data: collectReturn,  db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;
     | {
         <span class="kw">let </span>tokens = db_tx.get::&lt;AddressToTokens&gt;(target_address).ok()<span class="question-mark">??</span>;
         <span class="kw">let </span>[token_0, token_1] = [tokens.token0, tokens.token1];

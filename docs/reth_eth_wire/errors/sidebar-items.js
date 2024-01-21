@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["EthHandshakeError","EthStreamError","MuxDemuxError","P2PHandshakeError","P2PStreamError","PingerError"]};

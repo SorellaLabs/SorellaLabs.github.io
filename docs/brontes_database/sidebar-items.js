@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["cex","clickhouse"],"struct":["Metadata","MetadataDB","Pair"]};
+window.SIDEBAR_ITEMS = {"macro":["compressed_table","decode"],"mod":["clickhouse","libmdbx"]};

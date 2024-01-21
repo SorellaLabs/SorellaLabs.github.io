@@ -1,3 +1,0 @@
-(function() {var implementors = {
-"reth_rpc":[["impl <a class=\"trait\" href=\"reth_rpc_api/rpc/trait.RpcApiServer.html\" title=\"trait reth_rpc_api::rpc::RpcApiServer\">RpcApiServer</a> for <a class=\"struct\" href=\"reth_rpc/struct.RPCApi.html\" title=\"struct reth_rpc::RPCApi\">RPCApi</a>"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

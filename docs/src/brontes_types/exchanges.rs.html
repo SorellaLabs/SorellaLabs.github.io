@@ -124,9 +124,25 @@
 <a href="#124" id="124">124</a>
 <a href="#125" id="125">125</a>
 <a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt::Display, str::FromStr};
 
 <span class="kw">use </span>alloy_rlp::{Decodable, Encodable};
+<span class="kw">use </span>redefined::{self_convert_redefined, RedefinedConvert};
 <span class="kw">use </span>reth_db::{
     table::{Compress, Decompress},
     DatabaseError,
@@ -135,7 +151,19 @@
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
 <span class="attr">#[allow(non_camel_case_types)]
-#[derive(Debug, PartialEq, Clone, Copy, Eq, Hash, Serialize, Deserialize)]
+#[derive(
+    Debug,
+    PartialEq,
+    Clone,
+    Copy,
+    Eq,
+    Hash,
+    Serialize,
+    Deserialize,
+    rkyv::Serialize,
+    rkyv::Deserialize,
+    rkyv::Archive,
+)]
 </span><span class="kw">pub enum </span>StaticBindingsDb {
     UniswapV2,
     SushiSwapV2,
@@ -250,4 +278,6 @@
         StaticBindingsDb::decode(buf).map_err(|<span class="kw">_</span>| DatabaseError::Decode)
     }
 }
+
+<span class="macro">self_convert_redefined!</span>(StaticBindingsDb);
 </code></pre></div></section></main></body></html>

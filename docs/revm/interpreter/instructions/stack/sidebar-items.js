@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["dup","pop","push","push0","swap"]};

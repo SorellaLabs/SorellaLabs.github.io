@@ -191,53 +191,47 @@
 <a href="#191" id="191">191</a>
 <a href="#192" id="192">192</a>
 <a href="#193" id="193">193</a>
-<a href="#194" id="194">194</a>
-<a href="#195" id="195">195</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, fmt::Debug, str::FromStr, sync::Arc};
 
 <span class="kw">use </span>alloy_primitives::{Address, Bytes, Log, TxHash, B256};
 <span class="kw">use </span>alloy_sol_types::SolEvent;
-<span class="kw">use </span>brontes_database_libmdbx::implementation::tx::LibmdbxTx;
 <span class="kw">use </span>brontes_pricing::types::{DiscoveredPool, PoolUpdate};
 <span class="kw">use </span>brontes_types::{exchanges::StaticBindingsDb, traits::TracingProvider};
 <span class="kw">use </span>futures::Future;
 <span class="kw">use </span>lazy_static::lazy_static;
 <span class="kw">use </span>reth_db::mdbx::RO;
 
-<span class="kw">pub mod </span>classifier;
-<span class="kw">pub use </span>classifier::<span class="kw-2">*</span>;
-
+<span class="kw">pub mod </span>tree_builder;
+<span class="kw">pub use </span>tree_builder::Classifier;
 <span class="kw">pub mod </span>bindings;
 <span class="kw">use </span>bindings::<span class="kw-2">*</span>;
 
-<span class="comment">/*
-#[cfg(feature = "tests")]
-pub mod test_utils;
-*/
+<span class="attr">#[cfg(feature = <span class="string">"tests"</span>)]
+</span><span class="kw">pub mod </span>test_utils;
 
-</span><span class="kw">mod </span>classifiers;
+<span class="kw">mod </span>classifiers;
 <span class="kw">use </span>alloy_sol_types::{sol, SolInterface};
 <span class="kw">use </span>brontes_types::normalized_actions::Actions;
 <span class="kw">pub use </span>classifiers::<span class="kw-2">*</span>;
 
 <span class="comment">// Actions
-</span><span class="macro">sol!</span>(UniswapV2, <span class="string">"./abis/UniswapV2.json"</span>);
-<span class="macro">sol!</span>(SushiSwapV2, <span class="string">"./abis/SushiSwapV2.json"</span>);
-<span class="macro">sol!</span>(UniswapV3, <span class="string">"./abis/UniswapV3.json"</span>);
-<span class="macro">sol!</span>(SushiSwapV3, <span class="string">"./abis/SushiSwapV3.json"</span>);
-<span class="macro">sol!</span>(CurveCryptoSwap, <span class="string">"./abis/CurveCryptoSwap.json"</span>);
-<span class="macro">sol!</span>(AaveV2, <span class="string">"./abis/AaveV2Pool.json"</span>);
-<span class="macro">sol!</span>(AaveV3, <span class="string">"./abis/AaveV3Pool.json"</span>);
-<span class="macro">sol!</span>(UniswapX, <span class="string">"./abis/UniswapXExclusiveDutchOrderReactor.json"</span>);
+</span><span class="macro">sol!</span>(UniswapV2, <span class="string">"./classifier-abis/UniswapV2.json"</span>);
+<span class="macro">sol!</span>(SushiSwapV2, <span class="string">"./classifier-abis/SushiSwapV2.json"</span>);
+<span class="macro">sol!</span>(UniswapV3, <span class="string">"./classifier-abis/UniswapV3.json"</span>);
+<span class="macro">sol!</span>(SushiSwapV3, <span class="string">"./classifier-abis/SushiSwapV3.json"</span>);
+<span class="macro">sol!</span>(CurveCryptoSwap, <span class="string">"./classifier-abis/CurveCryptoSwap.json"</span>);
+<span class="macro">sol!</span>(AaveV2, <span class="string">"./classifier-abis/AaveV2Pool.json"</span>);
+<span class="macro">sol!</span>(AaveV3, <span class="string">"./classifier-abis/AaveV3Pool.json"</span>);
+<span class="macro">sol!</span>(UniswapX, <span class="string">"./classifier-abis/UniswapXExclusiveDutchOrderReactor.json"</span>);
 
 <span class="comment">// Discovery
-</span><span class="macro">sol!</span>(UniswapV2Factory, <span class="string">"./abis/UniswapV2Factory.json"</span>);
-<span class="macro">sol!</span>(UniswapV3Factory, <span class="string">"./abis/UniswapV3Factory.json"</span>);
-<span class="macro">sol!</span>(CurveV1MetapoolFactory, <span class="string">"./abis/CurveMetapoolFactoryV1.json"</span>);
-<span class="macro">sol!</span>(CurveV2MetapoolFactory, <span class="string">"./abis/CurveMetapoolFactoryV2.json"</span>);
-<span class="macro">sol!</span>(CurvecrvUSDFactory, <span class="string">"./abis/CurveCRVUSDFactory.json"</span>);
-<span class="macro">sol!</span>(CurveCryptoSwapFactory, <span class="string">"./abis/CurveCryptoSwapFactory.json"</span>);
-<span class="macro">sol!</span>(CurveTriCryptoFactory, <span class="string">"./abis/CurveTriCryptoFactory.json"</span>);
+</span><span class="macro">sol!</span>(UniswapV2Factory, <span class="string">"./classifier-abis/UniswapV2Factory.json"</span>);
+<span class="macro">sol!</span>(UniswapV3Factory, <span class="string">"./classifier-abis/UniswapV3Factory.json"</span>);
+<span class="macro">sol!</span>(CurveV1MetapoolFactory, <span class="string">"./classifier-abis/CurveMetapoolFactoryV1.json"</span>);
+<span class="macro">sol!</span>(CurveV2MetapoolFactory, <span class="string">"./classifier-abis/CurveMetapoolFactoryV2.json"</span>);
+<span class="macro">sol!</span>(CurvecrvUSDFactory, <span class="string">"./classifier-abis/CurveCRVUSDFactory.json"</span>);
+<span class="macro">sol!</span>(CurveCryptoSwapFactory, <span class="string">"./classifier-abis/CurveCryptoSwapFactory.json"</span>);
+<span class="macro">sol!</span>(CurveTriCryptoFactory, <span class="string">"./classifier-abis/CurveTriCryptoFactory.json"</span>);
 <span class="macro">sol! </span>{
     event Transfer(address indexed from, address indexed to, uint256 value);
     function name() public view returns (string);
@@ -255,8 +249,9 @@ pub mod test_utils;
         return_data: Bytes,
         from_address: Address,
         target_address: Address,
+        msg_sender: Address,
         logs: <span class="kw-2">&amp;</span>Vec&lt;Log&gt;,
-        db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;,
+        db_tx: <span class="kw-2">&amp;</span>brontes_database::libmdbx::tx::CompressedLibmdbxTx&lt;RO&gt;,
         block: u64,
         tx_idx: u64,
     ) -&gt; <span class="prelude-ty">Option</span>&lt;(PoolUpdate, Actions)&gt;;
@@ -286,8 +281,9 @@ pub mod test_utils;
         return_data: Bytes,
         from_address: Address,
         target_address: Address,
+        msg_sender: Address,
         logs: <span class="kw-2">&amp;</span>Vec&lt;Log&gt;,
-        db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;,
+        db_tx: <span class="kw-2">&amp;</span>brontes_database::libmdbx::tx::CompressedLibmdbxTx&lt;RO&gt;,
     ) -&gt; <span class="prelude-ty">Option</span>&lt;Actions&gt;;
 }
 

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ArrayPatternElement","ObjectPatternElement","Pattern"],"struct":["ArrayPattern","ObjectPattern"]};

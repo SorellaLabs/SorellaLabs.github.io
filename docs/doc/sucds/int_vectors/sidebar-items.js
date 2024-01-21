@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["compact_vector","dacs_byte","dacs_opt","prefix_summed_elias_fano","prelude"],"trait":["Access","Build","NumVals"]};

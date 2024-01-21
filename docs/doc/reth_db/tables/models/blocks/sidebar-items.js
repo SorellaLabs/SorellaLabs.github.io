@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["StoredBlockBodyIndices","StoredBlockBodyIndicesFlags","StoredBlockOmmers","StoredBlockOmmersFlags","StoredBlockWithdrawals","StoredBlockWithdrawalsFlags"],"type":["HeaderHash","NumTransactions"]};

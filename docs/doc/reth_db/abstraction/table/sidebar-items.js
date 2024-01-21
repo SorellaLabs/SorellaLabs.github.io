@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"trait":["Compress","Decode","Decompress","DupSort","Encode","Key","Table","TableImporter","Value"],"type":["TableRow"]};

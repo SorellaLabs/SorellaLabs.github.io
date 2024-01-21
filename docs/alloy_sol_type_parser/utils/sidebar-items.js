@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["array_parser","char_parser","identifier","opt_ws_ident","spanned","str_parser","tuple_parser"]};

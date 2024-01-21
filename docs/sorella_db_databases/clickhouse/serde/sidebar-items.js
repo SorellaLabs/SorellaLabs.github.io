@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["u256","vec_u256"]};

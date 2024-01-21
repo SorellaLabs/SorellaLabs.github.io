@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["Cif4","Closure4","ClosureMut4","ClosureOnce4","FnPtr4"],"type":["Callback4","CallbackMut4","CallbackOnce4"]};

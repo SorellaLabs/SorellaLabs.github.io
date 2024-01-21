@@ -134,10 +134,6 @@
 <a href="#134" id="134">134</a>
 <a href="#135" id="135">135</a>
 <a href="#136" id="136">136</a>
-<a href="#137" id="137">137</a>
-<a href="#138" id="138">138</a>
-<a href="#139" id="139">139</a>
-<a href="#140" id="140">140</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{sync::Arc, vec};
 
 <span class="kw">use </span>alloy_primitives::FixedBytes;
@@ -156,10 +152,6 @@
 <span class="macro">sol!</span>(
     IGetUniswapV3TickDataBatchRequest,
     <span class="string">"./src/exchanges/uniswap_v3/batch_request/GetUniswapV3TickDataBatchRequestABI.json"
-</span>);
-<span class="macro">sol!</span>(
-    ISyncUniswapV3PoolBatchRequest,
-    <span class="string">"./src/exchanges/uniswap_v3/batch_request/SyncUniswapV3PoolBatchRequestABI.json"
 </span>);
 
 <span class="macro">sol!</span>(
@@ -222,9 +214,9 @@
     <span class="kw">let </span>res = middleware
         .eth_call(req, block_number.map(|i| i.into()), <span class="prelude-val">None</span>, <span class="prelude-val">None</span>)
         .<span class="kw">await
-        </span>.unwrap();
+        </span>.map_err(|<span class="kw">_</span>| <span class="macro">eyre::eyre!</span>(<span class="string">"v3 data fetch call failed"</span>))<span class="question-mark">?</span>;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>return_data = data_constructorCall::abi_decode_returns(<span class="kw-2">&amp;*</span>res, <span class="bool-val">false</span>).unwrap();
+    <span class="kw">let </span><span class="kw-2">mut </span>return_data = data_constructorCall::abi_decode_returns(<span class="kw-2">&amp;*</span>res, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
     <span class="kw-2">*</span>pool = populate_pool_data_from_tokens(pool.to_owned(), return_data._0.remove(<span class="number">0</span>));
 
     <span class="kw">let </span>(r0, r1) = <span class="macro">join!</span>(

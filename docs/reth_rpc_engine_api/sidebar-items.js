@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["REQUEST_TOO_LARGE_CODE","UNKNOWN_PAYLOAD_CODE","UNSUPPORTED_FORK_CODE"],"enum":["EngineApiError","EngineApiMessageVersion"],"struct":["EngineApi"],"trait":["EngineApiServer"],"type":["EngineApiResult","EngineApiSender"]};

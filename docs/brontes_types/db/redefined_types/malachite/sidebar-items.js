@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ArchivedRedefined_InnerNatural","Redefined_InnerNatural","Redefined_InnerNaturalResolver"],"struct":["ArchivedRedefined_Natural","ArchivedRedefined_Rational","Redefined_Natural","Redefined_NaturalResolver","Redefined_Rational","Redefined_RationalResolver"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["component_index","components","connected_components","separate_components"]};

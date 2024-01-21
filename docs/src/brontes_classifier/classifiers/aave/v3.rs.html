@@ -106,11 +106,11 @@
 <a href="#106" id="106">106</a>
 <a href="#107" id="107">107</a>
 <a href="#108" id="108">108</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>alloy_primitives::Address;
-<span class="kw">use </span>brontes_database_libmdbx::{implementation::tx::LibmdbxTx, tables::AddressToTokens};
+</pre></div><pre class="rust"><code><span class="kw">use </span>alloy_primitives::{Address, U256};
+<span class="kw">use </span>brontes_database::libmdbx::{tables::AddressToTokens, tx::CompressedLibmdbxTx};
 <span class="kw">use </span>brontes_macros::{action_dispatch, action_impl};
 <span class="kw">use </span>brontes_types::normalized_actions::{NormalizedFlashLoan, NormalizedLiquidation};
-<span class="kw">use </span>reth_db::{mdbx::RO, transaction::DbTx};
+<span class="kw">use </span>reth_db::mdbx::RO;
 
 <span class="kw">use </span><span class="kw">crate</span>::AaveV3::{flashLoanCall, flashLoanSimpleCall, liquidationCallCall};
 
@@ -124,21 +124,19 @@
     |trace_index,
     from_address: Address,
     target_address: Address,
+    msg_sender: Address,
     call_data: liquidationCallCall,
-    db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt; | {
-
-        <span class="kw">let </span>tokens = db_tx.get::&lt;AddressToTokens&gt;(target_address).ok()<span class="question-mark">??</span>;
-        <span class="kw">let </span>[<span class="kw-2">mut </span>token_0, <span class="kw-2">mut </span>token_1] = [tokens.token0, tokens.token1];
-
-
+    db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt; | {
         <span class="kw">return </span><span class="prelude-val">Some</span>(NormalizedLiquidation {
             trace_index,
             pool: target_address,
-            liquidator: from_address,
+            liquidator: msg_sender,
             debtor: call_data.user,
             collateral_asset: call_data.collateralAsset,
             debt_asset: call_data.debtAsset,
-            amount: call_data.debtToCover,
+            covered_debt: call_data.debtToCover,
+            <span class="comment">// filled in later
+            </span>liquidated_collateral: U256::ZERO,
         })
     }
 );
@@ -153,8 +151,9 @@
     |trace_index,
     from_address: Address,
     target_address: Address,
+    msg_sender: Address,
     call_data: flashLoanCall,
-    db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt; | {
+    db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt; | {
 
         <span class="kw">let </span>tokens = db_tx.get::&lt;AddressToTokens&gt;(target_address).ok()<span class="question-mark">??</span>;
         <span class="kw">let </span>[<span class="kw-2">mut </span>token_0, <span class="kw-2">mut </span>token_1] = [tokens.token0, tokens.token1];
@@ -188,8 +187,9 @@
     |trace_index,
     from_address: Address,
     target_address: Address,
+    msg_sender: Address,
     call_data: flashLoanSimpleCall,
-    db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt; | {
+    db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt; | {
 
         <span class="kw">let </span>tokens = db_tx.get::&lt;AddressToTokens&gt;(target_address).ok()<span class="question-mark">??</span>;
         <span class="kw">let </span>[<span class="kw-2">mut </span>token_0, <span class="kw-2">mut </span>token_1] = [tokens.token0, tokens.token1];

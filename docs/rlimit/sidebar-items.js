@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["INFINITY"],"fn":["getmaxstdio","getrlimit","increase_nofile_limit","prlimit","setmaxstdio","setrlimit"],"struct":["ProcLimit","ProcLimits","Resource"],"type":["pid_t"]};

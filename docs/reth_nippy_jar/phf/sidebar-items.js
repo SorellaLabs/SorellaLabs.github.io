@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Functions"],"struct":["Fmph","GoFmph"],"trait":["PHFKey","PerfectHashingFunction"]};

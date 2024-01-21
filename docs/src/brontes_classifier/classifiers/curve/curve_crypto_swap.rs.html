@@ -225,11 +225,15 @@
 <a href="#225" id="225">225</a>
 <a href="#226" id="226">226</a>
 <a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>alloy_primitives::{hex, FixedBytes};
-<span class="kw">use </span>brontes_database_libmdbx::{implementation::tx::LibmdbxTx, tables::AddressToTokens};
+<span class="kw">use </span>brontes_database::libmdbx::{tables::AddressToTokens, tx::CompressedLibmdbxTx};
 <span class="kw">use </span>brontes_macros::{action_dispatch, action_impl};
 <span class="kw">use </span>brontes_types::normalized_actions::NormalizedSwap;
-<span class="kw">use </span>reth_db::{mdbx::RO, transaction::DbTx};
+<span class="kw">use </span>reth_db::mdbx::RO;
 <span class="kw">use </span>reth_primitives::{Address, U256};
 
 <span class="kw">use </span><span class="kw">crate</span>::CurveCryptoSwap::{
@@ -249,8 +253,9 @@
     |trace_index,
     from_address: Address,
     target_address: Address,
+    msg_sender: Address,
     log: CurveCryptoExchange0Swap,
-    db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;| {
+    db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;| {
         <span class="kw">let </span>log = log.TokenExchange_field;
         <span class="kw">let </span>tokens = db_tx.get::&lt;AddressToTokens&gt;(target_address).ok()<span class="question-mark">??</span>;
         <span class="kw">let </span>[<span class="kw-2">mut </span>token_0, <span class="kw-2">mut </span>token_1] = [tokens.token0, tokens.token1];
@@ -292,9 +297,10 @@
     |trace_index,
     from_address: Address,
     target_address: Address,
+    msg_sender: Address,
     call_data: exchange_1Call,
     log: CurveCryptoExchange1Swap,
-    db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;| {
+    db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;| {
 
         <span class="kw">let </span>log = log.TokenExchange_field;
         <span class="kw">let </span>tokens = db_tx.get::&lt;AddressToTokens&gt;(target_address).ok()<span class="question-mark">??</span>;
@@ -348,9 +354,10 @@
     |trace_index,
     from_address: Address,
     target_address: Address,
+    msg_sender: Address,
     call_data: exchange_2Call,
     log: CurveCryptoExchange2Swap,
-    db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;| {
+    db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;| {
 
         <span class="kw">let </span>log = log.TokenExchange_field;
         <span class="kw">let </span>tokens = db_tx.get::&lt;AddressToTokens&gt;(target_address).ok()<span class="question-mark">??</span>;
@@ -405,8 +412,9 @@
     |trace_index,
     from_address: Address,
     target_address: Address,
+    msg_sender: Address,
     log: CurveCryptoExchangeUnderlyingSwap,
-    db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;| {
+    db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;| {
         <span class="kw">let </span>log = log.TokenExchange_field;
         <span class="kw">let </span>tokens = db_tx.get::&lt;AddressToTokens&gt;(target_address).ok()<span class="question-mark">??</span>;
         <span class="kw">let </span>[<span class="kw-2">mut </span>token_0, <span class="kw-2">mut </span>token_1] = [tokens.token0, tokens.token1];

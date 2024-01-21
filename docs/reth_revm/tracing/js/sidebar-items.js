@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["JsDbRequest","JsInspectorError"],"struct":["JsInspector","TransactionContext"]};

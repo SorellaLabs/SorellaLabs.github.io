@@ -158,24 +158,71 @@
 <a href="#158" id="158">158</a>
 <a href="#159" id="159">159</a>
 <a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::HashMap,
-    pin::Pin,
+    future::IntoFuture,
+    pin::{pin, Pin},
     sync::Arc,
     task::{Context, Poll},
 };
 
 <span class="kw">use </span>brontes_classifier::Classifier;
-<span class="kw">use </span>brontes_core::decoding::{Parser, TracingProvider};
-<span class="kw">use </span>brontes_database::{clickhouse::Clickhouse, MetadataDB};
-<span class="kw">use </span>brontes_database_libmdbx::Libmdbx;
+<span class="kw">use </span>brontes_core::{
+    decoding::{Parser, TracingProvider},
+    missing_decimals::load_missing_decimals,
+};
+<span class="kw">use </span>brontes_database::{
+    clickhouse::Clickhouse,
+    libmdbx::{tables::MevBlocks, types::mev_block::MevBlocksData, Libmdbx},
+};
 <span class="kw">use </span>brontes_inspect::{
-    composer::{Composer, ComposerResults},
+    composer::{compose_mev_results, ComposerResults},
     Inspector,
 };
-<span class="kw">use </span>brontes_pricing::types::DexQuotes;
 <span class="kw">use </span>brontes_types::{
     classified_mev::{ClassifiedMev, MevBlock, SpecificMev},
+    db::{dex::DexQuotes, metadata::MetadataNoDex, mev_block::MevBlockWithClassified},
     normalized_actions::Actions,
     tree::BlockTree,
 };
@@ -183,16 +230,16 @@
 <span class="kw">use </span>tracing::{debug, error, info};
 
 <span class="kw">type </span>CollectionFut&lt;<span class="lifetime">'a</span>&gt; =
-    Pin&lt;Box&lt;<span class="kw">dyn </span>Future&lt;Output = (MetadataDB, BlockTree&lt;Actions&gt;)&gt; + Send + <span class="lifetime">'a</span>&gt;&gt;;
+    Pin&lt;Box&lt;<span class="kw">dyn </span>Future&lt;Output = (MetadataNoDex, BlockTree&lt;Actions&gt;)&gt; + Send + <span class="lifetime">'a</span>&gt;&gt;;
 
-<span class="kw">pub struct </span>TipInspector&lt;<span class="lifetime">'inspector</span>, <span class="kw">const </span>N: usize, T: TracingProvider&gt; {
+<span class="kw">pub struct </span>TipInspector&lt;<span class="lifetime">'inspector</span>, T: TracingProvider&gt; {
     current_block: u64,
 
     parser:            <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Parser&lt;<span class="lifetime">'inspector</span>, T&gt;,
     classifier:        <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Classifier&lt;<span class="lifetime">'inspector</span>, T&gt;,
     clickhouse:        <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Clickhouse,
     database:          <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Libmdbx,
-    inspectors:        <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>[<span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Box&lt;<span class="kw">dyn </span>Inspector&gt;; N],
+    inspectors:        <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>[<span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Box&lt;<span class="kw">dyn </span>Inspector&gt;],
     <span class="comment">// pending future data
     </span>classifier_future: FuturesOrdered&lt;CollectionFut&lt;<span class="lifetime">'inspector</span>&gt;&gt;,
 
@@ -202,13 +249,13 @@
     </span>insertion_future: <span class="prelude-ty">Option</span>&lt;Pin&lt;Box&lt;<span class="kw">dyn </span>Future&lt;Output = ()&gt; + Send + Sync + <span class="lifetime">'inspector</span>&gt;&gt;&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">'inspector</span>, <span class="kw">const </span>N: usize, T: TracingProvider&gt; TipInspector&lt;<span class="lifetime">'inspector</span>, N, T&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'inspector</span>, T: TracingProvider&gt; TipInspector&lt;<span class="lifetime">'inspector</span>, T&gt; {
     <span class="kw">pub fn </span>new(
         parser: <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Parser&lt;<span class="lifetime">'inspector</span>, T&gt;,
         clickhouse: <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Clickhouse,
         database: <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Libmdbx,
         classifier: <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Classifier&lt;<span class="lifetime">'_</span>, T&gt;,
-        inspectors: <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>[<span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Box&lt;<span class="kw">dyn </span>Inspector&gt;; N],
+        inspectors: <span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>[<span class="kw-2">&amp;</span><span class="lifetime">'inspector </span>Box&lt;<span class="kw">dyn </span>Inspector&gt;],
         current_block: u64,
     ) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
@@ -232,10 +279,18 @@
         <span class="kw">let </span>classifier_fut = Box::pin(<span class="kw">async </span>{
             <span class="kw">let </span>(traces, header) = parser_fut.<span class="kw">await</span>.unwrap().unwrap();
             <span class="macro">info!</span>(<span class="string">"Got {} traces + header"</span>, traces.len());
-            <span class="kw">let </span>(_extra_data, <span class="kw-2">mut </span>tree) = <span class="self">self</span>.classifier.build_block_tree(traces, header).<span class="kw">await</span>;
+            <span class="kw">let </span>block = header.number;
+            <span class="kw">let </span>(extra_data, tree) = <span class="self">self</span>.classifier.build_block_tree(traces, header).<span class="kw">await</span>;
+
+            load_missing_decimals(
+                <span class="self">self</span>.parser.get_tracer(),
+                <span class="self">self</span>.database,
+                block,
+                extra_data.tokens_decimal_fill,
+            )
+            .<span class="kw">await</span>;
 
             <span class="kw">let </span>meta = labeller_fut.<span class="kw">await</span>;
-            tree.eth_price = meta.eth_prices.clone();
 
             (meta, tree)
         });
@@ -243,17 +298,19 @@
         <span class="self">self</span>.classifier_future.push_back(classifier_fut);
     }
 
-    <span class="kw">fn </span>on_inspectors_finish(
-        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-        results: (MevBlock, Vec&lt;(ClassifiedMev, Box&lt;<span class="kw">dyn </span>SpecificMev&gt;)&gt;),
-    ) {
+    <span class="kw">fn </span>on_inspectors_finish(<span class="kw-2">&amp;mut </span><span class="self">self</span>, results: (MevBlock, Vec&lt;(ClassifiedMev, SpecificMev)&gt;)) {
         <span class="macro">info!</span>(
             block_number = <span class="self">self</span>.current_block,
             <span class="string">"inserting the collected results \n {:#?}"</span>, results
         );
+
+        <span class="kw">let </span>data_res = MevBlocksData {
+            block_number: results.<span class="number">0</span>.block_number,
+            mev_blocks:   MevBlockWithClassified { block: results.<span class="number">0</span>, mev: results.<span class="number">1 </span>},
+        };
         <span class="kw">if </span><span class="self">self
             </span>.database
-            .insert_classified_data(results.<span class="number">0</span>, results.<span class="number">1</span>)
+            .write_table::&lt;MevBlocks, MevBlocksData&gt;(<span class="kw-2">&amp;</span><span class="macro">vec!</span>[data_res])
             .is_err()
         {
             <span class="macro">error!</span>(<span class="string">"failed to insert classified data into libmdx"</span>);
@@ -266,8 +323,11 @@
                 <span class="kw">let </span>meta_data = meta_data.into_finalized_metadata(DexQuotes(<span class="macro">vec!</span>[]));
                 <span class="comment">//TODO: wire in the dex pricing task here
 
-                </span><span class="self">self</span>.composer_future =
-                    <span class="prelude-val">Some</span>(Box::pin(Composer::new(<span class="self">self</span>.inspectors, tree.into(), meta_data.into())));
+                </span><span class="self">self</span>.composer_future = <span class="prelude-val">Some</span>(Box::pin(compose_mev_results(
+                    <span class="self">self</span>.inspectors,
+                    tree.into(),
+                    meta_data.into(),
+                )));
             }
             Poll::Pending =&gt; <span class="kw">return</span>,
             Poll::Ready(<span class="prelude-val">None</span>) =&gt; <span class="kw">return</span>,
@@ -282,8 +342,27 @@
         }
     }
 
-    <span class="kw">fn </span>start_block_inspector(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {
+    <span class="attr">#[cfg(not(feature = <span class="string">"local"</span>))]
+    </span><span class="kw">fn </span>start_block_inspector(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="self">self</span>.parser.get_latest_block_number() {
+            <span class="prelude-val">Ok</span>(chain_tip) =&gt; {
+                <span class="kw">if </span>chain_tip &gt; <span class="self">self</span>.current_block {
+                    <span class="self">self</span>.current_block = chain_tip;
+                    <span class="bool-val">true
+                </span>} <span class="kw">else </span>{
+                    <span class="bool-val">false
+                </span>}
+            }
+            <span class="prelude-val">Err</span>(e) =&gt; {
+                <span class="macro">debug!</span>(<span class="string">"Error: {:?}"</span>, e);
+                <span class="bool-val">false
+            </span>}
+        }
+    }
+
+    <span class="attr">#[cfg(feature = <span class="string">"local"</span>)]
+    </span><span class="kw">async fn </span>start_block_inspector(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {
+        <span class="kw">match </span><span class="self">self</span>.parser.get_latest_block_number().<span class="kw">await </span>{
             <span class="prelude-val">Ok</span>(chain_tip) =&gt; {
                 <span class="kw">if </span>chain_tip &gt; <span class="self">self</span>.current_block {
                     <span class="self">self</span>.current_block = chain_tip;
@@ -300,7 +379,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>N: usize, T: TracingProvider&gt; Future <span class="kw">for </span>TipInspector&lt;<span class="lifetime">'_</span>, N, T&gt; {
+<span class="kw">impl</span>&lt;T: TracingProvider&gt; Future <span class="kw">for </span>TipInspector&lt;<span class="lifetime">'_</span>, T&gt; {
     <span class="kw">type </span>Output = ();
 
     <span class="kw">fn </span>poll(<span class="kw-2">mut </span><span class="self">self</span>: Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;, cx: <span class="kw-2">&amp;mut </span>Context&lt;<span class="lifetime">'_</span>&gt;) -&gt; Poll&lt;<span class="self">Self</span>::Output&gt; {
@@ -308,10 +387,13 @@
         // phase
 
         </span><span class="kw">loop </span>{
-            <span class="kw">if </span><span class="self">self</span>.start_block_inspector() {
-                <span class="self">self</span>.start_collection();
+            <span class="attr">#[cfg(not(feature = <span class="string">"local"</span>))]
+            </span>{
+                <span class="kw">if </span><span class="self">self</span>.start_block_inspector() {
+                    <span class="self">self</span>.start_collection();
+                }
+                <span class="self">self</span>.progress_futures(cx);
             }
-            <span class="self">self</span>.progress_futures(cx);
         }
 
         <span class="attr">#[allow(unreachable_code)]

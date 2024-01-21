@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["CallKind","LogCallOrder","StorageChangeReason"],"struct":["CallTrace","CallTraceNode","CallTraceStep","Log","RecordedMemory","StorageChange"]};

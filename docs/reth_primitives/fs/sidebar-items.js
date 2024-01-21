@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["FsPathError"],"fn":["create_dir_all","read","read_dir","read_to_string","remove_dir_all","remove_file","rename","write"]};

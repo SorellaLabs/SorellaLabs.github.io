@@ -109,11 +109,14 @@
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
 <a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>alloy_primitives::{Address, U256};
-<span class="kw">use </span>brontes_database_libmdbx::{implementation::tx::LibmdbxTx, tables::AddressToTokens};
+<span class="kw">use </span>brontes_database::libmdbx::{tables::AddressToTokens, tx::CompressedLibmdbxTx};
 <span class="kw">use </span>brontes_macros::{action_dispatch, action_impl};
 <span class="kw">use </span>brontes_types::normalized_actions::{NormalizedBurn, NormalizedMint, NormalizedSwap};
-<span class="kw">use </span>reth_db::{mdbx::RO, transaction::DbTx};
+<span class="kw">use </span>reth_db::mdbx::RO;
 
 <span class="kw">use </span><span class="kw">crate</span>::UniswapV2::{burnCall, mintCall, swapCall};
 
@@ -128,9 +131,10 @@
     |trace_index,
     from_address: Address,
     target_address: Address,
+     msg_sender: Address,
     call_data: swapCall,
     log_data: V2SwapImplSwap,
-    db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;| {
+    db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;| {
         <span class="kw">let </span>data = log_data.Swap_field;
         <span class="kw">let </span>recipient = call_data.to;
 
@@ -175,9 +179,10 @@
     |trace_index,
      from_address: Address,
      target_address: Address,
+     msg_sender: Address,
      call_data: mintCall,
      log_data: V2MintImplMint,
-     db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;| {
+     db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;| {
         <span class="kw">let </span>log_data = log_data.Mint_field;
         <span class="kw">let </span>tokens = db_tx.get::&lt;AddressToTokens&gt;(target_address).ok()<span class="question-mark">??</span>;
         <span class="kw">let </span>[token_0, token_1] = [tokens.token0, tokens.token1];
@@ -202,9 +207,10 @@
     |trace_index,
      from_address: Address,
      target_address: Address,
+     msg_sender: Address,
      call_data: burnCall,
      log_data: V2BurnImplBurn,
-     db_tx: <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;| {
+     db_tx: <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;| {
         <span class="kw">let </span>log_data = log_data.Burn_field;
         <span class="kw">let </span>tokens = db_tx.get::&lt;AddressToTokens&gt;(target_address).ok()<span class="question-mark">??</span>;
         <span class="kw">let </span>[token_0, token_1] = [tokens.token0, tokens.token1];

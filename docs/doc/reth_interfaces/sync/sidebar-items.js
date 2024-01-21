@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["SyncState"],"struct":["NoopSyncStateUpdater"],"trait":["NetworkSyncUpdater","SyncStateProvider"]};

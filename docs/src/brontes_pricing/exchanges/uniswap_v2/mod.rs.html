@@ -908,7 +908,7 @@
         pool.populate_data(<span class="prelude-val">Some</span>(block), middleware).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">if </span>!pool.data_is_populated() {
-            <span class="kw">return </span><span class="prelude-val">Err</span>(AmmError::PoolDataError)
+            <span class="kw">return </span><span class="prelude-val">Err</span>(AmmError::NoStateError(pair_addr))
         }
 
         <span class="prelude-val">Ok</span>(pool)

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["kruskal","kruskal_indices"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ProcFilter"],"fn":["pids_by_path","pids_by_type","pids_by_type_and_path"]};

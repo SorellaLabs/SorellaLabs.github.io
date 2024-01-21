@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":["error_trace","init_block","init_trace","init_tx","success_block","success_trace","success_tx"],"mod":["decoding","errors","executor","macros","missing_decimals","test_utils"]};
+window.SIDEBAR_ITEMS = {"macro":["error_trace","init_block","init_trace","init_tx","success_block","success_trace","success_tx"],"mod":["decoding","errors","executor","macros","missing_decimals"]};

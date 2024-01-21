@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["BlockTree","GasDetails","Node","Root"]};
+window.SIDEBAR_ITEMS = {"struct":["ArchivedGasDetails","BlockTree","GasDetails","GasDetailsResolver","Node","Root"]};

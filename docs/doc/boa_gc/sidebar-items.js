@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"derive":["Finalize","Trace"],"fn":["finalizer_safe","force_collect"],"macro":["custom_trace","empty_trace"],"struct":["Ephemeron","Gc","GcBox","GcRef","GcRefCell","GcRefMut","WeakGc","WeakMap"],"trait":["Finalize","Trace"]};

@@ -199,20 +199,10 @@
 <a href="#199" id="199">199</a>
 <a href="#200" id="200">200</a>
 <a href="#201" id="201">201</a>
-<a href="#202" id="202">202</a>
-<a href="#203" id="203">203</a>
-<a href="#204" id="204">204</a>
-<a href="#205" id="205">205</a>
-<a href="#206" id="206">206</a>
-<a href="#207" id="207">207</a>
-<a href="#208" id="208">208</a>
-<a href="#209" id="209">209</a>
-<a href="#210" id="210">210</a>
-<a href="#211" id="211">211</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::{HashMap, HashSet};
 
 <span class="kw">use </span>alloy_primitives::Address;
-<span class="kw">use </span>brontes_types::{exchanges::StaticBindingsDb, extra_processing::Pair};
+<span class="kw">use </span>brontes_types::{exchanges::StaticBindingsDb, extra_processing::Pair, price_graph::<span class="kw-2">*</span>};
 <span class="kw">use </span>indexmap::set::Intersection;
 <span class="kw">use </span>itertools::Itertools;
 <span class="kw">use </span>malachite::{
@@ -224,10 +214,7 @@
 };
 <span class="kw">use </span>tracing::info;
 
-<span class="kw">use super</span>::{
-    subgraph::{PairSubGraph, SubGraphEdge},
-    PoolPairInfoDirection, PoolState,
-};
+<span class="kw">use super</span>::{subgraph::PairSubGraph, PoolState};
 <span class="kw">use </span><span class="kw">crate</span>::types::PoolUpdate;
 
 <span class="doccomment">/// stores all sub-graphs and supports the update mechanisms
@@ -322,7 +309,7 @@
             .map(|subgraph_pair| {
                 (
                     subgraph_pair,
-                    <span class="kw">super</span>::PoolPairInformation {
+                    PoolPairInformation {
                         pool_addr: pool_address,
                         dex_type:  dex,
                         token_0:   pair.<span class="number">0</span>,
@@ -407,14 +394,7 @@
             .get(<span class="kw-2">&amp;</span>pair)
             .and_then(|graph| graph.fetch_price(<span class="kw-2">&amp;</span><span class="self">self</span>.edge_state))
             .map(|res| <span class="kw">if </span>swapped { res.reciprocal() } <span class="kw">else </span>{ res })
-        <span class="comment">// .map(|price| {
-        //     let mut opts = ToSciOptions::default();
-        //     opts.set_precision(10);
-        //     let str_price = price.to_sci_with_options(opts).to_string();
-        //     info!(?unordered_pair, price=%str_price, "price:");
-        //     price
-        // })
-    </span>}
+    }
 
     <span class="kw">pub fn </span>has_state(<span class="kw-2">&amp;</span><span class="self">self</span>, addr: <span class="kw-2">&amp;</span>Address) -&gt; bool {
         <span class="self">self</span>.edge_state.contains_key(addr)

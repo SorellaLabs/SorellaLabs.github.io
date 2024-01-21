@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["bitand","bitor","bitxor","byte","eq","gt","iszero","lt","not","sar","sgt","shl","shr","slt"]};

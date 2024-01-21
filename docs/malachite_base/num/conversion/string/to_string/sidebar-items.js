@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["digit_to_display_byte_lower","digit_to_display_byte_upper"],"struct":["BaseFmtWrapper"]};

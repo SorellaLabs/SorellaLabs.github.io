@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["PidInfo","PidInfoFlavor","ProcType"],"fn":["am_root","cwdself","libversion","listpidinfo","listpids","listpidspath","name","pidcwd","pidinfo","pidpath","regionfilename"],"struct":["ListThreads"],"trait":["ListPIDInfo","PIDInfo"]};

@@ -108,9 +108,15 @@
 <a href="#108" id="108">108</a>
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::time::SystemTimeError;
 
-<span class="kw">use </span>alloy_primitives::{Address <span class="kw">as </span>H160, U256};
+<span class="kw">use </span>alloy_primitives::{Address, U256};
+<span class="kw">use </span>alloy_sol_types::Error <span class="kw">as </span>AlloyError;
 <span class="kw">use </span>brontes_types::traits::TracingProvider;
 <span class="kw">use </span>ethers::{
     prelude::{AbiError, ContractError},
@@ -125,6 +131,8 @@
 </span><span class="kw">pub enum </span>AmmError {
     <span class="attr">#[error(<span class="string">"call error"</span>)]
     </span>CallError(<span class="attr">#[from] </span>eyre::Error),
+    <span class="attr">#[error(<span class="string">"No state was found for address: {0:?}"</span>)]
+    </span>NoStateError(Address),
     <span class="attr">#[error(<span class="string">"Provider error"</span>)]
     </span>ProviderError(<span class="attr">#[from] </span>ProviderError),
     <span class="attr">#[error(<span class="string">"ABI Codec error"</span>)]
@@ -142,11 +150,11 @@
     <span class="attr">#[error(<span class="string">"Uniswap V3 math error"</span>)]
     </span>UniswapV3MathError(<span class="attr">#[from] </span>UniswapV3MathError),
     <span class="attr">#[error(<span class="string">"Pair for token_a/token_b does not exist in provided dexes"</span>)]
-    </span>PairDoesNotExistInDexes(H160, H160),
+    </span>PairDoesNotExistInDexes(Address, Address),
     <span class="attr">#[error(<span class="string">"Could not initialize new pool from event log"</span>)]
     </span>UnrecognizedPoolCreatedEventLog,
     <span class="attr">#[error(<span class="string">"Error when syncing pool"</span>)]
-    </span>SyncError(H160),
+    </span>SyncError(Address),
     <span class="attr">#[error(<span class="string">"Error when getting pool data"</span>)]
     </span>PoolDataError,
     <span class="attr">#[error(<span class="string">"Arithmetic error"</span>)]
@@ -166,9 +174,11 @@
     <span class="attr">#[error(<span class="string">"Swap simulation error"</span>)]
     </span>SwapSimulationError(<span class="attr">#[from] </span>SwapSimulationError),
     <span class="attr">#[error(<span class="string">"Invalid data from batch request"</span>)]
-    </span>BatchRequestError(H160),
+    </span>BatchRequestError(Address),
     <span class="attr">#[error(<span class="string">"Checkpoint error"</span>)]
     </span>CheckpointError(<span class="attr">#[from] </span>CheckpointError),
+    <span class="attr">#[error(transparent)]
+    </span>AlloyError(<span class="attr">#[from] </span>AlloyError),
 }
 
 <span class="attr">#[derive(Error, Debug)]

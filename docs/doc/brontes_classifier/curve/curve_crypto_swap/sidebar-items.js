@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["ETH","WETH"],"struct":["CurveCryptoExchange0","CurveCryptoExchange1","CurveCryptoExchange2","CurveCryptoExchangeUnderlying","CurveCryptoSwapClassifier"]};

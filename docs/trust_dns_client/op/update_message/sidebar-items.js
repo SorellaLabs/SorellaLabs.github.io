@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["append","compare_and_swap","create","delete_all","delete_by_rdata","delete_rrset"],"trait":["UpdateMessage"]};

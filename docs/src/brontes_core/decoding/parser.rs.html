@@ -258,41 +258,13 @@
 <a href="#258" id="258">258</a>
 <a href="#259" id="259">259</a>
 <a href="#260" id="260">260</a>
-<a href="#261" id="261">261</a>
-<a href="#262" id="262">262</a>
-<a href="#263" id="263">263</a>
-<a href="#264" id="264">264</a>
-<a href="#265" id="265">265</a>
-<a href="#266" id="266">266</a>
-<a href="#267" id="267">267</a>
-<a href="#268" id="268">268</a>
-<a href="#269" id="269">269</a>
-<a href="#270" id="270">270</a>
-<a href="#271" id="271">271</a>
-<a href="#272" id="272">272</a>
-<a href="#273" id="273">273</a>
-<a href="#274" id="274">274</a>
-<a href="#275" id="275">275</a>
-<a href="#276" id="276">276</a>
-<a href="#277" id="277">277</a>
-<a href="#278" id="278">278</a>
-<a href="#279" id="279">279</a>
-<a href="#280" id="280">280</a>
-<a href="#281" id="281">281</a>
-<a href="#282" id="282">282</a>
-<a href="#283" id="283">283</a>
-<a href="#284" id="284">284</a>
-<a href="#285" id="285">285</a>
-<a href="#286" id="286">286</a>
-<a href="#287" id="287">287</a>
-<a href="#288" id="288">288</a>
 </pre></div><pre class="rust"><code><span class="attr">#[cfg(feature = <span class="string">"dyn-decode"</span>)]
 </span><span class="kw">use </span>std::collections::HashMap;
 <span class="kw">use </span>std::sync::Arc;
 
 <span class="attr">#[cfg(feature = <span class="string">"dyn-decode"</span>)]
 </span><span class="kw">use </span>alloy_json_abi::JsonAbi;
-<span class="kw">use </span>brontes_database_libmdbx::Libmdbx;
+<span class="kw">use </span>brontes_database::libmdbx::Libmdbx;
 <span class="kw">use </span>brontes_metrics::{
     trace::types::{BlockStats, TraceParseErrorKind, TransactionStats},
     PoirotMetricEvents,
@@ -317,7 +289,7 @@
     <span class="attr">#[allow(unused)]
     </span>libmdbx:               <span class="kw-2">&amp;</span><span class="lifetime">'db </span>Libmdbx,
     <span class="attr">#[allow(unused)]
-    </span>should_fetch:          Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>Address, <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;) -&gt; bool + Send + Sync&gt;,
+    </span>should_fetch:          Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>Address, <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;) -&gt; bool + Send + Sync&gt;,
     <span class="kw">pub </span>tracer:            Arc&lt;T&gt;,
     <span class="kw">pub</span>(<span class="kw">crate</span>) metrics_tx: Arc&lt;UnboundedSender&lt;PoirotMetricEvents&gt;&gt;,
 }
@@ -325,7 +297,7 @@
 <span class="kw">impl</span>&lt;<span class="lifetime">'db</span>, T: TracingProvider&gt; TraceParser&lt;<span class="lifetime">'db</span>, T&gt; {
     <span class="kw">pub fn </span>new(
         libmdbx: <span class="kw-2">&amp;</span><span class="lifetime">'db </span>Libmdbx,
-        should_fetch: Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>Address, <span class="kw-2">&amp;</span>LibmdbxTx&lt;RO&gt;) -&gt; bool + Send + Sync&gt;,
+        should_fetch: Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>Address, <span class="kw-2">&amp;</span>CompressedLibmdbxTx&lt;RO&gt;) -&gt; bool + Send + Sync&gt;,
         tracer: Arc&lt;T&gt;,
         metrics_tx: Arc&lt;UnboundedSender&lt;PoirotMetricEvents&gt;&gt;,
     ) -&gt; <span class="self">Self </span>{
@@ -391,7 +363,7 @@
             </span>}
         };
 
-        <span class="kw">let </span>db_tx = <span class="self">self</span>.libmdbx.ro_tx()<span class="question-mark">?</span>;
+        <span class="kw">let </span>db_tx = <span class="self">self</span>.libmdbx.ro_tx().unwrap();
         <span class="kw">let </span>json = <span class="kw">if let </span><span class="prelude-val">Some</span>(trace) = <span class="kw-2">&amp;</span>trace {
             <span class="kw">let </span>addresses = trace
                 .iter()
@@ -406,8 +378,9 @@
                 .filter(|addr| (<span class="self">self</span>.should_fetch)(addr, <span class="kw-2">&amp;</span>db_tx))
                 .collect::&lt;Vec&lt;Address&gt;&gt;();
             <span class="macro">info!</span>(<span class="string">"addresses for dyn decoding: {:#?}"</span>, addresses);
-            <span class="self">self</span>.database.get_abis(addresses).<span class="kw">await
-        </span>} <span class="kw">else </span>{
+            <span class="comment">//self.libmdbx.get_abis(addresses).await.unwrap()
+            </span>HashMap::default()
+        } <span class="kw">else </span>{
             HashMap::default()
         };
 
@@ -543,35 +516,6 @@
         tx_trace.gas_used = gas_used;
 
         (tx_trace, stats)
-    }
-}
-
-<span class="attr">#[cfg(test)]
-</span><span class="kw">mod </span>tests {
-
-    <span class="kw">use </span>serial_test::serial;
-    <span class="kw">use </span>tokio::sync::mpsc::unbounded_channel;
-    <span class="kw">use </span>tracing::info;
-
-    <span class="kw">use crate</span>::{init_tracing, test_utils::init_trace_parser};
-
-    <span class="attr">#[cfg(feature = <span class="string">"dyn-decode"</span>)]
-    #[tokio::test]
-    #[serial]
-    </span><span class="kw">async fn </span>test_dyn_decode() {
-        dotenv::dotenv().ok();
-        init_tracing();
-        <span class="kw">let </span>block_num = <span class="number">18522278</span>;
-
-        <span class="kw">let </span>(tx, _rx) = unbounded_channel();
-
-        <span class="kw">let </span>tracer = init_trace_parser(tokio::runtime::Handle::current().clone(), tx);
-        <span class="kw">let </span>(trace, <span class="kw">_</span>) = tracer.execute_block(block_num).<span class="kw">await</span>.unwrap();
-        <span class="kw">let </span>has_decoded = trace
-            .into_iter()
-            .flat_map(|t| t.trace.into_iter().map(|t| t.decoded_data.is_some()))
-            .any(|s| s);
-        <span class="macro">info!</span>(ran_dyn = has_decoded);
     }
 }
 </code></pre></div></section></main></body></html>

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["SciSizeOptions"],"mod":["exhaustive"],"struct":["FromSciStringOptions","ToSciOptions"]};

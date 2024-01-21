@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["get_log_from_tx"],"mod":["curve_crypto_swap","discovery"],"struct":["CurveCryptoSwapClassifier","CurveDecoder","CurveV1MetapoolBaseDecoder","CurveV1MetapoolMetaDecoder","CurveV2MetapoolBaseDecoder","CurveV2MetapoolMetaDecoder","CurveV2MetapoolPlainDecoder","CurvecrvUSDBaseDecoder","CurvecrvUSDMetaDecoder","CurvecrvUSDPlainDecoder"]};

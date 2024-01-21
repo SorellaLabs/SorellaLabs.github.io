@@ -66,30 +66,18 @@
 <a href="#66" id="66">66</a>
 <a href="#67" id="67">67</a>
 <a href="#68" id="68">68</a>
-<a href="#69" id="69">69</a>
-<a href="#70" id="70">70</a>
-<a href="#71" id="71">71</a>
-<a href="#72" id="72">72</a>
-<a href="#73" id="73">73</a>
-<a href="#74" id="74">74</a>
-<a href="#75" id="75">75</a>
-<a href="#76" id="76">76</a>
-<a href="#77" id="77">77</a>
-<a href="#78" id="78">78</a>
-<a href="#79" id="79">79</a>
-<a href="#80" id="80">80</a>
-<a href="#81" id="81">81</a>
-<a href="#82" id="82">82</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{pin::Pin, sync::Arc, task::Poll};
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>alloy_primitives::{Address, Bytes};
 <span class="kw">use </span>alloy_sol_macro::sol;
 <span class="kw">use </span>alloy_sol_types::SolCall;
-<span class="kw">use </span>brontes_database_libmdbx::Libmdbx;
-<span class="kw">use </span>futures::{future::join, stream::FuturesUnordered, Future, StreamExt};
+<span class="kw">use </span>brontes_database::libmdbx::{
+    tables::TokenDecimals, types::token_decimals::TokenDecimalsData, Libmdbx,
+};
+<span class="kw">use </span>futures::{future::join, stream::FuturesUnordered, StreamExt};
 <span class="kw">use </span>reth_provider::ProviderError;
 <span class="kw">use </span>reth_rpc_types::{CallInput, CallRequest};
-<span class="kw">use </span>tracing::{debug, error, info};
+<span class="kw">use </span>tracing::{debug, error};
 
 <span class="kw">use </span><span class="kw">crate</span>::decoding::TracingProvider;
 
@@ -97,69 +85,53 @@
     function decimals() public view returns (uint8);
 );
 
-<span class="kw">type </span>DecimalQuery = Pin&lt;Box&lt;<span class="kw">dyn </span>Future&lt;Output = (Address, <span class="prelude-ty">Result</span>&lt;Bytes, ProviderError&gt;)&gt; + Send&gt;&gt;;
+<span class="kw">pub async fn </span>load_missing_decimals&lt;T: TracingProvider&gt;(
+    provider: Arc&lt;T&gt;,
+    db: <span class="kw-2">&amp;</span>Libmdbx,
+    block: u64,
+    missing: Vec&lt;Address&gt;,
+) {
+    <span class="kw">let </span><span class="kw-2">mut </span>pending_decimals = FuturesUnordered::new();
+    missing.into_iter().for_each(|addr| {
+        <span class="kw">let </span>call = decimalsCall::new(()).abi_encode();
+        <span class="kw">let </span><span class="kw-2">mut </span>tx_req = CallRequest::default();
+        tx_req.to = <span class="prelude-val">Some</span>(addr);
+        tx_req.input = CallInput::new(call.into());
 
-<span class="kw">pub struct </span>MissingDecimals&lt;<span class="lifetime">'db</span>, T: TracingProvider + <span class="lifetime">'db</span>&gt; {
-    provider:         Arc&lt;T&gt;,
-    pending_decimals: FuturesUnordered&lt;DecimalQuery&gt;,
-    database:         <span class="kw-2">&amp;</span><span class="lifetime">'db </span>Libmdbx,
-}
+        <span class="kw">let </span>p = provider.clone();
+        pending_decimals.push(Box::pin(join(<span class="kw">async move </span>{ addr }, <span class="kw">async move </span>{
+            p.eth_call(tx_req, <span class="prelude-val">Some</span>(block.into()), <span class="prelude-val">None</span>, <span class="prelude-val">None</span>).<span class="kw">await
+        </span>})));
+    });
 
-<span class="kw">impl</span>&lt;<span class="lifetime">'db</span>, T: TracingProvider + <span class="lifetime">'static</span>&gt; MissingDecimals&lt;<span class="lifetime">'db</span>, T&gt; {
-    <span class="kw">pub fn </span>new(provider: Arc&lt;T&gt;, db: <span class="kw-2">&amp;</span><span class="lifetime">'db </span>Libmdbx, missing: Vec&lt;Address&gt;) -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span><span class="kw-2">mut </span>this =
-            <span class="self">Self </span>{ provider, pending_decimals: FuturesUnordered::default(), database: db };
-        this.missing_decimals(missing);
-
-        this
-    }
-
-    <span class="kw">fn </span>missing_decimals(<span class="kw-2">&amp;mut </span><span class="self">self</span>, addrs: Vec&lt;Address&gt;) {
-        addrs.into_iter().for_each(|addr| {
-            <span class="kw">let </span>call = decimalsCall::new(()).abi_encode();
-            <span class="comment">// let tx_req = TransactionRequest::default().to(addr).input(call.into());
-            </span><span class="kw">let </span><span class="kw-2">mut </span>tx_req = CallRequest::default();
-            tx_req.to = <span class="prelude-val">Some</span>(addr);
-            tx_req.input = CallInput::new(call.into());
-
-            <span class="kw">let </span>p = <span class="self">self</span>.provider.clone();
-            <span class="self">self</span>.pending_decimals
-                .push(Box::pin(join(<span class="kw">async move </span>{ addr }, <span class="kw">async move </span>{
-                    p.eth_call(tx_req, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>).<span class="kw">await
-                </span>})));
-        });
-    }
-
-    <span class="kw">fn </span>on_query_res(<span class="kw-2">&amp;mut </span><span class="self">self</span>, addr: Address, res: <span class="prelude-ty">Result</span>&lt;Bytes, ProviderError&gt;) {
-        <span class="kw">if let </span><span class="prelude-val">Ok</span>(res) = res {
-            <span class="kw">let </span><span class="prelude-val">Some</span>(dec) = decimalsCall::abi_decode_returns(<span class="kw-2">&amp;</span>res, <span class="bool-val">false</span>).ok() <span class="kw">else </span>{ <span class="kw">return </span>};
-            <span class="kw">let </span>dec = dec._0;
-            <span class="macro">info!</span>(<span class="question-mark">?</span>dec, <span class="question-mark">?</span>addr, <span class="string">"got new decimal"</span>);
-            <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = <span class="self">self</span>.database.insert_decimals(addr, dec) {
-                <span class="macro">error!</span>(<span class="question-mark">?</span>e);
-            }
-        } <span class="kw">else </span>{
-            <span class="macro">debug!</span>(<span class="question-mark">?</span>addr, <span class="string">"Token request failed for token"</span>);
-        }
+    <span class="kw">while let </span><span class="prelude-val">Some</span>((address, bytes)) = pending_decimals.next().<span class="kw">await </span>{
+        on_decimal_query_resolution(db, address, bytes);
     }
 }
 
-<span class="kw">impl</span>&lt;T: TracingProvider&gt; Future <span class="kw">for </span>MissingDecimals&lt;<span class="lifetime">'_</span>, T&gt; {
-    <span class="kw">type </span>Output = ();
-
-    <span class="kw">fn </span>poll(
-        <span class="kw-2">mut </span><span class="self">self</span>: std::pin::Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;,
-        cx: <span class="kw-2">&amp;mut </span>std::task::Context&lt;<span class="lifetime">'_</span>&gt;,
-    ) -&gt; std::task::Poll&lt;<span class="self">Self</span>::Output&gt; {
-        <span class="kw">while let </span>Poll::Ready(<span class="prelude-val">Some</span>(res)) = <span class="self">self</span>.pending_decimals.poll_next_unpin(cx) {
-            <span class="self">self</span>.on_query_res(res.<span class="number">0</span>, res.<span class="number">1</span>);
+<span class="kw">fn </span>on_decimal_query_resolution(
+    database: <span class="kw-2">&amp;</span>Libmdbx,
+    addr: Address,
+    res: <span class="prelude-ty">Result</span>&lt;Bytes, ProviderError&gt;,
+) {
+    <span class="kw">if let </span><span class="prelude-val">Ok</span>(res) = res {
+        <span class="kw">let </span><span class="prelude-val">Some</span>(dec) = decimalsCall::abi_decode_returns(<span class="kw-2">&amp;</span>res, <span class="bool-val">false</span>).ok() <span class="kw">else </span>{ <span class="kw">return </span>};
+        <span class="kw">let </span>dec = dec._0;
+        <span class="macro">debug!</span>(<span class="question-mark">?</span>dec, <span class="question-mark">?</span>addr, <span class="string">"got new decimal"</span>);
+        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = insert_decimals(database, addr, dec) {
+            <span class="macro">error!</span>(<span class="question-mark">?</span>e, <span class="string">"failed to insert missing decimals into libmdbx"</span>);
         }
-
-        <span class="kw">if </span><span class="self">self</span>.pending_decimals.is_empty() {
-            Poll::Ready(())
-        } <span class="kw">else </span>{
-            Poll::Pending
-        }
+    } <span class="kw">else </span>{
+        <span class="comment">// this is a debug as its pretty common to come across tokens
+        // without a decimals fn
+        </span><span class="macro">debug!</span>(<span class="question-mark">?</span>addr, <span class="string">"Token request failed for token"</span>);
     }
+}
+
+<span class="kw">fn </span>insert_decimals(database: <span class="kw-2">&amp;</span>Libmdbx, address: Address, decimals: u8) -&gt; eyre::Result&lt;()&gt; {
+    database.write_table::&lt;TokenDecimals, TokenDecimalsData&gt;(<span class="kw-2">&amp;</span><span class="macro">vec!</span>[TokenDecimalsData {
+        address,
+        decimals,
+    }])
 }
 </code></pre></div></section></main></body></html>

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["dex_price_mapping","serde","utils"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["constrain","in_direction","move_in_direction","uint_sqrt"]};

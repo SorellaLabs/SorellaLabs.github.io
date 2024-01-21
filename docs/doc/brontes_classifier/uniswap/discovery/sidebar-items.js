@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["UniswapDecoder","UniswapV2Decoder","UniswapV3Decoder"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["MissingDecimals","decimalsCall","decimalsReturn"]};
+window.SIDEBAR_ITEMS = {"fn":["load_missing_decimals"],"struct":["decimalsCall","decimalsReturn"]};

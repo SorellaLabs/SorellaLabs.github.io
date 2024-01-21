@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["sushiswap_v2","sushiswap_v3"],"struct":["SushiSwapV2Classifier","SushiSwapV3Classifier"]};

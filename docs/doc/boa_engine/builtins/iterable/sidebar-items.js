@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["IteratorHint"],"fn":["create_iter_result_object"],"struct":["IteratorPrototypes","IteratorRecord","IteratorResult"]};

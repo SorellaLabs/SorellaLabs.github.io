@@ -465,7 +465,15 @@
 <a href="#465" id="465">465</a>
 <a href="#466" id="466">466</a>
 <a href="#467" id="467">467</a>
-</pre></div><pre class="rust"><code><span class="kw">pub const </span>PRIVATE_FLOW: <span class="kw-2">&amp;</span>str = <span class="string">r#"SELECT toString(tx_hash) as tx_hash
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+</pre></div><pre class="rust"><code><span class="attr">#[allow(dead_code)]
+</span><span class="kw">pub const </span>PRIVATE_FLOW: <span class="kw-2">&amp;</span>str = <span class="string">r#"SELECT toString(tx_hash) as tx_hash
 FROM
 (
     SELECT arrayJoin(transaction_hashes) AS tx_hash
@@ -562,14 +570,16 @@ WHERE um.tx_hash IS NULL OR um.tx_hash = ''
 ORDER BY tx
 "#</span>;
 
-<span class="kw">pub const </span>ABIS: <span class="kw-2">&amp;</span>str = <span class="string">r#"SELECT 
+<span class="attr">#[allow(dead_code)]
+</span><span class="kw">pub const </span>ABIS: <span class="kw-2">&amp;</span>str = <span class="string">r#"SELECT 
  distinct(a.address), c.abi
 FROM ethereum.addresses a 
 INNER JOIN ethereum.contracts c ON a.hashed_bytecode = c.hashed_bytecode
 WHERE c.abi IS NOT NULL AND has([?], address)
 "#</span>;
 
-<span class="kw">pub const </span>TIMES_FLOW: <span class="kw-2">&amp;</span>str = <span class="string">r#"WITH
+<span class="attr">#[allow(dead_code)]
+</span><span class="kw">pub const </span>TIMES_FLOW: <span class="kw-2">&amp;</span>str = <span class="string">r#"WITH
     ? AS block_number,
     relay_block AS (
         SELECT
@@ -629,7 +639,8 @@ FROM relay_p2p, private_flow
 
 "#</span>;
 
-<span class="kw">pub const </span>PRICES: <span class="kw-2">&amp;</span>str = <span class="string">r#"WITH
+<span class="attr">#[allow(dead_code)]
+</span><span class="kw">pub const </span>PRICES: <span class="kw-2">&amp;</span>str = <span class="string">r#"WITH
     ? AS p2p_time,
     bids_asks AS
     (
@@ -690,7 +701,8 @@ FROM relay_p2p, private_flow
 SELECT *
 FROM prices"#</span>;
 
-<span class="kw">pub const </span>PLAY: <span class="kw-2">&amp;</span>str = <span class="string">r#"SELECT 
+<span class="attr">#[allow(dead_code)]
+</span><span class="kw">pub const </span>PLAY: <span class="kw-2">&amp;</span>str = <span class="string">r#"SELECT 
     substring(toString(sub1.address), 3) AS address,
     sub1.price AS relay_price,
     sub2.price AS p2p_price
@@ -890,7 +902,8 @@ FROM
 WHERE bt.timestamp &lt;= 1699116962163
 AND bt.symbol = 'ETHUSDT'"#</span>;
 
-<span class="kw">pub const </span>REAL_PRICES: <span class="kw-2">&amp;</span>str = <span class="string">r#"SELECT 
+<span class="attr">#[allow(dead_code)]
+</span><span class="kw">pub const </span>REAL_PRICES: <span class="kw-2">&amp;</span>str = <span class="string">r#"SELECT 
     substring(toString(sub1.address), 3) AS address,
     sub1.price AS relay_price,
     sub2.price AS p2p_price
@@ -929,7 +942,8 @@ FROM
         address
 ) AS sub2 ON sub2.address = sub1.address"#</span>;
 
-<span class="kw">pub const </span>DEX_PRICES: <span class="kw-2">&amp;</span>str = <span class="string">r#"SELECT * FROM ethereum.pool_reserves WHERE block_number = ?
+<span class="attr">#[allow(dead_code)]
+</span><span class="kw">pub const </span>DEX_PRICES: <span class="kw-2">&amp;</span>str = <span class="string">r#"SELECT * FROM ethereum.pool_reserves WHERE block_number = ?
 "#</span>;
 
 </code></pre></div></section></main></body></html>

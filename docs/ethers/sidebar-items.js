@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["addressbook","contract","core","etherscan","middleware","providers","signers"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["apply_beacon_root_contract_call","insert_post_block_withdrawals_balance_increments","post_block_balance_increments","post_block_withdrawals_balance_increments"]};

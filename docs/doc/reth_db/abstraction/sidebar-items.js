@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["common","cursor","database","database_metrics","mock","table","transaction"]};

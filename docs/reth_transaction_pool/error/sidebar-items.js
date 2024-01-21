@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Eip4844PoolTransactionError","InvalidPoolTransactionError","PoolErrorKind"],"struct":["PoolError"],"trait":["PoolTransactionError"],"type":["PoolResult"]};

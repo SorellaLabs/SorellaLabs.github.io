@@ -399,9 +399,50 @@
 <a href="#399" id="399">399</a>
 <a href="#400" id="400">400</a>
 <a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
+<a href="#441" id="441">441</a>
+<a href="#442" id="442">442</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt::Debug, path::Path, sync::Arc};
 
-<span class="kw">use </span>alloy_primitives::Log;
+<span class="kw">use </span>alloy_primitives::{Log, B256};
 <span class="kw">use </span>brontes_types::structured_trace::{TransactionTraceWithLogs, TxTrace};
 <span class="kw">use </span>reth_beacon_consensus::BeaconConsensus;
 <span class="kw">use </span>reth_blockchain_tree::{
@@ -591,7 +632,7 @@
     <span class="kw">pub fn </span>into_trace_results(<span class="self">self</span>, info: TransactionInfo, res: <span class="kw-2">&amp;</span>ExecutionResult) -&gt; TxTrace {
         <span class="kw">let </span>gas_used = res.gas_used().into();
 
-        <span class="kw">let </span>trace = <span class="self">self</span>.build_trace();
+        <span class="kw">let </span>trace = <span class="self">self</span>.build_trace(info.hash.unwrap(), info.block_number.unwrap());
 
         TxTrace {
             trace: trace.unwrap_or_default(),
@@ -616,12 +657,17 @@
     /// the state diff, since this requires access to the account diffs.
     ///
     /// See [Self::into_trace_results_with_state] and [populate_state_diff].
-    </span><span class="kw">pub fn </span>build_trace(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;TransactionTraceWithLogs&gt;&gt; {
+    </span><span class="kw">pub fn </span>build_trace(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        tx_hash: B256,
+        block_number: u64,
+    ) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;TransactionTraceWithLogs&gt;&gt; {
         <span class="kw">if </span><span class="self">self</span>.traces.nodes().is_empty() {
             <span class="kw">return </span><span class="prelude-val">None
         </span>}
 
-        <span class="kw">let </span><span class="kw-2">mut </span>traces = Vec::with_capacity(<span class="self">self</span>.traces.nodes().len());
+        <span class="kw">let </span><span class="kw-2">mut </span>traces: Vec&lt;TransactionTraceWithLogs&gt; =
+            Vec::with_capacity(<span class="self">self</span>.traces.nodes().len());
 
         <span class="kw">for </span>node <span class="kw">in </span><span class="self">self</span>.iter_traceable_nodes() {
             <span class="kw">let </span>trace_address = <span class="self">self</span>.trace_address(<span class="self">self</span>.traces.nodes(), node.idx);
@@ -633,9 +679,44 @@
                 .map(|log| Log { address: node.trace.address, data: log.clone() })
                 .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
+            <span class="kw">let </span>msg_sender = <span class="kw">if let </span>Action::Call(c) = <span class="kw-2">&amp;</span>trace.action {
+                <span class="kw">if </span>c.call_type == CallType::DelegateCall {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(prev_trace) = traces.iter().rev().find(|n| <span class="kw">match </span><span class="kw-2">&amp;</span>n.trace.action {
+                        Action::Call(c) =&gt; c.call_type != CallType::DelegateCall,
+                        Action::Create(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
+                        <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
+                    }) {
+                        prev_trace.msg_sender
+                    } <span class="kw">else </span>{
+                        <span class="macro">tracing::error!</span>(
+                            target: <span class="string">"reth-tracing-ext"</span>,
+                            <span class="question-mark">?</span>block_number,
+                            <span class="question-mark">?</span>tx_hash,
+                            <span class="string">"couldn't find head of delegate call for block"
+                        </span>);
+                        <span class="macro">panic!</span>(<span class="string">"should never be reached"</span>);
+                    }
+                } <span class="kw">else </span>{
+                    <span class="kw">match </span><span class="kw-2">&amp;</span>trace.action {
+                        Action::Call(call) =&gt; call.from,
+                        Action::Create(call) =&gt; call.from,
+                        Action::Reward(call) =&gt; call.author,
+                        Action::Selfdestruct(call) =&gt; call.address,
+                    }
+                }
+            } <span class="kw">else </span>{
+                <span class="kw">match </span><span class="kw-2">&amp;</span>trace.action {
+                    Action::Call(call) =&gt; call.from,
+                    Action::Create(call) =&gt; call.from,
+                    Action::Reward(call) =&gt; call.author,
+                    Action::Selfdestruct(call) =&gt; call.address,
+                }
+            };
+
             traces.push(TransactionTraceWithLogs {
                 trace,
                 logs,
+                msg_sender,
                 decoded_data: <span class="prelude-val">None</span>,
                 trace_idx: node.idx <span class="kw">as </span>u64,
             });
@@ -656,6 +737,7 @@
 
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(trace) = <span class="self">self</span>.parity_selfdestruct_trace(node, addr) {
                     traces.push(TransactionTraceWithLogs {
+                        msg_sender,
                         trace,
                         logs: <span class="macro">vec!</span>[],
                         decoded_data: <span class="prelude-val">None</span>,

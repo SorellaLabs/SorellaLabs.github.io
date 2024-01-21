@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["from_bool","from_natural","from_primitive_float","from_primitive_int","from_twos_complement_limbs","is_integer","natural_from_integer","primitive_float_from_integer","primitive_int_from_integer","serde","string","to_twos_complement_limbs"]};

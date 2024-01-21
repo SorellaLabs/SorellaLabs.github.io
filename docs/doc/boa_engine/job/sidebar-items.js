@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["IdleJobQueue","JobCallback","NativeJob","SimpleJobQueue"],"trait":["JobQueue"],"type":["FutureJob"]};

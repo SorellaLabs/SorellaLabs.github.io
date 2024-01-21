@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["PipelineError","PipelineEvent","StageError"],"struct":["Pipeline","PipelineBuilder","StageSetBuilder"],"trait":["StageSet"]};

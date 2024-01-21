@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"attr":["add_arbitrary_tests","derive_arbitrary","main_codec","no_codec","use_compact","use_postcard","use_scale"],"derive":["Compact","CompactZstd"],"macro":["impl_compact_for_bytes"],"trait":["Compact"]};

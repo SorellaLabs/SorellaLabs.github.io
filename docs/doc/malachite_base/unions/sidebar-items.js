@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Union2","UnionFromStrError"],"mod":["exhaustive"]};

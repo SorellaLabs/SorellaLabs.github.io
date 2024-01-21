@@ -78,6 +78,11 @@
 <a href="#78" id="78">78</a>
 <a href="#79" id="79">79</a>
 <a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>::serde::ser::{Serialize, SerializeStruct, Serializer};
 <span class="kw">use </span>sorella_db_databases::clickhouse::{fixed_string::FixedString, DbRow};
 
@@ -122,7 +127,11 @@
         ser_struct
             .serialize_field(<span class="string">"liquidations.collateral_asset"</span>, <span class="kw-2">&amp;</span>liquidations.collateral_asset)<span class="question-mark">?</span>;
         ser_struct.serialize_field(<span class="string">"liquidations.debt_asset"</span>, <span class="kw-2">&amp;</span>liquidations.debt_asset)<span class="question-mark">?</span>;
-        ser_struct.serialize_field(<span class="string">"liquidations.amount"</span>, <span class="kw-2">&amp;</span>liquidations.amount)<span class="question-mark">?</span>;
+        ser_struct.serialize_field(<span class="string">"liquidations.covered_debt"</span>, <span class="kw-2">&amp;</span>liquidations.covered_debt)<span class="question-mark">?</span>;
+        ser_struct.serialize_field(
+            <span class="string">"liquidations.liquidated_collateral"</span>,
+            <span class="kw-2">&amp;</span>liquidations.liquidated_collateral,
+        )<span class="question-mark">?</span>;
 
         <span class="kw">let </span>gas_details = (
             <span class="self">self</span>.gas_details.coinbase_transfer,
@@ -154,7 +163,8 @@
         <span class="string">"liquidations.debtor"</span>,
         <span class="string">"liquidations.collateral_asset"</span>,
         <span class="string">"liquidations.debt_asset"</span>,
-        <span class="string">"liquidations.amount"</span>,
+        <span class="string">"liquidations.covered_debt"</span>,
+        <span class="string">"liquidations.liquidated_collateral"</span>,
         <span class="string">"gas_details"</span>,
     ];
 }

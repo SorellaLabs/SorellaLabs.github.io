@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["BaseConvertError","FromUintError","ParseError","ToFieldError","ToUintError"],"fn":["mask","nbytes","nlimbs"],"macro":["const_for","uint"],"mod":["algorithms","aliases","support"],"struct":["Bits","Uint"],"trait":["UintTryFrom","UintTryTo"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["EthPrice","EthSupply2","NodeCount"]};

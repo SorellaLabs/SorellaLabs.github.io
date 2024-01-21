@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Error"],"mod":["events"],"struct":["EmitterConfig","EventWriter"],"type":["Result"]};

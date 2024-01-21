@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["bit_access","bit_block_access","bit_convertible","bit_iterable","bit_scan","count_ones","count_zeros","hamming_distance","leading_zeros","low_mask","not","significant_bits","trailing_zeros","traits"]};

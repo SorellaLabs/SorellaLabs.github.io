@@ -105,6 +105,14 @@
 <a href="#105" id="105">105</a>
 <a href="#106" id="106">106</a>
 <a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Brontes Inspect Crate
 //!
 //! The `brontes_inspect` crate is designed to efficiently detect and analyze
@@ -125,22 +133,23 @@
 //! `BlockTree` and `Metadata` as input and returns a vector of tuples, each
 //! containing a `ClassifiedMev` and a `SpecificMev`.
 //!
-//! ```
+//! ```ignore
 //! #[async_trait::async_trait]
 //! pub trait Inspector: Send + Sync {
 //!     async fn process_tree(
 //!         &amp;self,
 //!         tree: Arc&lt;BlockTree&lt;Actions&gt;&gt;,
-//!         metadata: Arc&lt;Metadata&gt;,
-//!     ) -&gt; Vec&lt;(ClassifiedMev, Box&lt;dyn SpecificMev&gt;)&gt;;
+//!         metadata: Arc&lt;MetadataCombined&gt;,
+//!     ) -&gt; Vec&lt;(ClassifiedMev, SpecificMev)&gt;;
 //! }
 //! ```
 //!
-//! The `BlockTree` represents a block of classified &amp; normalized Ethereum
-//! transactions &amp; their traces, and the `Metadata` contains additional
-//! information about the block. The `process_tree` method analyzes the block
-//! and identifies instances of the MEV strategy that the inspector is designed
-//! to detect.
+//! The [`BlockTree`](../brontes-classifier/index.html) represents a block of
+//! classified &amp; normalized Ethereum transactions &amp; their traces, and the
+//! [`Metadata`](../brontes-database) contains price information &amp; relevant off
+//! chain data such as mempool data &amp; centralized exchange price data relevant
+//! to that block. The `process_tree` method analyzes the block and identifies
+//! instances of the MEV strategy that the inspector is designed to detect.
 //!
 //! ## Individual Inspectors
 //!
@@ -152,6 +161,8 @@
 //! - [`cex_dex`](cex_dex/index.html)
 //! - [`jit`](jit/index.html)
 //! - [`sandwich`](sandwich/index.html)
+//! - [`liquidations`](liquidations/index.html)
+//! - [`long_tail`](long_tail/index.html)
 //!
 //! Each inspector implements the `Inspector` trait and provides its own
 //! implementation of the `process_tree` method.
@@ -163,14 +174,14 @@
 //! array of individual inspectors and a `BlockTree` and `Metadata` as input,
 //! running each inspector on the block and collecting their results.
 //!
-//! ```
+//! ```ingnore
 //! pub struct Composer&lt;'a, const N: usize&gt; {
 //!     inspectors_execution: InspectorFut&lt;'a&gt;,
 //!     pre_processing:       BlockPreprocessing,
 //! }
 //! ```
 //!
-//! The `Composer` uses a macro `mev_composability` to define a filter that
+//! The `Composer` uses  to define a filter that
 //! orders results from individual inspectors. This ensures that lower-level
 //! actions are composed before higher-level actions, which could affect the
 //! composition.
@@ -184,22 +195,27 @@
 //! analyzing MEV strategies in Ethereum transactions. Individual inspectors
 //! identify specific MEV strategies, while the `Composer` combines these
 //! results to identify more complex strategies.
+</span><span class="comment">//TODO: Update composer section once finished
 
 </span><span class="kw">pub mod </span>atomic_backrun;
 <span class="kw">pub mod </span>cex_dex;
 <span class="kw">pub mod </span>composer;
 <span class="kw">pub mod </span>jit;
-<span class="attr">#[allow(dead_code, unused_imports)]
+<span class="attr">#[allow(dead_code, unused_imports, unused_variables)]
 </span><span class="kw">pub mod </span>liquidations;
-<span class="kw">pub mod </span>long_tail;
+<span class="attr">#[allow(dead_code, unused_imports, unused_variables)]
+</span><span class="kw">pub mod </span>long_tail;
 <span class="kw">pub mod </span>sandwich;
 <span class="kw">pub mod </span>shared_utils;
 
+<span class="attr">#[cfg(feature = <span class="string">"tests"</span>)]
+</span><span class="kw">pub mod </span>test_utils;
+
 <span class="kw">use </span>std::sync::Arc;
 
-<span class="kw">use </span>brontes_database::Metadata;
 <span class="kw">use </span>brontes_types::{
     classified_mev::{ClassifiedMev, SpecificMev},
+    db::metadata::MetadataCombined,
     normalized_actions::Actions,
     tree::BlockTree,
 };
@@ -209,7 +225,7 @@
     <span class="kw">async fn </span>process_tree(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         tree: Arc&lt;BlockTree&lt;Actions&gt;&gt;,
-        metadata: Arc&lt;Metadata&gt;,
-    ) -&gt; Vec&lt;(ClassifiedMev, Box&lt;<span class="kw">dyn </span>SpecificMev&gt;)&gt;;
+        metadata: Arc&lt;MetadataCombined&gt;,
+    ) -&gt; Vec&lt;(ClassifiedMev, SpecificMev)&gt;;
 }
 </code></pre></div></section></main></body></html>

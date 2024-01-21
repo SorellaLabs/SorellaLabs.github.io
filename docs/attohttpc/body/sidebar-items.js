@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["BodyKind"],"struct":["Bytes","Empty","File","Text"],"trait":["Body"]};

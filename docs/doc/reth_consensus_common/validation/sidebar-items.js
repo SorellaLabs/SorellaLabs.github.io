@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["full_validation","validate_4844_header_standalone","validate_4844_header_with_parent","validate_all_transaction_regarding_block_and_nonces","validate_block_regarding_chain","validate_block_standalone","validate_header_regarding_parent","validate_header_standalone","validate_transaction_regarding_header"]};

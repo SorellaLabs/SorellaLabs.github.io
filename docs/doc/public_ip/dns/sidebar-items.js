@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["ALL","GOOGLE","GOOGLE_V4","GOOGLE_V6","OPENDNS","OPENDNS_V4","OPENDNS_V6"],"enum":["QueryMethod"],"struct":["Details","Resolver"],"type":["Error"]};

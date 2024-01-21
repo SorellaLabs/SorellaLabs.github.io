@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["escape_str_attribute","escape_str_pcdata"]};

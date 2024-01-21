@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["UniswapV2Classifier","V2BurnImpl","V2MintImpl","V2SwapImpl"]};

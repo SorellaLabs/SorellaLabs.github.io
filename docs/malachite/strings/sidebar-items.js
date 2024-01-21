@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["string_is_subset","string_sort","string_unique","strings_from_char_vecs"],"mod":["exhaustive"],"struct":["StringsFromCharVecs"],"trait":["ToBinaryString","ToDebugString","ToLowerHexString","ToOctalString","ToUpperHexString"]};

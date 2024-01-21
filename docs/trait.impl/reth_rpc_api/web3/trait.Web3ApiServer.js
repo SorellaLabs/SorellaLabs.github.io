@@ -1,3 +1,0 @@
-(function() {var implementors = {
-"reth_rpc":[["impl&lt;N&gt; <a class=\"trait\" href=\"reth_rpc_api/web3/trait.Web3ApiServer.html\" title=\"trait reth_rpc_api::web3::Web3ApiServer\">Web3ApiServer</a> for <a class=\"struct\" href=\"reth_rpc/struct.Web3Api.html\" title=\"struct reth_rpc::Web3Api\">Web3Api</a>&lt;N&gt;<div class=\"where\">where\n    N: <a class=\"trait\" href=\"reth_network_api/trait.NetworkInfo.html\" title=\"trait reth_network_api::NetworkInfo\">NetworkInfo</a> + 'static,</div>"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

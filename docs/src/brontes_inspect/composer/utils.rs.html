@@ -145,21 +145,25 @@
 <a href="#145" id="145">145</a>
 <a href="#146" id="146">146</a>
 <a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, sync::Arc};
 
-<span class="kw">use </span>alloy_primitives::FixedBytes;
-<span class="kw">use </span>brontes_database::Metadata;
+<span class="kw">use </span>alloy_primitives::{FixedBytes, B256};
 <span class="kw">use </span>brontes_types::{
-    classified_mev::{ClassifiedMev, MevBlock, MevType, SpecificMev},
+    classified_mev::{ClassifiedMev, Mev, MevBlock, MevType, SpecificMev},
+    db::metadata::MetadataCombined,
     normalized_actions::Actions,
     tree::BlockTree,
     ToScaledRational,
 };
-<span class="kw">use </span>malachite::{num::conversion::traits::RoundingFrom, rounding_modes::RoundingMode};
+<span class="kw">use </span>malachite::{num::conversion::traits::RoundingFrom, rounding_modes::RoundingMode, Rational};
 <span class="kw">use </span>reth_primitives::Address;
 
 <span class="kw">pub struct </span>BlockPreprocessing {
-    meta_data:           Arc&lt;Metadata&gt;,
+    meta_data:           Arc&lt;MetadataCombined&gt;,
     cumulative_gas_used: u128,
     cumulative_gas_paid: u128,
     builder_address:     Address,
@@ -173,7 +177,7 @@
 /// `BlockPreprocessing` struct.
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>pre_process(
     tree: Arc&lt;BlockTree&lt;Actions&gt;&gt;,
-    meta_data: Arc&lt;Metadata&gt;,
+    meta_data: Arc&lt;MetadataCombined&gt;,
 ) -&gt; BlockPreprocessing {
     <span class="kw">let </span>builder_address = tree.header.beneficiary;
     <span class="kw">let </span>cumulative_gas_used = tree
@@ -194,9 +198,10 @@
 <span class="comment">//TODO: Look into calculating the delta of priority fee + coinbase reward vs
 // proposer fee paid. This would act as a great proxy for how much mev we missed
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>build_mev_header(
-    metadata: Arc&lt;Metadata&gt;,
+    metadata: Arc&lt;MetadataCombined&gt;,
     pre_processing: <span class="kw-2">&amp;</span>BlockPreprocessing,
-    orchestra_data: <span class="kw-2">&amp;</span>Vec&lt;(ClassifiedMev, Box&lt;<span class="kw">dyn </span>SpecificMev&gt;)&gt;,
+    possible_missed_arbs: Vec&lt;B256&gt;,
+    orchestra_data: <span class="kw-2">&amp;</span>Vec&lt;(ClassifiedMev, SpecificMev)&gt;,
 ) -&gt; MevBlock {
     <span class="kw">let </span>total_bribe = orchestra_data
         .iter()
@@ -209,8 +214,11 @@
         .sum::&lt;u128&gt;();
 
     <span class="comment">//TODO: need to check if decimals are correct
-    </span><span class="kw">let </span>builder_eth_profit = (total_bribe + pre_processing.cumulative_gas_paid
-        - metadata.proposer_mev_reward.unwrap_or_default()) <span class="kw">as </span>i128;
+    </span><span class="kw">let </span>builder_eth_profit = Rational::from_signeds(
+        (total_bribe <span class="kw">as </span>i128 + pre_processing.cumulative_gas_paid <span class="kw">as </span>i128)
+            - (metadata.proposer_mev_reward.unwrap_or_default() <span class="kw">as </span>i128),
+        <span class="number">10i128</span>.pow(<span class="number">18</span>),
+    );
 
     MevBlock {
         block_hash: pre_processing.meta_data.block_hash.into(),
@@ -226,9 +234,9 @@
         total_bribe,
         cumulative_mev_priority_fee_paid: cum_mev_priority_fee_paid,
         builder_address: pre_processing.builder_address,
-        builder_eth_profit,
+        builder_eth_profit: f64::rounding_from(<span class="kw-2">&amp;</span>builder_eth_profit, RoundingMode::Nearest).<span class="number">0</span>,
         builder_finalized_profit_usd: f64::rounding_from(
-            builder_eth_profit.to_scaled_rational(<span class="number">18</span>) * <span class="kw-2">&amp;</span>pre_processing.meta_data.eth_prices,
+            builder_eth_profit * <span class="kw-2">&amp;</span>pre_processing.meta_data.eth_prices,
             RoundingMode::Nearest,
         )
         .<span class="number">0</span>,
@@ -244,11 +252,12 @@
             </span>},
         ),
         cumulative_mev_finalized_profit_usd: f64::rounding_from(
-            (cum_mev_priority_fee_paid + total_bribe).to_scaled_rational(<span class="number">12</span>)
+            (cum_mev_priority_fee_paid + total_bribe).to_scaled_rational(<span class="number">18</span>)
                 * <span class="kw-2">&amp;</span>pre_processing.meta_data.eth_prices,
             RoundingMode::Nearest,
         )
         .<span class="number">0</span>,
+        possible_missed_arbs,
     }
 }
 
@@ -259,15 +268,14 @@
 /// `MevType` and the values are vectors of tuples (same as input). Each vector
 /// contains all the MEVs of the corresponding type.
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>sort_mev_by_type(
-    orchestra_data: Vec&lt;(ClassifiedMev, Box&lt;<span class="kw">dyn </span>SpecificMev&gt;)&gt;,
-) -&gt; HashMap&lt;MevType, Vec&lt;(ClassifiedMev, Box&lt;<span class="kw">dyn </span>SpecificMev&gt;)&gt;&gt; {
+    orchestra_data: Vec&lt;(ClassifiedMev, SpecificMev)&gt;,
+) -&gt; HashMap&lt;MevType, Vec&lt;(ClassifiedMev, SpecificMev)&gt;&gt; {
     orchestra_data
         .into_iter()
         .map(|(classified_mev, specific)| (classified_mev.mev_type, (classified_mev, specific)))
         .fold(
             HashMap::default(),
-            |<span class="kw-2">mut </span>acc: HashMap&lt;MevType, Vec&lt;(ClassifiedMev, Box&lt;<span class="kw">dyn </span>SpecificMev&gt;)&gt;&gt;,
-             (mev_type, v)| {
+            |<span class="kw-2">mut </span>acc: HashMap&lt;MevType, Vec&lt;(ClassifiedMev, SpecificMev)&gt;&gt;, (mev_type, v)| {
                 acc.entry(mev_type).or_default().push(v);
                 acc
             },
@@ -277,7 +285,7 @@
 <span class="doccomment">/// Finds the index of the first classified mev in the list whose transaction
 /// hashes match any of the provided hashes.
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>find_mev_with_matching_tx_hashes(
-    mev_data_list: <span class="kw-2">&amp;</span>[(ClassifiedMev, Box&lt;<span class="kw">dyn </span>SpecificMev&gt;)],
+    mev_data_list: <span class="kw-2">&amp;</span>[(ClassifiedMev, SpecificMev)],
     tx_hashes: <span class="kw-2">&amp;</span>[FixedBytes&lt;<span class="number">32</span>&gt;],
 ) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
     mev_data_list

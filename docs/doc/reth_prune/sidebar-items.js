@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["PrunerError","PrunerEvent"],"mod":["segments"],"struct":["Pruner","PrunerBuilder"],"type":["PrunerResult","PrunerWithResult"]};

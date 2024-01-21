@@ -1,3 +1,0 @@
-(function() {var implementors = {
-"reth_payload_builder":[["impl <a class=\"trait\" href=\"reth_node_api/engine/traits/trait.BuiltPayload.html\" title=\"trait reth_node_api::engine::traits::BuiltPayload\">BuiltPayload</a> for <a class=\"struct\" href=\"reth_payload_builder/struct.EthBuiltPayload.html\" title=\"struct reth_payload_builder::EthBuiltPayload\">EthBuiltPayload</a>"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

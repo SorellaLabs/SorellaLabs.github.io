@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["goindexing","keyset"],"struct":["BuildConf","Function","GOBuildConf","GOConf","GOFunction"]};

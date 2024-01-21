@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["KeyTrust","KeyUsage","Protocol"],"fn":["emit","read"],"struct":["KEY","UpdateScope"]};

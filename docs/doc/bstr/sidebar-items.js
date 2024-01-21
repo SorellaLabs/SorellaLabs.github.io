@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["B","decode_last_utf8","decode_utf8"],"struct":["BStr","Bytes","CharIndices","Chars","EscapeBytes","FieldsWith","Find","FindReverse","Finder","FinderReverse","Lines","LinesWithTerminator","Split","SplitN","SplitNReverse","SplitReverse","Utf8Chunk","Utf8Chunks","Utf8Error"],"trait":["ByteSlice"]};

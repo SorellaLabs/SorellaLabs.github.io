@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["delta_directions","is_strictly_ascending","is_strictly_descending","is_strictly_zigzagging","is_weakly_ascending","is_weakly_descending","is_weakly_zigzagging"],"struct":["DeltaDirections"]};

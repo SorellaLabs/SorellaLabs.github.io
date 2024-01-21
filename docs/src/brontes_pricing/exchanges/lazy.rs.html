@@ -255,6 +255,11 @@
 <a href="#255" id="255">255</a>
 <a href="#256" id="256">256</a>
 <a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::{hash_map::Entry, HashMap, HashSet, VecDeque},
     pin::Pin,
@@ -263,7 +268,12 @@
 };
 
 <span class="kw">use </span>alloy_primitives::Address;
-<span class="kw">use </span>brontes_types::{exchanges::StaticBindingsDb, extra_processing::Pair, traits::TracingProvider};
+<span class="kw">use </span>brontes_types::{
+    exchanges::StaticBindingsDb,
+    extra_processing::Pair,
+    price_graph::{PoolPairInfoDirection, PoolPairInformation, SubGraphEdge},
+    traits::TracingProvider,
+};
 <span class="kw">use </span>futures::{
     future::BoxFuture,
     stream::{FuturesOrdered, FuturesUnordered},
@@ -273,8 +283,8 @@
 <span class="kw">use </span>tracing::{error, info};
 
 <span class="kw">use crate</span>::{
-    errors::AmmError, graphs::PoolPairInfoDirection, types::PoolState, uniswap_v2::UniswapV2Pool,
-    uniswap_v3::UniswapV3Pool, PoolUpdate,
+    errors::AmmError, types::PoolState, uniswap_v2::UniswapV2Pool, uniswap_v3::UniswapV3Pool,
+    PoolUpdate,
 };
 
 <span class="kw">type </span>PoolFetchError = (Address, StaticBindingsDb, u64, Pair, AmmError);
@@ -464,7 +474,7 @@
     }
 
     <span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="self">self</span>.pool_load_futures.is_empty()
+        <span class="self">self</span>.pool_load_futures.is_empty() &amp;&amp; <span class="self">self</span>.buf.is_empty()
     }
 }
 
@@ -491,8 +501,8 @@
                     <span class="kw">let </span>res = LazyResult { block, state: <span class="prelude-val">Some</span>(state), load_result: load };
                     Poll::Ready(<span class="prelude-val">Some</span>(res))
                 }
-                <span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>((pool_address, dex, block, pool_pair, e))) =&gt; {
-                    <span class="macro">error!</span>(<span class="question-mark">?</span>pool_address, %e,<span class="string">"failed to load pool, most likely pool never had state"</span>);
+                <span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>((pool_address, dex, block, pool_pair, err))) =&gt; {
+                    <span class="macro">error!</span>(%err, <span class="question-mark">?</span>pool_address,<span class="string">"lazy load failed"</span>);
                     <span class="kw">if let </span>Entry::Occupied(<span class="kw-2">mut </span>o) = <span class="self">self</span>.req_per_block.entry(block) {
                         <span class="kw-2">*</span>(o.get_mut()) -= <span class="number">1</span>;
                     }

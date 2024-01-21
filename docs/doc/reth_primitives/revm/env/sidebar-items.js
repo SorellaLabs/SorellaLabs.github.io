@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["CliqueSignerRecoveryError"],"fn":["block_coinbase","fill_block_env","fill_block_env_with_coinbase","fill_cfg_and_block_env","fill_cfg_env","fill_tx_env","fill_tx_env_with_beacon_root_contract_call","fill_tx_env_with_recovered","recover_header_signer","tx_env_with_recovered"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["StackSnapshotType"],"mod":["geth","js","parity","types"],"struct":["CallTraceArena","FourByteInspector","GethTraceBuilder","OpcodeCountInspector","ParityTraceBuilder","TracingInspector","TracingInspectorConfig"]};

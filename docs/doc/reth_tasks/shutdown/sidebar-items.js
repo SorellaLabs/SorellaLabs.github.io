@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["signal"],"struct":["GracefulShutdown","GracefulShutdownGuard","Shutdown","Signal"]};

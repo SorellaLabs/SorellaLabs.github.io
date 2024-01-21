@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["floats","integers","signeds","traits","unsigneds"]};

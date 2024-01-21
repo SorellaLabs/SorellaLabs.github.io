@@ -71,9 +71,14 @@
 <a href="#71" id="71">71</a>
 <a href="#72" id="72">72</a>
 <a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>brontes_types::{structured_trace::TxTrace, traits::TracingProvider};
 <span class="kw">use </span>reth_interfaces::provider::ProviderResult;
-<span class="kw">use </span>reth_primitives::{BlockId, BlockNumber, BlockNumberOrTag, Bytes, Header, B256};
+<span class="kw">use </span>reth_primitives::{BlockId, BlockNumber, BlockNumberOrTag, Bytes, Header, TxHash, B256};
 <span class="kw">use </span>reth_provider::{BlockIdReader, BlockNumReader, HeaderProvider};
 <span class="kw">use </span>reth_rpc::eth::error::EthResult;
 <span class="kw">use </span>reth_rpc_api::{EthApiServer, EthFilterApiServer};
@@ -132,6 +137,11 @@
                 </span>.unwrap()
                 .unwrap(),
         ))
+    }
+
+    <span class="kw">async fn </span>block_and_tx_index(<span class="kw-2">&amp;</span><span class="self">self</span>, hash: TxHash) -&gt; ProviderResult&lt;(u64, usize)&gt; {
+        <span class="kw">let </span>tx = <span class="self">self</span>.api.transaction_by_hash(hash).<span class="kw">await</span>.unwrap().unwrap();
+        <span class="prelude-val">Ok</span>((tx.block_number.unwrap().to::&lt;u64&gt;(), tx.transaction_index.unwrap().to::&lt;usize&gt;()))
     }
 
     <span class="kw">async fn </span>header_by_number(<span class="kw-2">&amp;</span><span class="self">self</span>, number: BlockNumber) -&gt; ProviderResult&lt;<span class="prelude-ty">Option</span>&lt;Header&gt;&gt; {

@@ -500,12 +500,19 @@
 <a href="#500" id="500">500</a>
 <a href="#501" id="501">501</a>
 <a href="#502" id="502">502</a>
+<a href="#503" id="503">503</a>
+<a href="#504" id="504">504</a>
+<a href="#505" id="505">505</a>
+<a href="#506" id="506">506</a>
+<a href="#507" id="507">507</a>
+<a href="#508" id="508">508</a>
+<a href="#509" id="509">509</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
-<span class="kw">use </span>brontes_database::{Metadata, Pair};
-<span class="kw">use </span>brontes_database_libmdbx::Libmdbx;
+<span class="kw">use </span>brontes_database::libmdbx::Libmdbx;
 <span class="kw">use </span>brontes_types::{
     classified_mev::{CexDex, MevType, PriceKind, SpecificMev},
+    extra_processing::Pair,
     normalized_actions::{Actions, NormalizedSwap},
     tree::{BlockTree, GasDetails},
     ToFloatNearest, ToScaledRational,
@@ -518,7 +525,7 @@
 <span class="kw">use </span>reth_primitives::{Address, B256};
 <span class="kw">use </span>tracing::{debug, error};
 
-<span class="kw">use crate</span>::{shared_utils::SharedInspectorUtils, ClassifiedMev, Inspector};
+<span class="kw">use crate</span>::{shared_utils::SharedInspectorUtils, ClassifiedMev, Inspector, MetadataCombined};
 
 <span class="kw">pub struct </span>CexDexInspector&lt;<span class="lifetime">'db</span>&gt; {
     inner: SharedInspectorUtils&lt;<span class="lifetime">'db</span>&gt;,
@@ -529,14 +536,17 @@
         <span class="self">Self </span>{ inner: SharedInspectorUtils::new(quote, db) }
     }
 }
-
-<span class="attr">#[async_trait::async_trait]
+<span class="comment">//TODO: Support for multiple CEXs
+//TODO: Filtering by coinbase.transfer() to builder or directly to the proposer
+//TODO: Start adding filtering by function sig in the tree. Like executeFFsYo
+// for beaver.
+</span><span class="attr">#[async_trait::async_trait]
 </span><span class="kw">impl </span>Inspector <span class="kw">for </span>CexDexInspector&lt;<span class="lifetime">'_</span>&gt; {
     <span class="kw">async fn </span>process_tree(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         tree: Arc&lt;BlockTree&lt;Actions&gt;&gt;,
-        meta_data: Arc&lt;Metadata&gt;,
-    ) -&gt; Vec&lt;(ClassifiedMev, Box&lt;<span class="kw">dyn </span>SpecificMev&gt;)&gt; {
+        meta_data: Arc&lt;MetadataCombined&gt;,
+    ) -&gt; Vec&lt;(ClassifiedMev, SpecificMev)&gt; {
         <span class="comment">// Get all normalized swaps
         </span><span class="kw">let </span>intersting_state = tree.collect_all(|node| {
             (node.data.is_swap(), node.subactions.iter().any(|action| action.is_swap()))
@@ -544,6 +554,7 @@
 
         intersting_state
             .into_par_iter()
+            .filter(|(<span class="kw">_</span>, swaps)| !swaps.is_empty())
             .filter_map(|(tx, swaps)| {
                 <span class="kw">let </span>gas_details = tree.get_gas_details(tx)<span class="question-mark">?</span>;
 
@@ -572,10 +583,10 @@
         idx: usize,
         mev_contract: Address,
         eoa: Address,
-        metadata: Arc&lt;Metadata&gt;,
+        metadata: Arc&lt;MetadataCombined&gt;,
         gas_details: <span class="kw-2">&amp;</span>GasDetails,
         swaps: Vec&lt;Actions&gt;,
-    ) -&gt; <span class="prelude-ty">Option</span>&lt;(ClassifiedMev, Box&lt;<span class="kw">dyn </span>SpecificMev&gt;)&gt; {
+    ) -&gt; <span class="prelude-ty">Option</span>&lt;(ClassifiedMev, SpecificMev)&gt; {
         <span class="kw">let </span>swap_sequences: Vec&lt;(<span class="kw-2">&amp;</span>Actions, <span class="kw">_</span>)&gt; = swaps
             .iter()
             .filter_map(|action| {
@@ -600,6 +611,7 @@
         <span class="kw">let </span>mev_profit_collector = <span class="self">self</span>.inner.profit_collectors(<span class="kw-2">&amp;</span>addr_usd_deltas);
 
         <span class="kw">let </span>classified = ClassifiedMev {
+            mev_tx_index: idx <span class="kw">as </span>u64,
             mev_profit_collector,
             tx_hash: hash,
             mev_contract,
@@ -640,7 +652,7 @@
                 .collect(),
         };
 
-        <span class="prelude-val">Some</span>((classified, Box::new(cex_dex)))
+        <span class="prelude-val">Some</span>((classified, SpecificMev::CexDex(cex_dex)))
     }
 
     <span class="kw">fn </span>arb_gas_accounting(
@@ -656,20 +668,20 @@
 
         <span class="kw">let </span>gas_cost = Rational::from_unsigneds(gas_details.gas_paid(), <span class="number">10u128</span>.pow(<span class="number">18</span>)) * eth_price;
 
-        <span class="kw">if </span>total_arb &gt; gas_cost {
+        <span class="kw">if </span>total_arb &gt; gas_cost || gas_details.coinbase_transfer.is_some() {
             <span class="prelude-val">Some</span>(total_arb - gas_cost)
         } <span class="kw">else </span>{
             <span class="prelude-val">None
         </span>}
     }
 
-    <span class="kw">pub fn </span>get_cex_dex(<span class="kw-2">&amp;</span><span class="self">self</span>, swap: <span class="kw-2">&amp;</span>NormalizedSwap, metadata: <span class="kw-2">&amp;</span>Metadata) -&gt; <span class="prelude-ty">Option</span>&lt;Rational&gt; {
+    <span class="kw">pub fn </span>get_cex_dex(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        swap: <span class="kw-2">&amp;</span>NormalizedSwap,
+        metadata: <span class="kw-2">&amp;</span>MetadataCombined,
+    ) -&gt; <span class="prelude-ty">Option</span>&lt;Rational&gt; {
         <span class="self">self</span>.rational_prices(<span class="kw-2">&amp;</span>Actions::Swap(swap.clone()), metadata)
-            .map(|(dex_price, best_ask)| {
-                <span class="self">self</span>.profit_classifier(swap, <span class="kw-2">&amp;</span>dex_price, <span class="kw-2">&amp;</span>best_ask)
-                    .filter(|p| Rational::ZERO.lt(p))
-            })
-            .unwrap_or_default()
+            .and_then(|(dex_price, best_ask)| <span class="self">self</span>.profit_classifier(swap, <span class="kw-2">&amp;</span>dex_price, <span class="kw-2">&amp;</span>best_ask))
     }
 
     <span class="kw">fn </span>profit_classifier(
@@ -693,7 +705,7 @@
     <span class="kw">pub fn </span>rational_prices(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         swap: <span class="kw-2">&amp;</span>Actions,
-        metadata: <span class="kw-2">&amp;</span>Metadata,
+        metadata: <span class="kw-2">&amp;</span>MetadataCombined,
     ) -&gt; <span class="prelude-ty">Option</span>&lt;(Rational, Rational)&gt; {
         <span class="kw">let </span>Actions::Swap(swap) = swap <span class="kw">else </span>{ <span class="kw">return </span><span class="prelude-val">None </span>};
 
@@ -721,10 +733,11 @@
     }
 }
 
-<span class="attr">#[cfg(test)]
-</span><span class="kw">mod </span>tests {
+<span class="comment">/*
+#[cfg(test)]
+mod tests {
 
-    <span class="kw">use </span>std::{
+    use std::{
         collections::{HashMap, HashSet},
         env,
         fs::File,
@@ -732,221 +745,221 @@
         time::SystemTime,
     };
 
-    <span class="kw">use </span>brontes_classifier::Classifier;
-    <span class="kw">use </span>brontes_core::test_utils::{init_trace_parser, init_tracing};
-    <span class="kw">use </span>brontes_database::{clickhouse::Clickhouse, graph::PriceGraph, Quote, QuotesMap};
-    <span class="kw">use </span>brontes_database_libmdbx::Libmdbx;
-    <span class="kw">use </span>malachite::num::conversion::traits::FromSciString;
-    <span class="kw">use </span>reth_primitives::U256;
-    <span class="kw">use </span>serde_json;
-    <span class="kw">use </span>serial_test::serial;
-    <span class="kw">use </span>tokio::sync::mpsc::unbounded_channel;
-    <span class="kw">use </span>tracing::info;
+    use brontes_classifier::Classifier;
+    use brontes_core::test_utils::{init_trace_parser, init_tracing};
+    use brontes_database::{clickhouse::Clickhouse, graph::PriceGraph, Quote, QuotesMap};
+    use brontes_database::libmdbx::Libmdbx;
+    use malachite::num::conversion::traits::FromSciString;
+    use reth_primitives::U256;
+    use serde_json;
+    use serial_test::serial;
+    use tokio::sync::mpsc::unbounded_channel;
+    use tracing::info;
 
-    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    use super::*;
 
-    <span class="attr">#[tokio::test]
+    #[tokio::test]
     #[serial]
-    </span><span class="kw">async fn </span>test_cex_dex() {
+    async fn test_cex_dex() {
         init_tracing();
 
-        <span class="macro">info!</span>(target: <span class="string">"brontes"</span>, <span class="string">"starting cex-dex test"</span>);
+        info!(target: "brontes", "starting cex-dex test");
 
         dotenv::dotenv().ok();
-        <span class="kw">let </span>brontes_db_endpoint = env::var(<span class="string">"BRONTES_DB_PATH"</span>).expect(<span class="string">"No BRONTES_DB_PATH in .env"</span>);
-        <span class="kw">let </span>libmdbx = Libmdbx::init_db(brontes_db_endpoint, <span class="prelude-val">None</span>).unwrap();
+        let brontes_db_endpoint = env::var("BRONTES_DB_PATH").expect("No BRONTES_DB_PATH in .env");
+        let libmdbx = Libmdbx::init_db(brontes_db_endpoint, None).unwrap();
 
-        <span class="kw">let </span>block_num = <span class="number">18264694</span>;
+        let block_num = 18264694;
 
-        <span class="kw">let </span>(tx, _rx) = unbounded_channel();
+        let (tx, _rx) = unbounded_channel();
 
-        <span class="kw">let </span>tracer = init_trace_parser(tokio::runtime::Handle::current().clone(), tx, <span class="kw-2">&amp;</span>libmdbx);
-        <span class="kw">let </span>db = Clickhouse::default();
-        <span class="kw">let </span>classifier = Classifier::new(<span class="kw-2">&amp;</span>libmdbx);
+        let tracer = init_trace_parser(tokio::runtime::Handle::current().clone(), tx, &amp;libmdbx);
+        let db = Clickhouse::default();
+        let classifier = Classifier::new(&amp;libmdbx);
 
-        <span class="kw">let </span>block = tracer.execute_block(block_num).<span class="kw">await</span>.unwrap();
-        <span class="kw">let </span>metadata = db.get_metadata(block_num).<span class="kw">await</span>;
+        let block = tracer.execute_block(block_num).await.unwrap();
+        let metadata = db.get_metadata(block_num).await;
 
-        <span class="kw">let </span>(_missing_token_decimals, tree) = classifier.build_block_tree(block.<span class="number">0</span>, block.<span class="number">1</span>);
-        <span class="kw">let </span>tree = Arc::new(tree);
-        <span class="comment">// Quote token is USDC here
-        </span><span class="kw">let </span>inspector = CexDexInspector::new(
-            Address::from_str(<span class="string">"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"</span>).unwrap(),
+        let (_missing_token_decimals, tree) = classifier.build_block_tree(block.0, block.1);
+        let tree = Arc::new(tree);
+        // Quote token is USDC here
+        let inspector = CexDexInspector::new(
+            Address::from_str("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48").unwrap(),
         );
 
-        <span class="kw">let </span>t0 = SystemTime::now();
-        <span class="macro">print!</span>(<span class="string">"starting cex-dex inspector"</span>);
-        <span class="kw">let </span>mev = inspector.process_tree(tree.clone(), metadata.into()).<span class="kw">await</span>;
-        <span class="kw">let </span>t1 = SystemTime::now();
-        <span class="kw">let </span>delta = t1.duration_since(t0).unwrap().as_micros();
+        let t0 = SystemTime::now();
+        print!("starting cex-dex inspector");
+        let mev = inspector.process_tree(tree.clone(), metadata.into()).await;
+        let t1 = SystemTime::now();
+        let delta = t1.duration_since(t0).unwrap().as_micros();
 
-        <span class="macro">println!</span>(<span class="string">"{:#?}"</span>, mev);
+        println!("{:#?}", mev);
 
-        serde_json::to_writer_pretty(std::fs::File::create(<span class="string">"cex_dex.json"</span>).unwrap(), <span class="kw-2">&amp;</span>mev).unwrap();
+        serde_json::to_writer_pretty(std::fs::File::create("cex_dex.json").unwrap(), &amp;mev).unwrap();
 
-        <span class="macro">info!</span>(<span class="string">"cex-dex inspector took: {} us"</span>, delta);
+        info!("cex-dex inspector took: {} us", delta);
 
-        <span class="comment">/*assert_eq!(
+        /*assert_eq!(
             mev[0].0.tx_hash.is_some(),
             B256::from_str("0x21b129d221a4f169de0fc391fe0382dbde797b69300a9a68143487c54d620295")
                 .unwrap()
         );*/
-    </span>}
+    }
 
-    <span class="comment">//Testing for tx:
+    //Testing for tx:
     // 0x21b129d221a4f169de0fc391fe0382dbde797b69300a9a68143487c54d620295
 
-    </span><span class="attr">#[tokio::test]
+    #[tokio::test]
     #[serial]
-    </span><span class="kw">async fn </span>test_profit_calculation() {
+    async fn test_profit_calculation() {
         init_tracing();
 
-        <span class="kw">let </span>swap = NormalizedSwap {
-            index:      <span class="number">0</span>,
-            from:       Address::from_str(<span class="string">"0xA69babEF1cA67A37Ffaf7a485DfFF3382056e78C"</span>).unwrap(),
-            pool:       Address::from_str(<span class="string">"0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640"</span>).unwrap(),
-            token_in:   Address::from_str(<span class="string">"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"</span>).unwrap(),
-            token_out:  Address::from_str(<span class="string">"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"</span>).unwrap(),
-            amount_in:  <span class="string">"5055369263870573349743"</span>.parse().unwrap(),
-            amount_out: <span class="string">"8421308582396"</span>.parse().unwrap(),
+        let swap = NormalizedSwap {
+            index:      0,
+            from:       Address::from_str("0xA69babEF1cA67A37Ffaf7a485DfFF3382056e78C").unwrap(),
+            pool:       Address::from_str("0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640").unwrap(),
+            token_in:   Address::from_str("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48").unwrap(),
+            token_out:  Address::from_str("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48").unwrap(),
+            amount_in:  "5055369263870573349743".parse().unwrap(),
+            amount_out: "8421308582396".parse().unwrap(),
         };
 
-        <span class="kw">let </span>metadata = get_metadata();
+        let metadata = get_metadata();
 
-        <span class="comment">// Quote token is USDC here
-        </span><span class="kw">let </span>inspector = CexDexInspector::new(
-            Address::from_str(<span class="string">"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"</span>).unwrap(),
+        // Quote token is USDC here
+        let inspector = CexDexInspector::new(
+            Address::from_str("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48").unwrap(),
         );
 
-        <span class="kw">let </span>amount_in = Rational::from_sci_string(<span class="string">"5055369263000000000000e-18"</span>).unwrap();
-        <span class="kw">let </span>amount_out = Rational::from_sci_string(<span class="string">"8421308582396e-6"</span>).unwrap();
+        let amount_in = Rational::from_sci_string("5055369263000000000000e-18").unwrap();
+        let amount_out = Rational::from_sci_string("8421308582396e-6").unwrap();
 
-        <span class="kw">let </span>dex_price = amount_out / amount_in;
+        let dex_price = amount_out / amount_in;
 
-        <span class="kw">let </span>price_delta = metadata
+        let price_delta = metadata
             .cex_quotes
-            .get_quote(<span class="kw-2">&amp;</span>Pair(swap.token_in, swap.token_out))
+            .get_quote(&amp;Pair(swap.token_in, swap.token_out))
             .unwrap()
             .best_ask()
             - dex_price;
 
-        <span class="kw">let </span>expected_profit = price_delta * swap.amount_in.to_scaled_rational(<span class="number">6</span>);
+        let expected_profit = price_delta * swap.amount_in.to_scaled_rational(6);
 
-        <span class="kw">let </span>profit = inspector.get_cex_dex(<span class="kw-2">&amp;</span>swap, <span class="kw-2">&amp;</span>metadata);
+        let profit = inspector.get_cex_dex(&amp;swap, &amp;metadata);
 
-        <span class="macro">assert_eq!</span>(profit.unwrap(), expected_profit);
+        assert_eq!(profit.unwrap(), expected_profit);
     }
 
-    <span class="attr">#[tokio::test]
+    #[tokio::test]
     #[serial]
-    </span><span class="kw">async fn </span>test_rational_price() {
+    async fn test_rational_price() {
         init_tracing();
-        <span class="kw">let </span>swap = NormalizedSwap {
-            index:      <span class="number">0</span>,
-            from:       Address::from_str(<span class="string">"0xA69babEF1cA67A37Ffaf7a485DfFF3382056e78C"</span>).unwrap(),
-            pool:       Address::from_str(<span class="string">"0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640"</span>).unwrap(),
-            token_in:   Address::from_str(<span class="string">"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"</span>).unwrap(),
-            token_out:  Address::from_str(<span class="string">"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"</span>).unwrap(),
-            amount_in:  U256::from_str(<span class="string">"5055369263000000000000"</span>).unwrap(),
-            amount_out: U256::from_str(<span class="string">"8421308582396"</span>).unwrap(),
+        let swap = NormalizedSwap {
+            index:      0,
+            from:       Address::from_str("0xA69babEF1cA67A37Ffaf7a485DfFF3382056e78C").unwrap(),
+            pool:       Address::from_str("0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640").unwrap(),
+            token_in:   Address::from_str("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2").unwrap(),
+            token_out:  Address::from_str("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48").unwrap(),
+            amount_in:  U256::from_str("5055369263000000000000").unwrap(),
+            amount_out: U256::from_str("8421308582396").unwrap(),
         };
 
-        <span class="kw">let </span>metadata = get_metadata();
+        let metadata = get_metadata();
 
-        <span class="comment">// Quote token is USDC here
-        </span><span class="kw">let </span>inspector = CexDexInspector::new(
-            Address::from_str(<span class="string">"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"</span>).unwrap(),
+        // Quote token is USDC here
+        let inspector = CexDexInspector::new(
+            Address::from_str("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48").unwrap(),
         );
 
-        <span class="kw">let </span>rational_prices = inspector.rational_prices(<span class="kw-2">&amp;</span>Actions::Swap(swap.clone()), <span class="kw-2">&amp;</span>metadata);
+        let rational_prices = inspector.rational_prices(&amp;Actions::Swap(swap.clone()), &amp;metadata);
 
-        <span class="kw">let </span>amount_in = Rational::from_sci_string(<span class="string">"5055369263000000000000e-18"</span>).unwrap();
-        <span class="kw">let </span>amount_out = Rational::from_sci_string(<span class="string">"8421308582396e-6"</span>).unwrap();
+        let amount_in = Rational::from_sci_string("5055369263000000000000e-18").unwrap();
+        let amount_out = Rational::from_sci_string("8421308582396e-6").unwrap();
 
-        <span class="kw">let </span>expected_dex_price = amount_out / amount_in;
+        let expected_dex_price = amount_out / amount_in;
 
-        <span class="macro">assert_eq!</span>(
+        assert_eq!(
             expected_dex_price,
             rational_prices
                 .as_ref()
-                .unwrap_or(<span class="kw-2">&amp;</span>(Rational::ZERO, Rational::ZERO))
-                .<span class="number">0</span>,
-            <span class="string">"Dex price did not match"
-        </span>);
+                .unwrap_or(&amp;(Rational::ZERO, Rational::ZERO))
+                .0,
+            "Dex price did not match"
+        );
 
-        <span class="kw">let </span>cex_best_ask = metadata
+        let cex_best_ask = metadata
             .cex_quotes
-            .get_quote(<span class="kw-2">&amp;</span>Pair(swap.token_in, swap.token_out))
+            .get_quote(&amp;Pair(swap.token_in, swap.token_out))
             .unwrap()
             .best_ask();
 
-        <span class="macro">assert_eq!</span>(
+        assert_eq!(
             cex_best_ask,
-            rational_prices.as_ref().unwrap().<span class="number">1</span>,
-            <span class="string">"Pre cex price did not match {}"</span>,
-            rational_prices.as_ref().unwrap().<span class="number">1
-        </span>);
+            rational_prices.as_ref().unwrap().1,
+            "Pre cex price did not match {}",
+            rational_prices.as_ref().unwrap().1
+        );
     }
 
-    <span class="attr">#[tokio::test]
-    </span><span class="kw">async fn </span>test_arb_gas_accounting() {
+    #[tokio::test]
+    async fn test_arb_gas_accounting() {
         init_tracing();
-        <span class="kw">let </span><span class="kw-2">mut </span>swaps = Vec::new();
-        <span class="kw">let </span>gas_details = GasDetails {
-            coinbase_transfer:   <span class="prelude-val">None</span>,
-            priority_fee:        <span class="number">0</span>,
-            gas_used:            <span class="number">20_000</span>,
-            <span class="comment">// 20 gwei
-            </span>effective_gas_price: <span class="number">20 </span>* <span class="number">10_u128</span>.pow(<span class="number">9</span>),
+        let mut swaps = Vec::new();
+        let gas_details = GasDetails {
+            coinbase_transfer:   None,
+            priority_fee:        0,
+            gas_used:            20_000,
+            // 20 gwei
+            effective_gas_price: 20 * 10_u128.pow(9),
         };
 
-        <span class="kw">let </span>swap = NormalizedSwap::default();
+        let swap = NormalizedSwap::default();
 
-        <span class="kw">let </span>post_0 = Rational::from(<span class="number">10</span>);
-        <span class="kw">let </span>swapped = Actions::Swap(swap.clone());
-        <span class="kw">let </span>inner_0 = <span class="macro">vec!</span>[(<span class="kw-2">&amp;</span>swapped, (<span class="prelude-val">Some</span>(post_0)))];
+        let post_0 = Rational::from(10);
+        let swapped = Actions::Swap(swap.clone());
+        let inner_0 = vec![(&amp;swapped, (Some(post_0)))];
         swaps.push(inner_0);
 
-        <span class="comment">// Quote token is USDC here
-        </span><span class="kw">let </span>inspector = CexDexInspector::new(
-            Address::from_str(<span class="string">"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"</span>).unwrap(),
+        // Quote token is USDC here
+        let inspector = CexDexInspector::new(
+            Address::from_str("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48").unwrap(),
         );
 
-        <span class="kw">let </span>eth_price = Rational::from(<span class="number">2</span>);
+        let eth_price = Rational::from(2);
 
-        <span class="kw">let </span>profit = inspector
-            .arb_gas_accounting(swaps, <span class="kw-2">&amp;</span>gas_details, <span class="kw-2">&amp;</span>eth_price)
+        let profit = inspector
+            .arb_gas_accounting(swaps, &amp;gas_details, &amp;eth_price)
             .unwrap();
 
-        <span class="kw">let </span>result = Rational::from_str(<span class="string">"12499/1250"</span>).unwrap();
+        let result = Rational::from_str("12499/1250").unwrap();
 
-        <span class="macro">assert_eq!</span>(profit, result);
+        assert_eq!(profit, result);
     }
 
-    <span class="kw">pub fn </span>get_metadata() -&gt; Metadata {
+    pub fn get_metadata() -&gt; Metadata {
         Metadata {
-            <span class="comment">// ETH Sold = 5,055.369263
+            // ETH Sold = 5,055.369263
             // USDC bought = 8 421 308.582396
             // price = $1665.8147297
             // See Chart: https://www.tradingview.com/x/eLfjxI9h
             //
             // We need to integrate more granular data because otherwise I think the binance
             // quotes are out of whack at that time TBD
-            </span>block_num:              <span class="number">18264694</span>,
+            block_num:              18264694,
             block_hash:             U256::from_str_radix(
-                <span class="string">"57968198764731c3fcdb0caff812559ce5035aabade9e6bcb2d7fcee29616729"</span>,
-                <span class="number">16</span>,
+                "57968198764731c3fcdb0caff812559ce5035aabade9e6bcb2d7fcee29616729",
+                16,
             )
             .unwrap(),
-            relay_timestamp:        <span class="number">1696271963129</span>, <span class="comment">// Oct 02 2023 18:39:23 UTC
-            </span>p2p_timestamp:          <span class="number">1696271964134</span>, <span class="comment">// Oct 02 2023 18:39:24 UTC
-            </span>proposer_fee_recipient: Address::from_str(<span class="string">"0x388c818ca8b9251b393131c08a736a67ccb19297"</span>)
+            relay_timestamp:        1696271963129, // Oct 02 2023 18:39:23 UTC
+            p2p_timestamp:          1696271964134, // Oct 02 2023 18:39:24 UTC
+            proposer_fee_recipient: Address::from_str("0x388c818ca8b9251b393131c08a736a67ccb19297")
                 .unwrap(),
-            proposer_mev_reward:    <span class="number">11769128921907366414</span>,
+            proposer_mev_reward:    11769128921907366414,
             cex_quotes:             {
-                <span class="kw">let </span><span class="kw-2">mut </span>prices = HashMap::new();
+                let mut prices = HashMap::new();
 
-                <span class="comment">// By looking at the chart, and comparing it to the binance quote we can see
+                // By looking at the chart, and comparing it to the binance quote we can see
                 // that our quotes are lagging:
                 // - 1: If we can get a chart that shows us 1s time frames we can tell if quotes
                 //   are out of whack but I doubt this is the problem
@@ -958,42 +971,42 @@
                 // $1688.1
 
                 // See chart: https://www.tradingview.com/x/5uG0Zxdq
-                </span>prices.insert(
+                prices.insert(
                     Pair(
-                        Address::from_str(<span class="string">"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"</span>).unwrap(),
-                        Address::from_str(<span class="string">"0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"</span>).unwrap(),
+                        Address::from_str("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2").unwrap(),
+                        Address::from_str("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48").unwrap(),
                     ),
                     Quote {
-                        timestamp: <span class="number">1696271964130</span>,
+                        timestamp: 1696271964130,
                         price:     (
-                            Rational::from_str(<span class="string">"3712171157697331/2199023255552"</span>).unwrap(),
-                            Rational::from_str(<span class="string">"7423594647487775/4398046511104"</span>).unwrap(),
+                            Rational::from_str("3712171157697331/2199023255552").unwrap(),
+                            Rational::from_str("7423594647487775/4398046511104").unwrap(),
                         ),
                     },
                 );
 
                 prices.insert(
                     Pair(
-                        Address::from_str(<span class="string">"0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"</span>).unwrap(),
-                        Address::from_str(<span class="string">"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"</span>).unwrap(),
+                        Address::from_str("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48").unwrap(),
+                        Address::from_str("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2").unwrap(),
                     ),
                     Quote {
-                        timestamp: <span class="number">1696271964130</span>,
+                        timestamp: 1696271964130,
                         price:     (
-                            Rational::from_str(<span class="string">"1364711005559649/2305843009213693952"</span>).unwrap(),
-                            Rational::from_str(<span class="string">"5459748799445213/9223372036854775808"</span>).unwrap(),
+                            Rational::from_str("1364711005559649/2305843009213693952").unwrap(),
+                            Rational::from_str("5459748799445213/9223372036854775808").unwrap(),
                         ),
                     },
                 );
 
                 PriceGraph::from_quotes(QuotesMap::wrap(prices))
             },
-            eth_prices:             (Rational::from_str(<span class="string">"3712171157697331/2199023255552"</span>).unwrap()),
+            eth_prices:             (Rational::from_str("3712171157697331/2199023255552").unwrap()),
             mempool_flow:           {
-                <span class="kw">let </span><span class="kw-2">mut </span>private = HashSet::new();
+                let mut private = HashSet::new();
                 private.insert(
                     B256::from_str(
-                        <span class="string">"0x21b129d221a4f169de0fc391fe0382dbde797b69300a9a68143487c54d620295"</span>,
+                        "0x21b129d221a4f169de0fc391fe0382dbde797b69300a9a68143487c54d620295",
                     )
                     .unwrap(),
                 );
@@ -1002,4 +1015,5 @@
         }
     }
 }
-</code></pre></div></section></main></body></html>
+*/
+</span></code></pre></div></section></main></body></html>

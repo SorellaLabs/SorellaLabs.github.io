@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["basefee","blob_basefee","blob_hash","chainid","coinbase","difficulty","gaslimit","gasprice","number","origin","timestamp"]};

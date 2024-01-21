@@ -74,87 +74,54 @@
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
 <a href="#76" id="76">76</a>
-<a href="#77" id="77">77</a>
-<a href="#78" id="78">78</a>
-<a href="#79" id="79">79</a>
-<a href="#80" id="80">80</a>
-<a href="#81" id="81">81</a>
-<a href="#82" id="82">82</a>
-<a href="#83" id="83">83</a>
-<a href="#84" id="84">84</a>
-<a href="#85" id="85">85</a>
-<a href="#86" id="86">86</a>
-<a href="#87" id="87">87</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>serde::{ser::SerializeTuple, Deserialize, Deserializer, Serialize, Serializer};
+</pre></div><pre class="rust"><code><span class="kw">use </span>serde::{Serialize, Serializer};
 <span class="kw">use </span>sorella_db_databases::clickhouse::InsertRow;
 
-<span class="kw">use </span><span class="kw">crate</span>::classified_mev::{
-    AtomicBackrun, CexDex, JitLiquidity, JitLiquiditySandwich, Liquidation, MevType, Sandwich,
-    SpecificMev,
-};
+<span class="kw">use </span><span class="kw">crate</span>::classified_mev::SpecificMev;
 
-<span class="macro">macro_rules! </span>decode_specific {
-    (<span class="macro-nonterminal">$mev_type</span>:ident, <span class="macro-nonterminal">$value</span>:ident, $(<span class="macro-nonterminal">$mev</span>:ident = <span class="macro-nonterminal">$name</span>:ident),+) =&gt; {
-        <span class="kw">match </span><span class="macro-nonterminal">$mev_type </span>{
+<span class="comment">/*
+macro_rules! decode_specific {
+    ($mev_type:ident, $value:ident, $($mev:ident = $name:ident),+) =&gt; {
+        match $mev_type {
         $(
-            MevType::<span class="macro-nonterminal">$mev </span>=&gt; Box::new(
-                serde_json::from_value::&lt;<span class="macro-nonterminal">$name</span>&gt;(<span class="macro-nonterminal">$value</span>).unwrap()
-            ) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>SpecificMev&gt;,
+            MevType::$mev =&gt; Box::new(
+                serde_json::from_value::&lt;$name&gt;($value).unwrap()
+            ) as SpecificMev,
         )+
-        <span class="kw">_ </span>=&gt; <span class="macro">todo!</span>(<span class="string">"missing variant"</span>)
+        _ =&gt; todo!("missing variant")
     }
     };
 }
+*/
 
-<span class="kw">impl </span>Serialize <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>SpecificMev&gt; {
+</span><span class="kw">impl </span>Serialize <span class="kw">for </span>SpecificMev {
     <span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
     <span class="kw">where
         </span>S: Serializer,
     {
-        <span class="kw">let </span><span class="kw-2">mut </span>tup = serializer.serialize_tuple(<span class="number">2</span>)<span class="question-mark">?</span>;
-        <span class="kw">let </span>mev_type = <span class="self">self</span>.mev_type();
-        tup.serialize_element(<span class="kw-2">&amp;</span>mev_type)<span class="question-mark">?</span>;
-        <span class="kw">let </span>any = <span class="self">self</span>.clone().into_any();
-
-        <span class="kw">match </span>mev_type {
-            MevType::Sandwich =&gt; {
-                <span class="kw">let </span>this = any.downcast_ref::&lt;Sandwich&gt;().unwrap();
-                tup.serialize_element(<span class="kw-2">&amp;</span>this)<span class="question-mark">?</span>;
+        <span class="kw">match </span><span class="self">self </span>{
+            SpecificMev::Sandwich(sandwich) =&gt; sandwich.serialize(serializer),
+            SpecificMev::AtomicBackrun(backrun) =&gt; backrun.serialize(serializer),
+            SpecificMev::JitSandwich(jit_sandwich) =&gt; jit_sandwich.serialize(serializer),
+            SpecificMev::Jit(jit) =&gt; jit.serialize(serializer),
+            SpecificMev::CexDex(cex_dex) =&gt; cex_dex.serialize(serializer),
+            SpecificMev::Liquidation(liquidation) =&gt; liquidation.serialize(serializer),
+            SpecificMev::Unknown =&gt; {
+                <span class="macro">unimplemented!</span>(<span class="string">"attempted to serialize unknown mev: UNIMPLEMENTED"</span>)
             }
-            MevType::Backrun =&gt; {
-                <span class="kw">let </span>this = any.downcast_ref::&lt;AtomicBackrun&gt;().unwrap();
-                tup.serialize_element(<span class="kw-2">&amp;</span>this)<span class="question-mark">?</span>;
-            }
-            MevType::JitSandwich =&gt; {
-                <span class="kw">let </span>this = any.downcast_ref::&lt;JitLiquiditySandwich&gt;().unwrap();
-                tup.serialize_element(<span class="kw-2">&amp;</span>this)<span class="question-mark">?</span>;
-            }
-            MevType::Jit =&gt; {
-                <span class="kw">let </span>this = any.downcast_ref::&lt;JitLiquidity&gt;().unwrap();
-                tup.serialize_element(<span class="kw-2">&amp;</span>this)<span class="question-mark">?</span>;
-            }
-            MevType::CexDex =&gt; {
-                <span class="kw">let </span>this = any.downcast_ref::&lt;CexDex&gt;().unwrap();
-                tup.serialize_element(<span class="kw-2">&amp;</span>this)<span class="question-mark">?</span>;
-            }
-            MevType::Liquidation =&gt; {
-                <span class="kw">let </span>this = any.downcast_ref::&lt;Liquidation&gt;().unwrap();
-                tup.serialize_element(<span class="kw-2">&amp;</span>this)<span class="question-mark">?</span>;
-            }
-            MevType::Unknown =&gt; <span class="macro">unimplemented!</span>(<span class="string">"none yet"</span>),
         }
-        tup.end()
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">'de</span>&gt; Deserialize&lt;<span class="lifetime">'de</span>&gt; <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>SpecificMev&gt; {
-    <span class="kw">fn </span>deserialize&lt;D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt;
-    <span class="kw">where
-        </span>D: Deserializer&lt;<span class="lifetime">'de</span>&gt;,
+<span class="comment">/*
+impl&lt;'de&gt; Deserialize&lt;'de&gt; for SpecificMev {
+    fn deserialize&lt;D&gt;(deserializer: D) -&gt; Result&lt;Self, D::Error&gt;
+    where
+        D: Deserializer&lt;'de&gt;,
     {
-        <span class="kw">let </span>(mev_type, val) = &lt;(MevType, serde_json::Value)&gt;::deserialize(deserializer)<span class="question-mark">?</span>;
+        let (mev_type, val) = &lt;(MevType, serde_json::Value)&gt;::deserialize(deserializer)?;
 
-        <span class="prelude-val">Ok</span>(<span class="macro">decode_specific!</span>(
+        Ok(decode_specific!(
             mev_type,
             val,
             Backrun = AtomicBackrun,
@@ -166,10 +133,21 @@
         ))
     }
 }
+*/
 
-<span class="kw">impl </span>InsertRow <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>SpecificMev&gt; {
+</span><span class="kw">impl </span>InsertRow <span class="kw">for </span>SpecificMev {
     <span class="kw">fn </span>get_column_names(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'static </span>[<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str] {
-        (<span class="kw-2">**</span><span class="self">self</span>).get_column_names()
+        <span class="kw">match </span><span class="self">self </span>{
+            SpecificMev::Sandwich(sandwich) =&gt; sandwich.get_column_names(),
+            SpecificMev::AtomicBackrun(backrun) =&gt; backrun.get_column_names(),
+            SpecificMev::JitSandwich(jit_sandwich) =&gt; jit_sandwich.get_column_names(),
+            SpecificMev::Jit(jit) =&gt; jit.get_column_names(),
+            SpecificMev::CexDex(cex_dex) =&gt; cex_dex.get_column_names(),
+            SpecificMev::Liquidation(liquidation) =&gt; liquidation.get_column_names(),
+            SpecificMev::Unknown =&gt; {
+                <span class="macro">unimplemented!</span>(<span class="string">"attempted to inserted unknown mev into clickhouse: UNIMPLEMENTED"</span>)
+            }
+        }
     }
 }
 </code></pre></div></section></main></body></html>

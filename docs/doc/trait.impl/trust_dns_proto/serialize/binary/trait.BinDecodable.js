@@ -1,4 +1,0 @@
-(function() {var implementors = {
-"trust_dns_client":[["impl&lt;'r&gt; <a class=\"trait\" href=\"trust_dns_client/serialize/binary/trait.BinDecodable.html\" title=\"trait trust_dns_client::serialize::binary::BinDecodable\">BinDecodable</a>&lt;'r&gt; for <a class=\"struct\" href=\"trust_dns_client/op/struct.LowerQuery.html\" title=\"struct trust_dns_client::op::LowerQuery\">LowerQuery</a>"],["impl&lt;'r&gt; <a class=\"trait\" href=\"trust_dns_client/serialize/binary/trait.BinDecodable.html\" title=\"trait trust_dns_client::serialize::binary::BinDecodable\">BinDecodable</a>&lt;'r&gt; for <a class=\"struct\" href=\"trust_dns_client/rr/struct.LowerName.html\" title=\"struct trust_dns_client::rr::LowerName\">LowerName</a>"]],
-"trust_dns_proto":[]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

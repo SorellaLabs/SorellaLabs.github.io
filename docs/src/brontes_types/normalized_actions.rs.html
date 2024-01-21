@@ -402,7 +402,114 @@
 <a href="#402" id="402">402</a>
 <a href="#403" id="403">403</a>
 <a href="#404" id="404">404</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, fmt::Debug};
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
+<a href="#441" id="441">441</a>
+<a href="#442" id="442">442</a>
+<a href="#443" id="443">443</a>
+<a href="#444" id="444">444</a>
+<a href="#445" id="445">445</a>
+<a href="#446" id="446">446</a>
+<a href="#447" id="447">447</a>
+<a href="#448" id="448">448</a>
+<a href="#449" id="449">449</a>
+<a href="#450" id="450">450</a>
+<a href="#451" id="451">451</a>
+<a href="#452" id="452">452</a>
+<a href="#453" id="453">453</a>
+<a href="#454" id="454">454</a>
+<a href="#455" id="455">455</a>
+<a href="#456" id="456">456</a>
+<a href="#457" id="457">457</a>
+<a href="#458" id="458">458</a>
+<a href="#459" id="459">459</a>
+<a href="#460" id="460">460</a>
+<a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
+<a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
+<a href="#491" id="491">491</a>
+<a href="#492" id="492">492</a>
+<a href="#493" id="493">493</a>
+<a href="#494" id="494">494</a>
+<a href="#495" id="495">495</a>
+<a href="#496" id="496">496</a>
+<a href="#497" id="497">497</a>
+<a href="#498" id="498">498</a>
+<a href="#499" id="499">499</a>
+<a href="#500" id="500">500</a>
+<a href="#501" id="501">501</a>
+<a href="#502" id="502">502</a>
+<a href="#503" id="503">503</a>
+<a href="#504" id="504">504</a>
+<a href="#505" id="505">505</a>
+<a href="#506" id="506">506</a>
+<a href="#507" id="507">507</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+    collections::HashMap,
+    fmt::Debug,
+    ops::{Deref, DerefMut},
+};
 
 <span class="kw">use </span>alloy_primitives::Log;
 <span class="kw">use </span>reth_primitives::{Address, U256};
@@ -415,9 +522,10 @@
 <span class="kw">use </span><span class="kw">crate</span>::structured_trace::TransactionTraceWithLogs;
 
 <span class="doccomment">/// A normalized action that has been classified
-</span><span class="attr">#[derive(Debug, Clone, Deserialize)]
+</span><span class="attr">#[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
 </span><span class="kw">pub enum </span>Actions {
     Swap(NormalizedSwap),
+    SwapWithFee(NormalizedSwapWithFee),
     FlashLoan(NormalizedFlashLoan),
     Batch(NormalizedBatch),
     Transfer(NormalizedTransfer),
@@ -433,6 +541,7 @@
     <span class="kw">fn </span>get_column_names(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'static </span>[<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str] {
         <span class="kw">match </span><span class="self">self </span>{
             Actions::Swap(<span class="kw">_</span>) =&gt; NormalizedSwap::COLUMN_NAMES,
+            Actions::SwapWithFee(<span class="kw">_</span>) =&gt; NormalizedSwapWithFee::COLUMN_NAMES,
             Actions::FlashLoan(<span class="kw">_</span>) =&gt; NormalizedFlashLoan::COLUMN_NAMES,
             Actions::Batch(<span class="kw">_</span>) =&gt; NormalizedBatch::COLUMN_NAMES,
             Actions::Transfer(<span class="kw">_</span>) =&gt; NormalizedTransfer::COLUMN_NAMES,
@@ -465,10 +574,47 @@
     }
 }
 
+<span class="macro">macro_rules! </span>collect_action_fn {
+    ($(<span class="macro-nonterminal">$action</span>:ident),<span class="kw-2">*</span>) =&gt; {
+        <span class="kw">impl </span>Actions {
+            $(
+                <span class="macro">::paste::paste!</span>(
+                    <span class="kw">pub fn </span>[&lt;<span class="macro-nonterminal">$action </span>_collect_fn&gt;]()
+                    -&gt; <span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span><span class="kw">crate</span>::tree::Node&lt;<span class="self">Self</span>&gt;) -&gt; (bool, bool) {
+                        |node | (node.data.[&lt;is_ <span class="macro-nonterminal">$action</span>&gt;](), node.get_all_sub_actions()
+                                .iter().any(|i| i.[&lt;is_ <span class="macro-nonterminal">$action</span>&gt;]()))
+                    }
+                );
+            )*
+        }
+    };
+}
+
+<span class="macro">collect_action_fn!</span>(
+    swap,
+    flash_loan,
+    liquidation,
+    batch,
+    burn,
+    revert,
+    mint,
+    transfer,
+    collect,
+    unclassified
+);
+
 <span class="kw">impl </span>Actions {
+    <span class="kw">pub fn </span>force_liquidation(<span class="self">self</span>) -&gt; NormalizedLiquidation {
+        <span class="kw">match </span><span class="self">self </span>{
+            Actions::Liquidation(l) =&gt; l,
+            <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+        }
+    }
+
     <span class="kw">pub fn </span>force_swap(<span class="self">self</span>) -&gt; NormalizedSwap {
         <span class="kw">match </span><span class="self">self </span>{
             Actions::Swap(s) =&gt; s,
+            Actions::SwapWithFee(s) =&gt; s.swap,
             <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
         }
     }
@@ -476,6 +622,15 @@
     <span class="kw">pub fn </span>force_swap_ref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>NormalizedSwap {
         <span class="kw">match </span><span class="self">self </span>{
             Actions::Swap(s) =&gt; s,
+            Actions::SwapWithFee(s) =&gt; s,
+            <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+        }
+    }
+
+    <span class="kw">pub fn </span>force_swap_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>NormalizedSwap {
+        <span class="kw">match </span><span class="self">self </span>{
+            Actions::Swap(s) =&gt; s,
+            Actions::SwapWithFee(s) =&gt; s,
             <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
         }
     }
@@ -490,6 +645,7 @@
     <span class="kw">pub fn </span>get_to_address(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Address {
         <span class="kw">match </span><span class="self">self </span>{
             Actions::Swap(s) =&gt; s.pool,
+            Actions::SwapWithFee(s) =&gt; s.pool,
             Actions::FlashLoan(f) =&gt; f.pool,
             Actions::Batch(b) =&gt; b.settlement_contract,
             Actions::Mint(m) =&gt; m.to,
@@ -503,13 +659,12 @@
                 reth_rpc_types::trace::parity::Action::Reward(<span class="kw">_</span>) =&gt; Address::ZERO,
                 reth_rpc_types::trace::parity::Action::Selfdestruct(s) =&gt; s.address,
             },
-
             <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
         }
     }
 
     <span class="kw">pub fn </span>is_swap(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="macro">matches!</span>(<span class="self">self</span>, Actions::Swap(<span class="kw">_</span>))
+        <span class="macro">matches!</span>(<span class="self">self</span>, Actions::Swap(<span class="kw">_</span>)) || <span class="macro">matches!</span>(<span class="self">self</span>, Actions::SwapWithFee(<span class="kw">_</span>))
     }
 
     <span class="kw">pub fn </span>is_flash_loan(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
@@ -526,6 +681,10 @@
 
     <span class="kw">pub fn </span>is_burn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="macro">matches!</span>(<span class="self">self</span>, Actions::Burn(<span class="kw">_</span>))
+    }
+
+    <span class="kw">pub fn </span>is_revert(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="macro">matches!</span>(<span class="self">self</span>, Actions::Revert)
     }
 
     <span class="kw">pub fn </span>is_mint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
@@ -545,7 +704,7 @@
     }
 }
 
-<span class="attr">#[derive(Debug, Serialize, Clone, Row, Deserialize)]
+<span class="attr">#[derive(Debug, Serialize, Clone, Row, Deserialize, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>NormalizedFlashLoan {
     <span class="kw">pub </span>trace_index:       u64,
     <span class="kw">pub </span>from:              Address,
@@ -630,6 +789,26 @@
 }
 
 <span class="attr">#[derive(Debug, Default, Serialize, Clone, Row, PartialEq, Eq, Deserialize)]
+</span><span class="kw">pub struct </span>NormalizedSwapWithFee {
+    <span class="kw">pub </span>swap:       NormalizedSwap,
+    <span class="kw">pub </span>fee_token:  Address,
+    <span class="kw">pub </span>fee_amount: U256,
+}
+
+<span class="kw">impl </span>Deref <span class="kw">for </span>NormalizedSwapWithFee {
+    <span class="kw">type </span>Target = NormalizedSwap;
+
+    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.swap
+    }
+}
+<span class="kw">impl </span>DerefMut <span class="kw">for </span>NormalizedSwapWithFee {
+    <span class="kw">fn </span>deref_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self</span>::Target {
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>.swap
+    }
+}
+
+<span class="attr">#[derive(Debug, Default, Serialize, Clone, Row, PartialEq, Eq, Deserialize)]
 </span><span class="kw">pub struct </span>NormalizedSwap {
     <span class="kw">pub </span>trace_index: u64,
     <span class="kw">pub </span>from:        Address,
@@ -691,16 +870,6 @@
 }
 
 <span class="attr">#[derive(Debug, Serialize, Clone, Row, PartialEq, Eq, Deserialize)]
-</span><span class="kw">pub struct </span>NormalizedLiquidation {
-    <span class="kw">pub </span>trace_index:      u64,
-    <span class="kw">pub </span>pool:             Address,
-    <span class="kw">pub </span>liquidator:       Address,
-    <span class="kw">pub </span>debtor:           Address,
-    <span class="kw">pub </span>collateral_asset: Address,
-    <span class="kw">pub </span>debt_asset:       Address,
-    <span class="kw">pub </span>amount:           U256,
-}
-<span class="attr">#[derive(Debug, Serialize, Clone, Row, PartialEq, Eq, Deserialize)]
 </span><span class="kw">pub struct </span>NormalizedLoan {
     <span class="kw">pub </span>trace_index:  u64,
     <span class="kw">pub </span>lender:       Address,
@@ -708,6 +877,40 @@
     <span class="kw">pub </span>loaned_token: Address,
     <span class="kw">pub </span>loan_amount:  U256,
     <span class="kw">pub </span>collateral:   HashMap&lt;Address, U256&gt;,
+}
+
+<span class="attr">#[derive(Debug, Serialize, Clone, Row, PartialEq, Eq, Deserialize)]
+</span><span class="kw">pub struct </span>NormalizedLiquidation {
+    <span class="kw">pub </span>trace_index:           u64,
+    <span class="kw">pub </span>pool:                  Address,
+    <span class="kw">pub </span>liquidator:            Address,
+    <span class="kw">pub </span>debtor:                Address,
+    <span class="kw">pub </span>collateral_asset:      Address,
+    <span class="kw">pub </span>debt_asset:            Address,
+    <span class="kw">pub </span>covered_debt:          U256,
+    <span class="kw">pub </span>liquidated_collateral: U256,
+}
+
+<span class="kw">impl </span>NormalizedLiquidation {
+    <span class="kw">pub fn </span>finish_classification(<span class="kw-2">&amp;mut </span><span class="self">self</span>, actions: Vec&lt;(u64, Actions)&gt;) -&gt; Vec&lt;u64&gt; {
+        actions
+            .into_iter()
+            .find_map(|(index, action)| {
+                <span class="kw">if let </span>Actions::Transfer(transfer) = action {
+                    <span class="comment">// because aave has the option to return the Atoken or regular,
+                    // we can't filter by collateral filter. This might be an issue...
+                    // tbd tho
+                    </span><span class="kw">if </span>transfer.to == <span class="self">self</span>.liquidator {
+                        <span class="self">self</span>.liquidated_collateral = transfer.amount;
+                        <span class="kw">return </span><span class="prelude-val">Some</span>(index)
+                    }
+                }
+
+                <span class="prelude-val">None
+            </span>})
+            .map(|e| <span class="macro">vec!</span>[e])
+            .unwrap_or_default()
+    }
 }
 
 <span class="attr">#[derive(Debug, Serialize, Clone, Row, PartialEq, Eq, Deserialize)]
@@ -736,6 +939,7 @@
     <span class="kw">fn </span>continue_classification(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="self">self </span>{
             <span class="self">Self</span>::Swap(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
+            <span class="self">Self</span>::SwapWithFee(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
             <span class="self">Self</span>::FlashLoan(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
             <span class="self">Self</span>::Batch(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
             <span class="self">Self</span>::Mint(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
@@ -751,6 +955,7 @@
     <span class="kw">fn </span>continued_classification_types(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool + Send + Sync&gt; {
         <span class="kw">match </span><span class="self">self </span>{
             Actions::Swap(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
+            Actions::SwapWithFee(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             Actions::FlashLoan(<span class="kw">_</span>) =&gt; Box::new(|action: <span class="kw-2">&amp;</span>Actions| {
                 action.is_liquidation()
                     | action.is_batch()
@@ -764,10 +969,7 @@
             Actions::Mint(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             Actions::Burn(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             Actions::Transfer(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
-            <span class="comment">//TODO: Check later if it is possible to have nested liquidations
-            </span>Actions::Liquidation(<span class="kw">_</span>) =&gt; {
-                Box::new(|action: <span class="kw-2">&amp;</span>Actions| action.is_swap() | action.is_transfer())
-            }
+            Actions::Liquidation(<span class="kw">_</span>) =&gt; Box::new(|action: <span class="kw-2">&amp;</span>Actions| action.is_transfer()),
             Actions::Collect(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             Actions::Unclassified(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             Actions::Revert =&gt; <span class="macro">unreachable!</span>(),
@@ -777,6 +979,7 @@
     <span class="kw">fn </span>get_trace_index(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
         <span class="kw">match </span><span class="self">self </span>{
             <span class="self">Self</span>::Swap(s) =&gt; s.trace_index,
+            <span class="self">Self</span>::SwapWithFee(s) =&gt; s.trace_index,
             <span class="self">Self</span>::FlashLoan(f) =&gt; f.trace_index,
             <span class="self">Self</span>::Batch(b) =&gt; b.trace_index,
             <span class="self">Self</span>::Mint(m) =&gt; m.trace_index,
@@ -792,12 +995,15 @@
     <span class="kw">fn </span>finalize_classification(<span class="kw-2">&amp;mut </span><span class="self">self</span>, actions: Vec&lt;(u64, <span class="self">Self</span>)&gt;) -&gt; Vec&lt;u64&gt; {
         <span class="kw">match </span><span class="self">self </span>{
             <span class="self">Self</span>::Swap(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(<span class="string">"Swap type never requires complex classification"</span>),
+            <span class="self">Self</span>::SwapWithFee(<span class="kw">_</span>) =&gt; {
+                <span class="macro">unreachable!</span>(<span class="string">"Swap With fee never requires complex classification"</span>)
+            }
             <span class="self">Self</span>::FlashLoan(f) =&gt; f.finish_classification(actions),
             <span class="self">Self</span>::Batch(<span class="kw">_</span>) =&gt; <span class="macro">todo!</span>(),
             <span class="self">Self</span>::Mint(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             <span class="self">Self</span>::Burn(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             <span class="self">Self</span>::Transfer(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
-            <span class="self">Self</span>::Liquidation(<span class="kw">_</span>) =&gt; <span class="macro">todo!</span>(),
+            <span class="self">Self</span>::Liquidation(l) =&gt; l.finish_classification(actions),
             <span class="self">Self</span>::Collect(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(<span class="string">"Collect type never requires complex classification"</span>),
             <span class="self">Self</span>::Unclassified(<span class="kw">_</span>) =&gt; {
                 <span class="macro">unreachable!</span>(<span class="string">"Unclassified type never requires complex classification"</span>)
