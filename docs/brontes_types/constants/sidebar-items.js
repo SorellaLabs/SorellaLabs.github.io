@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["USDC_ADDRESS","USDT_ADDRESS","WETH_ADDRESS"]};

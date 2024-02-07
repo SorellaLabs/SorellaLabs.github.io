@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["accounts","blocks","integer_list","sharded_key","storage_sharded_key"]};

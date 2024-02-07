@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"attr":["embed_doc_image"],"macro":["embed_image"]};

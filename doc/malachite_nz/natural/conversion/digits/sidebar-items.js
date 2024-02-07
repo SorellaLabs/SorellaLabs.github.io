@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["general_digits","power_of_2_digit_iterable","power_of_2_digits"]};

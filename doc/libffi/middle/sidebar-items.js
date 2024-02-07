@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ffi_abi_FFI_DEFAULT_ABI"],"fn":["arg"],"struct":["Arg","Builder","Cif","Closure","ClosureOnce","Type"],"type":["CallbackOnce","FfiAbi"]};

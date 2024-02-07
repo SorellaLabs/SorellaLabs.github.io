@@ -1,3 +1,0 @@
-(function() {var implementors = {
-"brontes_types":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html\" title=\"trait core::convert::AsRef\">AsRef</a>&lt;<a class=\"struct\" href=\"brontes_types/db/metadata/struct.MetadataNoDex.html\" title=\"struct brontes_types::db::metadata::MetadataNoDex\">MetadataNoDex</a>&gt; for <a class=\"struct\" href=\"brontes_types/db/metadata/struct.MetadataCombined.html\" title=\"struct brontes_types::db::metadata::MetadataCombined\">MetadataCombined</a>"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

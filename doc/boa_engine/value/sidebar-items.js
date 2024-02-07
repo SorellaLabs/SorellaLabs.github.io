@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"derive":["TryFromJs"],"enum":["AbstractRelation","IntegerOrInfinity","JsValue","Numeric","PreferredType","Type"],"struct":["ValueDisplay"],"trait":["TryFromJs"]};

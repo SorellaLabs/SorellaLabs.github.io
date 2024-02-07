@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ArchivedBundleDataRedefined","BundleData","BundleDataRedefined","BundleDataRedefinedResolver"],"struct":["BundleDataIter","BundleDataWithRevenue"]};

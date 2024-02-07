@@ -1,3 +1,0 @@
-(function() {var implementors = {
-"brontes_types":[["impl IntoEnumIterator for <a class=\"enum\" href=\"brontes_types/classified_mev/enum.MevType.html\" title=\"enum brontes_types::classified_mev::MevType\">MevType</a>"],["impl IntoEnumIterator for <a class=\"enum\" href=\"brontes_types/classified_mev/enum.SpecificMev.html\" title=\"enum brontes_types::classified_mev::SpecificMev\">SpecificMev</a>"],["impl IntoEnumIterator for <a class=\"enum\" href=\"brontes_types/classified_mev/enum.PriceKind.html\" title=\"enum brontes_types::classified_mev::PriceKind\">PriceKind</a>"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

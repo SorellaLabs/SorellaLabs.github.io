@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["BuilderPattern"],"fn":["doc_comment_from"],"struct":["Bindings","Block","BuildMethod","Builder","BuilderField","DeprecationNotes","Initializer","Setter"]};

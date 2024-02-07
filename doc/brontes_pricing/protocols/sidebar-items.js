@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Protocol"],"fn":["make_call_request"],"mod":["errors","lazy","uniswap_v2","uniswap_v3"],"trait":["LoadState","UpdatableProtocol"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["address_to_tokens","cex","clickhouse","dex","metadata","mev_block","pool_creation_block","redefined_types","subgraph","utils"]};

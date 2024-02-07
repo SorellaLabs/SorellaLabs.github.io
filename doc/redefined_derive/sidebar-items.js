@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"derive":["Redefined"],"macro":["redefined_remote"]};

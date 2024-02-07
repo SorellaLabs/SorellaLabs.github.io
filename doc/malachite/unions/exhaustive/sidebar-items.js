@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["exhaustive_union2s","lex_union2s"],"struct":["ExhaustiveUnion2s","LexUnion2s"]};

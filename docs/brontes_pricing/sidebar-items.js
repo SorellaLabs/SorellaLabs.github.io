@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["exchanges","types"],"struct":["AllPairFindRequests","AllPairGraph","BrontesBatchPricer","GraphManager","StateBuffer"]};

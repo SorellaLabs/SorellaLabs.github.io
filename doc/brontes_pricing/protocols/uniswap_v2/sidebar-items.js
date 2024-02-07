@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["SYNC_EVENT_SIGNATURE","U128_0X10000000000000000"],"mod":["IErc20","IUniswapV2Pair","batch_request","factory"],"struct":["UniswapV2Pool"]};

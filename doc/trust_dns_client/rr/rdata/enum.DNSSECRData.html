@@ -1,0 +1,354 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Record data enum variants for DNSSEC-specific records."><title>DNSSECRData in trust_dns_client::rr::rdata - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="trust_dns_client" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (b11fbfbf3 2024-02-03)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc enum"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../trust_dns_client/index.html">trust_dns_client</a><span class="version">0.20.4</span></h2></div><h2 class="location"><a href="#">DNSSECRData</a></h2><div class="sidebar-elems"><section><h3><a href="#variants">Variants</a></h3><ul class="block variant"><li><a href="#variant.DNSKEY">DNSKEY</a></li><li><a href="#variant.DS">DS</a></li><li><a href="#variant.KEY">KEY</a></li><li><a href="#variant.NSEC">NSEC</a></li><li><a href="#variant.NSEC3">NSEC3</a></li><li><a href="#variant.NSEC3PARAM">NSEC3PARAM</a></li><li><a href="#variant.SIG">SIG</a></li><li><a href="#variant.Unknown">Unknown</a></li></ul><h3><a href="#implementations">Methods</a></h3><ul class="block method"><li><a href="#method.as_dnskey">as_dnskey</a></li><li><a href="#method.as_dnskey_mut">as_dnskey_mut</a></li><li><a href="#method.as_ds">as_ds</a></li><li><a href="#method.as_ds_mut">as_ds_mut</a></li><li><a href="#method.as_key">as_key</a></li><li><a href="#method.as_key_mut">as_key_mut</a></li><li><a href="#method.as_nsec">as_nsec</a></li><li><a href="#method.as_nsec3">as_nsec3</a></li><li><a href="#method.as_nsec3_mut">as_nsec3_mut</a></li><li><a href="#method.as_nsec3param">as_nsec3param</a></li><li><a href="#method.as_nsec3param_mut">as_nsec3param_mut</a></li><li><a href="#method.as_nsec_mut">as_nsec_mut</a></li><li><a href="#method.as_sig">as_sig</a></li><li><a href="#method.as_sig_mut">as_sig_mut</a></li><li><a href="#method.as_unknown">as_unknown</a></li><li><a href="#method.as_unknown_mut">as_unknown_mut</a></li><li><a href="#method.into_dnskey">into_dnskey</a></li><li><a href="#method.into_ds">into_ds</a></li><li><a href="#method.into_key">into_key</a></li><li><a href="#method.into_nsec">into_nsec</a></li><li><a href="#method.into_nsec3">into_nsec3</a></li><li><a href="#method.into_nsec3param">into_nsec3param</a></li><li><a href="#method.into_sig">into_sig</a></li><li><a href="#method.into_unknown">into_unknown</a></li></ul><h3><a href="#trait-implementations">Trait Implementations</a></h3><ul class="block trait-implementation"><li><a href="#impl-Clone-for-DNSSECRData">Clone</a></li><li><a href="#impl-Debug-for-DNSSECRData">Debug</a></li><li><a href="#impl-Display-for-DNSSECRData">Display</a></li><li><a href="#impl-Eq-for-DNSSECRData">Eq</a></li><li><a href="#impl-PartialEq-for-DNSSECRData">PartialEq</a></li><li><a href="#impl-StructuralPartialEq-for-DNSSECRData">StructuralPartialEq</a></li></ul><h3><a href="#synthetic-implementations">Auto Trait Implementations</a></h3><ul class="block synthetic-implementation"><li><a href="#impl-RefUnwindSafe-for-DNSSECRData">RefUnwindSafe</a></li><li><a href="#impl-Send-for-DNSSECRData">Send</a></li><li><a href="#impl-Sync-for-DNSSECRData">Sync</a></li><li><a href="#impl-Unpin-for-DNSSECRData">Unpin</a></li><li><a href="#impl-UnwindSafe-for-DNSSECRData">UnwindSafe</a></li></ul><h3><a href="#blanket-implementations">Blanket Implementations</a></h3><ul class="block blanket-implementation"><li><a href="#impl-Any-for-T">Any</a></li><li><a href="#impl-Borrow%3CT%3E-for-T">Borrow&lt;T&gt;</a></li><li><a href="#impl-BorrowMut%3CT%3E-for-T">BorrowMut&lt;T&gt;</a></li><li><a href="#impl-From%3CT%3E-for-T">From&lt;T&gt;</a></li><li><a href="#impl-Into%3CU%3E-for-T">Into&lt;U&gt;</a></li><li><a href="#impl-ToOwned-for-T">ToOwned</a></li><li><a href="#impl-ToString-for-T">ToString</a></li><li><a href="#impl-TryFrom%3CU%3E-for-T">TryFrom&lt;U&gt;</a></li><li><a href="#impl-TryInto%3CU%3E-for-T">TryInto&lt;U&gt;</a></li><li><a href="#impl-VZip%3CV%3E-for-T">VZip&lt;V&gt;</a></li></ul></section><h2><a href="index.html">In trust_dns_client::rr::rdata</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../trust_dns_client/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Enum <a href="../../index.html">trust_dns_client</a>::<wbr><a href="../index.html">rr</a>::<wbr><a href="index.html">rdata</a>::<wbr><a class="enum" href="#">DNSSECRData</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub enum DNSSECRData {
+    DNSKEY(<a class="struct" href="struct.DNSKEY.html" title="struct trust_dns_client::rr::rdata::DNSKEY">DNSKEY</a>),
+    DS(<a class="struct" href="struct.DS.html" title="struct trust_dns_client::rr::rdata::DS">DS</a>),
+    KEY(<a class="struct" href="struct.KEY.html" title="struct trust_dns_client::rr::rdata::KEY">KEY</a>),
+    NSEC(<a class="struct" href="struct.NSEC.html" title="struct trust_dns_client::rr::rdata::NSEC">NSEC</a>),
+    NSEC3(<a class="struct" href="struct.NSEC3.html" title="struct trust_dns_client::rr::rdata::NSEC3">NSEC3</a>),
+    NSEC3PARAM(<a class="struct" href="struct.NSEC3PARAM.html" title="struct trust_dns_client::rr::rdata::NSEC3PARAM">NSEC3PARAM</a>),
+    SIG(<a class="struct" href="struct.SIG.html" title="struct trust_dns_client::rr::rdata::SIG">SIG</a>),
+    Unknown {
+        code: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>,
+        rdata: <a class="struct" href="struct.NULL.html" title="struct trust_dns_client::rr::rdata::NULL">NULL</a>,
+    },
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Record data enum variants for DNSSEC-specific records.</p>
+</div></details><h2 id="variants" class="variants section-header">Variants<a href="#variants" class="anchor">§</a></h2><div class="variants"><section id="variant.DNSKEY" class="variant"><a href="#variant.DNSKEY" class="anchor">§</a><h3 class="code-header">DNSKEY(<a class="struct" href="struct.DNSKEY.html" title="struct trust_dns_client::rr::rdata::DNSKEY">DNSKEY</a>)</h3></section><div class="docblock"><div class="example-wrap"><pre class="language-text"><code>RFC 4034                DNSSEC Resource Records               March 2005
+
+2.1.  DNSKEY RDATA Wire Format
+
+   The RDATA for a DNSKEY RR consists of a 2 octet Flags Field, a 1
+   octet Protocol Field, a 1 octet Algorithm Field, and the Public Key
+   Field.
+
+                        1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |              Flags            |    Protocol   |   Algorithm   |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   /                                                               /
+   /                            Public Key                         /
+   /                                                               /
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+2.1.1.  The Flags Field
+
+   Bit 7 of the Flags field is the Zone Key flag.  If bit 7 has value 1,
+   then the DNSKEY record holds a DNS zone key, and the DNSKEY RR&#39;s
+   owner name MUST be the name of a zone.  If bit 7 has value 0, then
+   the DNSKEY record holds some other type of DNS public key and MUST
+   NOT be used to verify RRSIGs that cover RRsets.
+
+   Bit 15 of the Flags field is the Secure Entry Point flag, described
+   in [RFC3757].  If bit 15 has value 1, then the DNSKEY record holds a
+   key intended for use as a secure entry point.  This flag is only
+   intended to be a hint to zone signing or debugging software as to the
+   intended use of this DNSKEY record; validators MUST NOT alter their
+   behavior during the signature validation process in any way based on
+   the setting of this bit.  This also means that a DNSKEY RR with the
+   SEP bit set would also need the Zone Key flag set in order to be able
+   to generate signatures legally.  A DNSKEY RR with the SEP set and the
+   Zone Key flag not set MUST NOT be used to verify RRSIGs that cover
+   RRsets.
+
+   Bits 0-6 and 8-14 are reserved: these bits MUST have value 0 upon
+   creation of the DNSKEY RR and MUST be ignored upon receipt.
+
+RFC 5011                  Trust Anchor Update             September 2007
+
+7.  IANA Considerations
+
+  The IANA has assigned a bit in the DNSKEY flags field (see Section 7
+  of [RFC4034]) for the REVOKE bit (8).
+</code></pre></div></div><section id="variant.DS" class="variant"><a href="#variant.DS" class="anchor">§</a><h3 class="code-header">DS(<a class="struct" href="struct.DS.html" title="struct trust_dns_client::rr::rdata::DS">DS</a>)</h3></section><div class="docblock"><div class="example-wrap"><pre class="language-text"><code>5.1.  DS RDATA Wire Format
+
+The RDATA for a DS RR consists of a 2 octet Key Tag field, a 1 octet
+          Algorithm field, a 1 octet Digest Type field, and a Digest field.
+
+                         1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Key Tag             |  Algorithm    |  Digest Type  |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    /                                                               /
+    /                            Digest                             /
+    /                                                               /
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+5.1.1.  The Key Tag Field
+
+   The Key Tag field lists the key tag of the DNSKEY RR referred to by
+   the DS record, in network byte order.
+
+   The Key Tag used by the DS RR is identical to the Key Tag used by
+   RRSIG RRs.  Appendix B describes how to compute a Key Tag.
+
+5.1.2.  The Algorithm Field
+
+   The Algorithm field lists the algorithm number of the DNSKEY RR
+   referred to by the DS record.
+
+   The algorithm number used by the DS RR is identical to the algorithm
+   number used by RRSIG and DNSKEY RRs.  Appendix A.1 lists the
+   algorithm number types.
+
+5.1.3.  The Digest Type Field
+
+   The DS RR refers to a DNSKEY RR by including a digest of that DNSKEY
+   RR.  The Digest Type field identifies the algorithm used to construct
+   the digest.  Appendix A.2 lists the possible digest algorithm types.
+
+5.1.4.  The Digest Field
+
+   The DS record refers to a DNSKEY RR by including a digest of that
+   DNSKEY RR.
+
+   The digest is calculated by concatenating the canonical form of the
+   fully qualified owner name of the DNSKEY RR with the DNSKEY RDATA,
+   and then applying the digest algorithm.
+
+     digest = digest_algorithm( DNSKEY owner name | DNSKEY RDATA);
+
+      &quot;|&quot; denotes concatenation
+
+     DNSKEY RDATA = Flags | Protocol | Algorithm | Public Key.
+
+   The size of the digest may vary depending on the digest algorithm and
+   DNSKEY RR size.  As of the time of this writing, the only defined
+   digest algorithm is SHA-1, which produces a 20 octet digest.
+</code></pre></div></div><section id="variant.KEY" class="variant"><a href="#variant.KEY" class="anchor">§</a><h3 class="code-header">KEY(<a class="struct" href="struct.KEY.html" title="struct trust_dns_client::rr::rdata::KEY">KEY</a>)</h3></section><div class="docblock"><div class="example-wrap"><pre class="language-text"><code>RFC 2535                DNS Security Extensions               March 1999
+
+3.1 KEY RDATA format
+
+ The RDATA for a KEY RR consists of flags, a protocol octet, the
+ algorithm number octet, and the public key itself.  The format is as
+ follows:
+
+                      1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |             flags             |    protocol   |   algorithm   |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |                                                               /
+ /                          public key                           /
+ /                                                               /
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|
+
+ The KEY RR is not intended for storage of certificates and a separate
+ certificate RR has been developed for that purpose, defined in [RFC
+ 2538].
+
+ The meaning of the KEY RR owner name, flags, and protocol octet are
+ described in Sections 3.1.1 through 3.1.5 below.  The flags and
+ algorithm must be examined before any data following the algorithm
+ octet as they control the existence and format of any following data.
+ The algorithm and public key fields are described in Section 3.2.
+ The format of the public key is algorithm dependent.
+
+ KEY RRs do not specify their validity period but their authenticating
+ SIG RR(s) do as described in Section 4 below.
+</code></pre></div></div><section id="variant.NSEC" class="variant"><a href="#variant.NSEC" class="anchor">§</a><h3 class="code-header">NSEC(<a class="struct" href="struct.NSEC.html" title="struct trust_dns_client::rr::rdata::NSEC">NSEC</a>)</h3></section><div class="docblock"><div class="example-wrap"><pre class="language-text"><code>RFC 4034                DNSSEC Resource Records               March 2005
+
+4.1.  NSEC RDATA Wire Format
+
+ The RDATA of the NSEC RR is as shown below:
+
+                      1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ /                      Next Domain Name                         /
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ /                       Type Bit Maps                           /
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre></div></div><section id="variant.NSEC3" class="variant"><a href="#variant.NSEC3" class="anchor">§</a><h3 class="code-header">NSEC3(<a class="struct" href="struct.NSEC3.html" title="struct trust_dns_client::rr::rdata::NSEC3">NSEC3</a>)</h3></section><div class="docblock"><div class="example-wrap"><pre class="language-text"><code>RFC 5155                         NSEC3                        March 2008
+
+3.2.  NSEC3 RDATA Wire Format
+
+ The RDATA of the NSEC3 RR is as shown below:
+
+                      1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |   Hash Alg.   |     Flags     |          Iterations           |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |  Salt Length  |                     Salt                      /
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |  Hash Length  |             Next Hashed Owner Name            /
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ /                         Type Bit Maps                         /
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+ Hash Algorithm is a single octet.
+
+ Flags field is a single octet, the Opt-Out flag is the least
+ significant bit, as shown below:
+
+  0 1 2 3 4 5 6 7
+ +-+-+-+-+-+-+-+-+
+ |             |O|
+ +-+-+-+-+-+-+-+-+
+
+ Iterations is represented as a 16-bit unsigned integer, with the most
+ significant bit first.
+
+ Salt Length is represented as an unsigned octet.  Salt Length
+ represents the length of the Salt field in octets.  If the value is
+ zero, the following Salt field is omitted.
+
+ Salt, if present, is encoded as a sequence of binary octets.  The
+ length of this field is determined by the preceding Salt Length
+ field.
+
+ Hash Length is represented as an unsigned octet.  Hash Length
+ represents the length of the Next Hashed Owner Name field in octets.
+
+ The next hashed owner name is not base32 encoded, unlike the owner
+ name of the NSEC3 RR.  It is the unmodified binary hash value.  It
+ does not include the name of the containing zone.  The length of this
+ field is determined by the preceding Hash Length field.
+
+3.2.1.  Type Bit Maps Encoding
+
+ The encoding of the Type Bit Maps field is the same as that used by
+ the NSEC RR, described in [RFC4034].  It is explained and clarified
+ here for clarity.
+
+ The RR type space is split into 256 window blocks, each representing
+ the low-order 8 bits of the 16-bit RR type space.  Each block that
+ has at least one active RR type is encoded using a single octet
+ window number (from 0 to 255), a single octet bitmap length (from 1
+ to 32) indicating the number of octets used for the bitmap of the
+ window block, and up to 32 octets (256 bits) of bitmap.
+
+ Blocks are present in the NSEC3 RR RDATA in increasing numerical
+ order.
+
+    Type Bit Maps Field = ( Window Block # | Bitmap Length | Bitmap )+
+
+    where &quot;|&quot; denotes concatenation.
+
+ Each bitmap encodes the low-order 8 bits of RR types within the
+ window block, in network bit order.  The first bit is bit 0.  For
+ window block 0, bit 1 corresponds to RR type 1 (A), bit 2 corresponds
+ to RR type 2 (NS), and so forth.  For window block 1, bit 1
+ corresponds to RR type 257, bit 2 to RR type 258.  If a bit is set to
+ 1, it indicates that an RRSet of that type is present for the
+ original owner name of the NSEC3 RR.  If a bit is set to 0, it
+ indicates that no RRSet of that type is present for the original
+ owner name of the NSEC3 RR.
+
+ Since bit 0 in window block 0 refers to the non-existing RR type 0,
+ it MUST be set to 0.  After verification, the validator MUST ignore
+ the value of bit 0 in window block 0.
+
+ Bits representing Meta-TYPEs or QTYPEs as specified in Section 3.1 of
+ [RFC2929] or within the range reserved for assignment only to QTYPEs
+ and Meta-TYPEs MUST be set to 0, since they do not appear in zone
+ data.  If encountered, they must be ignored upon reading.
+
+ Blocks with no types present MUST NOT be included.  Trailing zero
+ octets in the bitmap MUST be omitted.  The length of the bitmap of
+ each block is determined by the type code with the largest numerical
+ value, within that block, among the set of RR types present at the
+ original owner name of the NSEC3 RR.  Trailing octets not specified
+ MUST be interpreted as zero octets.
+</code></pre></div></div><section id="variant.NSEC3PARAM" class="variant"><a href="#variant.NSEC3PARAM" class="anchor">§</a><h3 class="code-header">NSEC3PARAM(<a class="struct" href="struct.NSEC3PARAM.html" title="struct trust_dns_client::rr::rdata::NSEC3PARAM">NSEC3PARAM</a>)</h3></section><div class="docblock"><div class="example-wrap"><pre class="language-text"><code>RFC 5155                         NSEC3                        March 2008
+
+4.2.  NSEC3PARAM RDATA Wire Format
+
+ The RDATA of the NSEC3PARAM RR is as shown below:
+
+                      1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |   Hash Alg.   |     Flags     |          Iterations           |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |  Salt Length  |                     Salt                      /
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+ Hash Algorithm is a single octet.
+
+ Flags field is a single octet.
+
+ Iterations is represented as a 16-bit unsigned integer, with the most
+ significant bit first.
+
+ Salt Length is represented as an unsigned octet.  Salt Length
+ represents the length of the following Salt field in octets.  If the
+ value is zero, the Salt field is omitted.
+
+ Salt, if present, is encoded as a sequence of binary octets.  The
+ length of this field is determined by the preceding Salt Length
+ field.
+</code></pre></div></div><section id="variant.SIG" class="variant"><a href="#variant.SIG" class="anchor">§</a><h3 class="code-header">SIG(<a class="struct" href="struct.SIG.html" title="struct trust_dns_client::rr::rdata::SIG">SIG</a>)</h3></section><div class="docblock"><div class="example-wrap"><pre class="language-text"><code>RFC 2535 &amp; 2931   DNS Security Extensions               March 1999
+RFC 4034          DNSSEC Resource Records               March 2005
+
+3.1.  RRSIG RDATA Wire Format
+
+   The RDATA for an RRSIG RR consists of a 2 octet Type Covered field, a
+   1 octet Algorithm field, a 1 octet Labels field, a 4 octet Original
+   TTL field, a 4 octet Signature Expiration field, a 4 octet Signature
+   Inception field, a 2 octet Key tag, the Signer&#39;s Name field, and the
+   Signature field.
+
+                        1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |        Type Covered           |  Algorithm    |     Labels    |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                         Original TTL                          |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                      Signature Expiration                     |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                      Signature Inception                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |            Key Tag            |                               /
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         Signer&#39;s Name         /
+   /                                                               /
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   /                                                               /
+   /                            Signature                          /
+   /                                                               /
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre></div></div><section id="variant.Unknown" class="variant"><a href="#variant.Unknown" class="anchor">§</a><h3 class="code-header">Unknown</h3></section><div class="sub-variant" id="variant.Unknown.fields"><h4>Fields</h4><div class="sub-variant-field"><span id="variant.Unknown.field.code" class="section-header"><a href="#variant.Unknown.field.code" class="anchor field">§</a><code>code: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a></code></span><div class="docblock"><p>RecordType code</p>
+</div></div><div class="sub-variant-field"><span id="variant.Unknown.field.rdata" class="section-header"><a href="#variant.Unknown.field.rdata" class="anchor field">§</a><code>rdata: <a class="struct" href="struct.NULL.html" title="struct trust_dns_client::rr::rdata::NULL">NULL</a></code></span><div class="docblock"><p>RData associated to the record</p>
+</div></div></div><div class="docblock"><p>Unknown or unsupported DNSSec record data</p>
+</div></div><h2 id="implementations" class="section-header">Implementations<a href="#implementations" class="anchor">§</a></h2><div id="implementations-list"><details class="toggle implementors-toggle" open><summary><section id="impl-DNSSECRData" class="impl"><a href="#impl-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.as_dnskey_mut" class="method"><h4 class="code-header">pub fn <a href="#method.as_dnskey_mut" class="fn">as_dnskey_mut</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;mut <a class="struct" href="struct.DNSKEY.html" title="struct trust_dns_client::rr::rdata::DNSKEY">DNSKEY</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns mutable references to the inner fields if this is a <code>DNSSECRData::DNSKEY</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_dnskey" class="method"><h4 class="code-header">pub fn <a href="#method.as_dnskey" class="fn">as_dnskey</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.DNSKEY.html" title="struct trust_dns_client::rr::rdata::DNSKEY">DNSKEY</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns references to the inner fields if this is a <code>DNSSECRData::DNSKEY</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.into_dnskey" class="method"><h4 class="code-header">pub fn <a href="#method.into_dnskey" class="fn">into_dnskey</a>(self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.DNSKEY.html" title="struct trust_dns_client::rr::rdata::DNSKEY">DNSKEY</a>, <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a>&gt;</h4></section></summary><div class="docblock"><p>Returns the inner fields if this is a <code>DNSSECRData::DNSKEY</code>, otherwise returns back the enum in the <code>Err</code> case of the result</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_ds_mut" class="method"><h4 class="code-header">pub fn <a href="#method.as_ds_mut" class="fn">as_ds_mut</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;mut <a class="struct" href="struct.DS.html" title="struct trust_dns_client::rr::rdata::DS">DS</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns mutable references to the inner fields if this is a <code>DNSSECRData::DS</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_ds" class="method"><h4 class="code-header">pub fn <a href="#method.as_ds" class="fn">as_ds</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.DS.html" title="struct trust_dns_client::rr::rdata::DS">DS</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns references to the inner fields if this is a <code>DNSSECRData::DS</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.into_ds" class="method"><h4 class="code-header">pub fn <a href="#method.into_ds" class="fn">into_ds</a>(self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.DS.html" title="struct trust_dns_client::rr::rdata::DS">DS</a>, <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a>&gt;</h4></section></summary><div class="docblock"><p>Returns the inner fields if this is a <code>DNSSECRData::DS</code>, otherwise returns back the enum in the <code>Err</code> case of the result</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_key_mut" class="method"><h4 class="code-header">pub fn <a href="#method.as_key_mut" class="fn">as_key_mut</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;mut <a class="struct" href="struct.KEY.html" title="struct trust_dns_client::rr::rdata::KEY">KEY</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns mutable references to the inner fields if this is a <code>DNSSECRData::KEY</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_key" class="method"><h4 class="code-header">pub fn <a href="#method.as_key" class="fn">as_key</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.KEY.html" title="struct trust_dns_client::rr::rdata::KEY">KEY</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns references to the inner fields if this is a <code>DNSSECRData::KEY</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.into_key" class="method"><h4 class="code-header">pub fn <a href="#method.into_key" class="fn">into_key</a>(self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.KEY.html" title="struct trust_dns_client::rr::rdata::KEY">KEY</a>, <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a>&gt;</h4></section></summary><div class="docblock"><p>Returns the inner fields if this is a <code>DNSSECRData::KEY</code>, otherwise returns back the enum in the <code>Err</code> case of the result</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_nsec_mut" class="method"><h4 class="code-header">pub fn <a href="#method.as_nsec_mut" class="fn">as_nsec_mut</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;mut <a class="struct" href="struct.NSEC.html" title="struct trust_dns_client::rr::rdata::NSEC">NSEC</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns mutable references to the inner fields if this is a <code>DNSSECRData::NSEC</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_nsec" class="method"><h4 class="code-header">pub fn <a href="#method.as_nsec" class="fn">as_nsec</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.NSEC.html" title="struct trust_dns_client::rr::rdata::NSEC">NSEC</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns references to the inner fields if this is a <code>DNSSECRData::NSEC</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.into_nsec" class="method"><h4 class="code-header">pub fn <a href="#method.into_nsec" class="fn">into_nsec</a>(self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.NSEC.html" title="struct trust_dns_client::rr::rdata::NSEC">NSEC</a>, <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a>&gt;</h4></section></summary><div class="docblock"><p>Returns the inner fields if this is a <code>DNSSECRData::NSEC</code>, otherwise returns back the enum in the <code>Err</code> case of the result</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_nsec3_mut" class="method"><h4 class="code-header">pub fn <a href="#method.as_nsec3_mut" class="fn">as_nsec3_mut</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;mut <a class="struct" href="struct.NSEC3.html" title="struct trust_dns_client::rr::rdata::NSEC3">NSEC3</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns mutable references to the inner fields if this is a <code>DNSSECRData::NSEC3</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_nsec3" class="method"><h4 class="code-header">pub fn <a href="#method.as_nsec3" class="fn">as_nsec3</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.NSEC3.html" title="struct trust_dns_client::rr::rdata::NSEC3">NSEC3</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns references to the inner fields if this is a <code>DNSSECRData::NSEC3</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.into_nsec3" class="method"><h4 class="code-header">pub fn <a href="#method.into_nsec3" class="fn">into_nsec3</a>(self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.NSEC3.html" title="struct trust_dns_client::rr::rdata::NSEC3">NSEC3</a>, <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a>&gt;</h4></section></summary><div class="docblock"><p>Returns the inner fields if this is a <code>DNSSECRData::NSEC3</code>, otherwise returns back the enum in the <code>Err</code> case of the result</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_nsec3param_mut" class="method"><h4 class="code-header">pub fn <a href="#method.as_nsec3param_mut" class="fn">as_nsec3param_mut</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;mut <a class="struct" href="struct.NSEC3PARAM.html" title="struct trust_dns_client::rr::rdata::NSEC3PARAM">NSEC3PARAM</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns mutable references to the inner fields if this is a <code>DNSSECRData::NSEC3PARAM</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_nsec3param" class="method"><h4 class="code-header">pub fn <a href="#method.as_nsec3param" class="fn">as_nsec3param</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.NSEC3PARAM.html" title="struct trust_dns_client::rr::rdata::NSEC3PARAM">NSEC3PARAM</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns references to the inner fields if this is a <code>DNSSECRData::NSEC3PARAM</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.into_nsec3param" class="method"><h4 class="code-header">pub fn <a href="#method.into_nsec3param" class="fn">into_nsec3param</a>(self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.NSEC3PARAM.html" title="struct trust_dns_client::rr::rdata::NSEC3PARAM">NSEC3PARAM</a>, <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a>&gt;</h4></section></summary><div class="docblock"><p>Returns the inner fields if this is a <code>DNSSECRData::NSEC3PARAM</code>, otherwise returns back the enum in the <code>Err</code> case of the result</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_sig_mut" class="method"><h4 class="code-header">pub fn <a href="#method.as_sig_mut" class="fn">as_sig_mut</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;mut <a class="struct" href="struct.SIG.html" title="struct trust_dns_client::rr::rdata::SIG">SIG</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns mutable references to the inner fields if this is a <code>DNSSECRData::SIG</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_sig" class="method"><h4 class="code-header">pub fn <a href="#method.as_sig" class="fn">as_sig</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;&amp;<a class="struct" href="struct.SIG.html" title="struct trust_dns_client::rr::rdata::SIG">SIG</a>&gt;</h4></section></summary><div class="docblock"><p>Optionally returns references to the inner fields if this is a <code>DNSSECRData::SIG</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.into_sig" class="method"><h4 class="code-header">pub fn <a href="#method.into_sig" class="fn">into_sig</a>(self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="struct.SIG.html" title="struct trust_dns_client::rr::rdata::SIG">SIG</a>, <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a>&gt;</h4></section></summary><div class="docblock"><p>Returns the inner fields if this is a <code>DNSSECRData::SIG</code>, otherwise returns back the enum in the <code>Err</code> case of the result</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_unknown_mut" class="method"><h4 class="code-header">pub fn <a href="#method.as_unknown_mut" class="fn">as_unknown_mut</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;(&amp;mut <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>, &amp;mut <a class="struct" href="struct.NULL.html" title="struct trust_dns_client::rr::rdata::NULL">NULL</a>)&gt;</h4></section></summary><div class="docblock"><p>Optionally returns mutable references to the inner fields if this is a <code>DNSSECRData::Unknown</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.as_unknown" class="method"><h4 class="code-header">pub fn <a href="#method.as_unknown" class="fn">as_unknown</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;(&amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>, &amp;<a class="struct" href="struct.NULL.html" title="struct trust_dns_client::rr::rdata::NULL">NULL</a>)&gt;</h4></section></summary><div class="docblock"><p>Optionally returns references to the inner fields if this is a <code>DNSSECRData::Unknown</code>, otherwise <code>None</code></p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.into_unknown" class="method"><h4 class="code-header">pub fn <a href="#method.into_unknown" class="fn">into_unknown</a>(self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>, <a class="struct" href="struct.NULL.html" title="struct trust_dns_client::rr::rdata::NULL">NULL</a>), <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a>&gt;</h4></section></summary><div class="docblock"><p>Returns the inner fields if this is a <code>DNSSECRData::Unknown</code>, otherwise returns back the enum in the <code>Err</code> case of the result</p>
+</div></details></div></details></div><h2 id="trait-implementations" class="section-header">Trait Implementations<a href="#trait-implementations" class="anchor">§</a></h2><div id="trait-implementations-list"><details class="toggle implementors-toggle" open><summary><section id="impl-Clone-for-DNSSECRData" class="impl"><a href="#impl-Clone-for-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.clone" class="method trait-impl"><a href="#method.clone" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone" class="fn">clone</a>(&amp;self) -&gt; <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h4></section></summary><div class='docblock'>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></div></details><details class="toggle method-toggle" open><summary><section id="method.clone_from" class="method trait-impl"><span class="rightside"><span class="since" title="Stable since Rust version 1.0.0">1.0.0</span> · <a class="src" href="https://doc.rust-lang.org/nightly/src/core/clone.rs.html#169">source</a></span><a href="#method.clone_from" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from" class="fn">clone_from</a>(&amp;mut self, source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;Self</a>)</h4></section></summary><div class='docblock'>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></div></details></div></details><details class="toggle implementors-toggle" open><summary><section id="impl-Debug-for-DNSSECRData" class="impl"><a href="#impl-Debug-for-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.fmt" class="method trait-impl"><a href="#method.fmt" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt" class="fn">fmt</a>(&amp;self, f: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>&lt;'_&gt;) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Error.html" title="struct core::fmt::Error">Error</a>&gt;</h4></section></summary><div class='docblock'>Formats the value using the given formatter. <a href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt">Read more</a></div></details></div></details><details class="toggle implementors-toggle" open><summary><section id="impl-Display-for-DNSSECRData" class="impl"><a href="#impl-Display-for-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Display.html" title="trait core::fmt::Display">Display</a> for <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.fmt-1" class="method trait-impl"><a href="#method.fmt-1" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/fmt/trait.Display.html#tymethod.fmt" class="fn">fmt</a>(&amp;self, f: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>&lt;'_&gt;) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Error.html" title="struct core::fmt::Error">Error</a>&gt;</h4></section></summary><div class='docblock'>Formats the value using the given formatter. <a href="https://doc.rust-lang.org/nightly/core/fmt/trait.Display.html#tymethod.fmt">Read more</a></div></details></div></details><details class="toggle implementors-toggle" open><summary><section id="impl-PartialEq-for-DNSSECRData" class="impl"><a href="#impl-PartialEq-for-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html" title="trait core::cmp::PartialEq">PartialEq</a> for <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.eq" class="method trait-impl"><a href="#method.eq" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq" class="fn">eq</a>(&amp;self, other: &amp;<a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class='docblock'>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used
+by <code>==</code>.</div></details><details class="toggle method-toggle" open><summary><section id="method.ne" class="method trait-impl"><span class="rightside"><span class="since" title="Stable since Rust version 1.0.0">1.0.0</span> · <a class="src" href="https://doc.rust-lang.org/nightly/src/core/cmp.rs.html#242">source</a></span><a href="#method.ne" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne" class="fn">ne</a>(&amp;self, other: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;Rhs</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></h4></section></summary><div class='docblock'>This method tests for <code>!=</code>. The default implementation is almost always
+sufficient, and should not be overridden without very good reason.</div></details></div></details><section id="impl-Eq-for-DNSSECRData" class="impl"><a href="#impl-Eq-for-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html" title="trait core::cmp::Eq">Eq</a> for <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section><section id="impl-StructuralPartialEq-for-DNSSECRData" class="impl"><a href="#impl-StructuralPartialEq-for-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.StructuralPartialEq.html" title="trait core::marker::StructuralPartialEq">StructuralPartialEq</a> for <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section></div><h2 id="synthetic-implementations" class="section-header">Auto Trait Implementations<a href="#synthetic-implementations" class="anchor">§</a></h2><div id="synthetic-implementations-list"><section id="impl-RefUnwindSafe-for-DNSSECRData" class="impl"><a href="#impl-RefUnwindSafe-for-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/panic/unwind_safe/trait.RefUnwindSafe.html" title="trait core::panic::unwind_safe::RefUnwindSafe">RefUnwindSafe</a> for <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section><section id="impl-Send-for-DNSSECRData" class="impl"><a href="#impl-Send-for-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> for <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section><section id="impl-Sync-for-DNSSECRData" class="impl"><a href="#impl-Sync-for-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a> for <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section><section id="impl-Unpin-for-DNSSECRData" class="impl"><a href="#impl-Unpin-for-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Unpin.html" title="trait core::marker::Unpin">Unpin</a> for <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section><section id="impl-UnwindSafe-for-DNSSECRData" class="impl"><a href="#impl-UnwindSafe-for-DNSSECRData" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/panic/unwind_safe/trait.UnwindSafe.html" title="trait core::panic::unwind_safe::UnwindSafe">UnwindSafe</a> for <a class="enum" href="enum.DNSSECRData.html" title="enum trust_dns_client::rr::rdata::DNSSECRData">DNSSECRData</a></h3></section></div><h2 id="blanket-implementations" class="section-header">Blanket Implementations<a href="#blanket-implementations" class="anchor">§</a></h2><div id="blanket-implementations-list"><details class="toggle implementors-toggle"><summary><section id="impl-Any-for-T" class="impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/any.rs.html#140">source</a><a href="#impl-Any-for-T" class="anchor">§</a><h3 class="code-header">impl&lt;T&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/any/trait.Any.html" title="trait core::any::Any">Any</a> for T<div class="where">where
+    T: 'static + ?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,</div></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.type_id" class="method trait-impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/any.rs.html#141">source</a><a href="#method.type_id" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/any/trait.Any.html#tymethod.type_id" class="fn">type_id</a>(&amp;self) -&gt; <a class="struct" href="https://doc.rust-lang.org/nightly/core/any/struct.TypeId.html" title="struct core::any::TypeId">TypeId</a></h4></section></summary><div class='docblock'>Gets the <code>TypeId</code> of <code>self</code>. <a href="https://doc.rust-lang.org/nightly/core/any/trait.Any.html#tymethod.type_id">Read more</a></div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-Borrow%3CT%3E-for-T" class="impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/borrow.rs.html#208">source</a><a href="#impl-Borrow%3CT%3E-for-T" class="anchor">§</a><h3 class="code-header">impl&lt;T&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/borrow/trait.Borrow.html" title="trait core::borrow::Borrow">Borrow</a>&lt;T&gt; for T<div class="where">where
+    T: ?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,</div></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.borrow" class="method trait-impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/borrow.rs.html#210">source</a><a href="#method.borrow" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/borrow/trait.Borrow.html#tymethod.borrow" class="fn">borrow</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;T</a></h4></section></summary><div class='docblock'>Immutably borrows from an owned value. <a href="https://doc.rust-lang.org/nightly/core/borrow/trait.Borrow.html#tymethod.borrow">Read more</a></div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-BorrowMut%3CT%3E-for-T" class="impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/borrow.rs.html#216">source</a><a href="#impl-BorrowMut%3CT%3E-for-T" class="anchor">§</a><h3 class="code-header">impl&lt;T&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/borrow/trait.BorrowMut.html" title="trait core::borrow::BorrowMut">BorrowMut</a>&lt;T&gt; for T<div class="where">where
+    T: ?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,</div></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.borrow_mut" class="method trait-impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/borrow.rs.html#217">source</a><a href="#method.borrow_mut" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/borrow/trait.BorrowMut.html#tymethod.borrow_mut" class="fn">borrow_mut</a>(&amp;mut self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut T</a></h4></section></summary><div class='docblock'>Mutably borrows from an owned value. <a href="https://doc.rust-lang.org/nightly/core/borrow/trait.BorrowMut.html#tymethod.borrow_mut">Read more</a></div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-From%3CT%3E-for-T" class="impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/convert/mod.rs.html#764">source</a><a href="#impl-From%3CT%3E-for-T" class="anchor">§</a><h3 class="code-header">impl&lt;T&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html" title="trait core::convert::From">From</a>&lt;T&gt; for T</h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.from" class="method trait-impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/convert/mod.rs.html#767">source</a><a href="#method.from" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from" class="fn">from</a>(t: T) -&gt; T</h4></section></summary><div class="docblock"><p>Returns the argument unchanged.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-Into%3CU%3E-for-T" class="impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/convert/mod.rs.html#747-749">source</a><a href="#impl-Into%3CU%3E-for-T" class="anchor">§</a><h3 class="code-header">impl&lt;T, U&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;U&gt; for T<div class="where">where
+    U: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html" title="trait core::convert::From">From</a>&lt;T&gt;,</div></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.into" class="method trait-impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/convert/mod.rs.html#757">source</a><a href="#method.into" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html#tymethod.into" class="fn">into</a>(self) -&gt; U</h4></section></summary><div class="docblock"><p>Calls <code>U::from(self)</code>.</p>
+<p>That is, this conversion is whatever the implementation of
+<code><a href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html" title="trait core::convert::From">From</a>&lt;T&gt; for U</code> chooses to do.</p>
+</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-ToOwned-for-T" class="impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/alloc/borrow.rs.html#83-85">source</a><a href="#impl-ToOwned-for-T" class="anchor">§</a><h3 class="code-header">impl&lt;T&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/alloc/borrow/trait.ToOwned.html" title="trait alloc::borrow::ToOwned">ToOwned</a> for T<div class="where">where
+    T: <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a>,</div></h3></section></summary><div class="impl-items"><details class="toggle" open><summary><section id="associatedtype.Owned" class="associatedtype trait-impl"><a href="#associatedtype.Owned" class="anchor">§</a><h4 class="code-header">type <a href="https://doc.rust-lang.org/nightly/alloc/borrow/trait.ToOwned.html#associatedtype.Owned" class="associatedtype">Owned</a> = T</h4></section></summary><div class='docblock'>The resulting type after obtaining ownership.</div></details><details class="toggle method-toggle" open><summary><section id="method.to_owned" class="method trait-impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/alloc/borrow.rs.html#88">source</a><a href="#method.to_owned" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/alloc/borrow/trait.ToOwned.html#tymethod.to_owned" class="fn">to_owned</a>(&amp;self) -&gt; T</h4></section></summary><div class='docblock'>Creates owned data from borrowed data, usually by cloning. <a href="https://doc.rust-lang.org/nightly/alloc/borrow/trait.ToOwned.html#tymethod.to_owned">Read more</a></div></details><details class="toggle method-toggle" open><summary><section id="method.clone_into" class="method trait-impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/alloc/borrow.rs.html#92">source</a><a href="#method.clone_into" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/alloc/borrow/trait.ToOwned.html#method.clone_into" class="fn">clone_into</a>(&amp;self, target: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut T</a>)</h4></section></summary><div class='docblock'>Uses borrowed data to replace owned data, usually by cloning. <a href="https://doc.rust-lang.org/nightly/alloc/borrow/trait.ToOwned.html#method.clone_into">Read more</a></div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-ToString-for-T" class="impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/alloc/string.rs.html#2600">source</a><a href="#impl-ToString-for-T" class="anchor">§</a><h3 class="code-header">impl&lt;T&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/alloc/string/trait.ToString.html" title="trait alloc::string::ToString">ToString</a> for T<div class="where">where
+    T: <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Display.html" title="trait core::fmt::Display">Display</a> + ?<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,</div></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.to_string" class="method trait-impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/alloc/string.rs.html#2606">source</a><a href="#method.to_string" class="anchor">§</a><h4 class="code-header">default fn <a href="https://doc.rust-lang.org/nightly/alloc/string/trait.ToString.html#tymethod.to_string" class="fn">to_string</a>(&amp;self) -&gt; <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></h4></section></summary><div class='docblock'>Converts the given value to a <code>String</code>. <a href="https://doc.rust-lang.org/nightly/alloc/string/trait.ToString.html#tymethod.to_string">Read more</a></div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-TryFrom%3CU%3E-for-T" class="impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/convert/mod.rs.html#804-806">source</a><a href="#impl-TryFrom%3CU%3E-for-T" class="anchor">§</a><h3 class="code-header">impl&lt;T, U&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html" title="trait core::convert::TryFrom">TryFrom</a>&lt;U&gt; for T<div class="where">where
+    U: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;T&gt;,</div></h3></section></summary><div class="impl-items"><details class="toggle" open><summary><section id="associatedtype.Error" class="associatedtype trait-impl"><a href="#associatedtype.Error" class="anchor">§</a><h4 class="code-header">type <a href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html#associatedtype.Error" class="associatedtype">Error</a> = <a class="enum" href="https://doc.rust-lang.org/nightly/core/convert/enum.Infallible.html" title="enum core::convert::Infallible">Infallible</a></h4></section></summary><div class='docblock'>The type returned in the event of a conversion error.</div></details><details class="toggle method-toggle" open><summary><section id="method.try_from" class="method trait-impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/convert/mod.rs.html#811">source</a><a href="#method.try_from" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html#tymethod.try_from" class="fn">try_from</a>(value: U) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, &lt;T as <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html" title="trait core::convert::TryFrom">TryFrom</a>&lt;U&gt;&gt;::<a class="associatedtype" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html#associatedtype.Error" title="type core::convert::TryFrom::Error">Error</a>&gt;</h4></section></summary><div class='docblock'>Performs the conversion.</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-TryInto%3CU%3E-for-T" class="impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/convert/mod.rs.html#789-791">source</a><a href="#impl-TryInto%3CU%3E-for-T" class="anchor">§</a><h3 class="code-header">impl&lt;T, U&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryInto.html" title="trait core::convert::TryInto">TryInto</a>&lt;U&gt; for T<div class="where">where
+    U: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html" title="trait core::convert::TryFrom">TryFrom</a>&lt;T&gt;,</div></h3></section></summary><div class="impl-items"><details class="toggle" open><summary><section id="associatedtype.Error-1" class="associatedtype trait-impl"><a href="#associatedtype.Error-1" class="anchor">§</a><h4 class="code-header">type <a href="https://doc.rust-lang.org/nightly/core/convert/trait.TryInto.html#associatedtype.Error" class="associatedtype">Error</a> = &lt;U as <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html" title="trait core::convert::TryFrom">TryFrom</a>&lt;T&gt;&gt;::<a class="associatedtype" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html#associatedtype.Error" title="type core::convert::TryFrom::Error">Error</a></h4></section></summary><div class='docblock'>The type returned in the event of a conversion error.</div></details><details class="toggle method-toggle" open><summary><section id="method.try_into" class="method trait-impl"><a class="src rightside" href="https://doc.rust-lang.org/nightly/src/core/convert/mod.rs.html#796">source</a><a href="#method.try_into" class="anchor">§</a><h4 class="code-header">fn <a href="https://doc.rust-lang.org/nightly/core/convert/trait.TryInto.html#tymethod.try_into" class="fn">try_into</a>(self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;U, &lt;U as <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html" title="trait core::convert::TryFrom">TryFrom</a>&lt;T&gt;&gt;::<a class="associatedtype" href="https://doc.rust-lang.org/nightly/core/convert/trait.TryFrom.html#associatedtype.Error" title="type core::convert::TryFrom::Error">Error</a>&gt;</h4></section></summary><div class='docblock'>Performs the conversion.</div></details></div></details><details class="toggle implementors-toggle"><summary><section id="impl-VZip%3CV%3E-for-T" class="impl"><a class="src rightside" href="../../../src/ppv_lite86/types.rs.html#221-223">source</a><a href="#impl-VZip%3CV%3E-for-T" class="anchor">§</a><h3 class="code-header">impl&lt;V, T&gt; <a class="trait" href="../../../ppv_lite86/types/trait.VZip.html" title="trait ppv_lite86::types::VZip">VZip</a>&lt;V&gt; for T<div class="where">where
+    V: <a class="trait" href="../../../ppv_lite86/types/trait.MultiLane.html" title="trait ppv_lite86::types::MultiLane">MultiLane</a>&lt;T&gt;,</div></h3></section></summary><div class="impl-items"><section id="method.vzip" class="method trait-impl"><a class="src rightside" href="../../../src/ppv_lite86/types.rs.html#226">source</a><a href="#method.vzip" class="anchor">§</a><h4 class="code-header">fn <a href="../../../ppv_lite86/types/trait.VZip.html#tymethod.vzip" class="fn">vzip</a>(self) -&gt; V</h4></section></div></details></div></section></div></main></body></html>

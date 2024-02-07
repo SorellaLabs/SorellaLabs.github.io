@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="From https://github.com/cbreeden/fxhash"><title>hashers::fx_hash - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="hashers" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (b11fbfbf3 2024-02-03)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../hashers/index.html">hashers</a><span class="version">1.0.1</span></h2></div><h2 class="location"><a href="#">Module fx_hash</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#functions">Functions</a></li></ul></section><h2><a href="../index.html">In crate hashers</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../hashers/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">hashers</a>::<wbr><a class="mod" href="#">fx_hash</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/hashers/lib.rs.html#320">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>From https://github.com/cbreeden/fxhash</p>
+<blockquote>
+<p>This hashing algorithm was extracted from the Rustc compiler. This
+is the same hashing algorithm used for some internal operations in
+FireFox. The strength of this algorithm is in hashing 8 bytes at
+a time on 64-bit platforms, where the FNV algorithm works on one
+byte at a time.</p>
+</blockquote>
+<p>This Hasher is imported from the fxhash crate.</p>
+<p>Ok, its is a weird one. It chomps the data in 32- or 64-
+(or system-specific) bit bites, and is otherwise very, very
+simple. Literally, the algorithm is based around hashing a word:
+<code>rotate_left(5).bitxor(word).wrapping_mul($key)</code></p>
+<p>The complexity must be the <code>$key</code> value, right. In 64-bits, it is 0x517cc1b727220a95. What’s
+that, you ask?</p>
+<div class="example-wrap"><pre class="language-sh"><code>$ bc
+ibase = 16
+517CC1B727220A95
+5871781006564002453
+...
+scale = 15
+(2^64) / 5871781006564002453
+3.141592653589793
+</code></pre></div>
+<p>For those not in the bc inner circle, 0x517cc1b727220a95 = 5871781006564002453, which when
+divided into 2^64 is 3.14159, i.e. π.</p>
+<p>So, yeah.</p>
+<p>The fxhash crate provides both 32- and 64-bit versions, as well as FxHasher, which uses the
+system bit-width.</p>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.FxHasher.html" title="struct hashers::fx_hash::FxHasher">FxHasher</a></div><div class="desc docblock-short">This hashing algorithm was extracted from the Rustc compiler.
+This is the same hashing algoirthm used for some internal operations in FireFox.
+The strength of this algorithm is in hashing 8 bytes at a time on 64-bit platforms,
+where the FNV algorithm works on one byte at a time.</div></li><li><div class="item-name"><a class="struct" href="struct.FxHasher32.html" title="struct hashers::fx_hash::FxHasher32">FxHasher32</a></div><div class="desc docblock-short">This hashing algorithm was extracted from the Rustc compiler.
+This is the same hashing algoirthm used for some internal operations in FireFox.
+The strength of this algorithm is in hashing 4 bytes at a time on any platform,
+where the FNV algorithm works on one byte at a time.</div></li><li><div class="item-name"><a class="struct" href="struct.FxHasher64.html" title="struct hashers::fx_hash::FxHasher64">FxHasher64</a></div><div class="desc docblock-short">This hashing algorithm was extracted from the Rustc compiler.
+This is the same hashing algoirthm used for some internal operations in FireFox.
+The strength of this algorithm is in hashing 8 bytes at a time on any platform,
+where the FNV algorithm works on one byte at a time.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.fxhash.html" title="fn hashers::fx_hash::fxhash">fxhash</a></div></li><li><div class="item-name"><a class="fn" href="fn.fxhash32.html" title="fn hashers::fx_hash::fxhash32">fxhash32</a></div></li><li><div class="item-name"><a class="fn" href="fn.fxhash64.html" title="fn hashers::fx_hash::fxhash64">fxhash64</a></div></li></ul></section></div></main></body></html>

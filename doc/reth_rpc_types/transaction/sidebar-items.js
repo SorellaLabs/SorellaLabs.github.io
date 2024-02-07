@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TransactionKind","TypedTransactionRequest"],"struct":["EIP1559TransactionRequest","EIP2930TransactionRequest","EIP4844TransactionRequest","LegacyTransactionRequest","TransactionRequest"]};

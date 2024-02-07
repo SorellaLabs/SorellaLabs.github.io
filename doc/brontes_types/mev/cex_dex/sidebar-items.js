@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["ArchivedCexDexRedefined","ArchivedStatArbDetailsRedefined","ArchivedStatArbPnlRedefined","CexDex","CexDexRedefined","CexDexRedefinedResolver","StatArbDetails","StatArbDetailsRedefined","StatArbDetailsRedefinedResolver","StatArbPnl","StatArbPnlRedefined","StatArbPnlRedefinedResolver"]};

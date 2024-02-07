@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["ArchivedNaturalRedefined","ArchivedRationalRedefined","NaturalRedefined","NaturalRedefinedResolver","RationalRedefined","RationalRedefinedResolver"],"type":["LimbRedefined"]};

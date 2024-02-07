@@ -1,0 +1,310 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Traits for converting numbers to and from mantissa and exponent representations."><title>malachite_base::num::conversion::mantissa_and_exponent - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="malachite_base" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (b11fbfbf3 2024-02-03)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../../malachite_base/index.html">malachite_base</a><span class="version">0.4.4</span></h2></div><h2 class="location"><a href="#">Module mantissa_and_exponent</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#functions">Functions</a></li></ul></section><h2><a href="../index.html">In malachite_base::num::conversion</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../../malachite_base/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../../../index.html">malachite_base</a>::<wbr><a href="../../index.html">num</a>::<wbr><a href="../index.html">conversion</a>::<wbr><a class="mod" href="#">mantissa_and_exponent</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../../../src/malachite_base/num/conversion/mantissa_and_exponent.rs.html#1-901">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Traits for converting numbers to and from mantissa and exponent representations.</p>
+<p>See <a href="../../basic/floats/trait.PrimitiveFloat.html" title="trait malachite_base::num::basic::floats::PrimitiveFloat"><code>PrimitiveFloat</code></a> for a description of the
+different types of mantissas and exponents. The traits are
+<a href="../traits/trait.RawMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::RawMantissaAndExponent"><code>RawMantissaAndExponent</code></a>,
+<a href="../traits/trait.IntegerMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::IntegerMantissaAndExponent"><code>IntegerMantissaAndExponent</code></a>, and
+<a href="../traits/trait.SciMantissaAndExponent.html" title="trait malachite_base::num::conversion::traits::SciMantissaAndExponent"><code>SciMantissaAndExponent</code></a>.</p>
+<h2 id="raw_mantissa_and_exponent"><a class="doc-anchor" href="#raw_mantissa_and_exponent">§</a>raw_mantissa_and_exponent</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::basic::floats::PrimitiveFloat;
+<span class="kw">use </span>malachite_base::num::basic::traits::NegativeInfinity;
+<span class="kw">use </span>malachite_base::num::conversion::traits::RawMantissaAndExponent;
+
+<span class="macro">assert_eq!</span>(<span class="number">0.0f32</span>.raw_mantissa_and_exponent(), (<span class="number">0</span>, <span class="number">0</span>));
+<span class="macro">assert_eq!</span>((-<span class="number">0.0f32</span>).raw_mantissa_and_exponent(), (<span class="number">0</span>, <span class="number">0</span>));
+<span class="macro">assert_eq!</span>(f32::NAN.raw_mantissa_and_exponent(), (<span class="number">0x400000</span>, <span class="number">255</span>));
+<span class="macro">assert_eq!</span>(f32::INFINITY.raw_mantissa_and_exponent(), (<span class="number">0</span>, <span class="number">255</span>));
+<span class="macro">assert_eq!</span>(f32::NEGATIVE_INFINITY.raw_mantissa_and_exponent(), (<span class="number">0</span>, <span class="number">255</span>));
+<span class="macro">assert_eq!</span>(<span class="number">1.0f32</span>.raw_mantissa_and_exponent(), (<span class="number">0</span>, <span class="number">127</span>));
+<span class="macro">assert_eq!</span>(
+    core::f32::consts::PI.raw_mantissa_and_exponent(),
+    (<span class="number">4788187</span>, <span class="number">128</span>)
+);
+<span class="macro">assert_eq!</span>(<span class="number">0.1f32</span>.raw_mantissa_and_exponent(), (<span class="number">5033165</span>, <span class="number">123</span>));</code></pre></div>
+<h2 id="raw_mantissa"><a class="doc-anchor" href="#raw_mantissa">§</a>raw_mantissa</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::basic::floats::PrimitiveFloat;
+<span class="kw">use </span>malachite_base::num::basic::traits::NegativeInfinity;
+<span class="kw">use </span>malachite_base::num::conversion::traits::RawMantissaAndExponent;
+
+<span class="macro">assert_eq!</span>(<span class="number">0.0f32</span>.raw_mantissa(), <span class="number">0</span>);
+<span class="macro">assert_eq!</span>((-<span class="number">0.0f32</span>).raw_mantissa(), <span class="number">0</span>);
+<span class="macro">assert_eq!</span>(f32::NAN.raw_mantissa(), <span class="number">0x400000</span>);
+<span class="macro">assert_eq!</span>(f32::INFINITY.raw_mantissa(), <span class="number">0</span>);
+<span class="macro">assert_eq!</span>(f32::NEGATIVE_INFINITY.raw_mantissa(), <span class="number">0</span>);
+<span class="macro">assert_eq!</span>(<span class="number">1.0f32</span>.raw_mantissa(), <span class="number">0</span>);
+<span class="macro">assert_eq!</span>(core::f32::consts::PI.raw_mantissa(), <span class="number">4788187</span>);
+<span class="macro">assert_eq!</span>(<span class="number">0.1f32</span>.raw_mantissa(), <span class="number">5033165</span>);</code></pre></div>
+<h2 id="raw_exponent"><a class="doc-anchor" href="#raw_exponent">§</a>raw_exponent</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::basic::floats::PrimitiveFloat;
+<span class="kw">use </span>malachite_base::num::basic::traits::NegativeInfinity;
+<span class="kw">use </span>malachite_base::num::conversion::traits::RawMantissaAndExponent;
+
+<span class="macro">assert_eq!</span>(<span class="number">0.0f32</span>.raw_exponent(), <span class="number">0</span>);
+<span class="macro">assert_eq!</span>((-<span class="number">0.0f32</span>).raw_exponent(), <span class="number">0</span>);
+<span class="macro">assert_eq!</span>(f32::NAN.raw_exponent(), <span class="number">255</span>);
+<span class="macro">assert_eq!</span>(f32::INFINITY.raw_exponent(), <span class="number">255</span>);
+<span class="macro">assert_eq!</span>(f32::NEGATIVE_INFINITY.raw_exponent(), <span class="number">255</span>);
+<span class="macro">assert_eq!</span>(<span class="number">1.0f32</span>.raw_exponent(), <span class="number">127</span>);
+<span class="macro">assert_eq!</span>(core::f32::consts::PI.raw_exponent(), <span class="number">128</span>);
+<span class="macro">assert_eq!</span>(<span class="number">0.1f32</span>.raw_exponent(), <span class="number">123</span>);</code></pre></div>
+<h2 id="from_raw_mantissa_and_exponent"><a class="doc-anchor" href="#from_raw_mantissa_and_exponent">§</a>from_raw_mantissa_and_exponent</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::basic::floats::PrimitiveFloat;
+<span class="kw">use </span>malachite_base::num::conversion::traits::RawMantissaAndExponent;
+<span class="kw">use </span>malachite_base::num::float::NiceFloat;
+
+<span class="macro">assert_eq!</span>(
+    NiceFloat(f32::from_raw_mantissa_and_exponent(<span class="number">0</span>, <span class="number">0</span>)),
+    NiceFloat(<span class="number">0.0</span>)
+);
+<span class="macro">assert_eq!</span>(
+    NiceFloat(f32::from_raw_mantissa_and_exponent(<span class="number">0x400000</span>, <span class="number">255</span>)),
+    NiceFloat(f32::NAN)
+);
+<span class="macro">assert_eq!</span>(
+    NiceFloat(f32::from_raw_mantissa_and_exponent(<span class="number">0</span>, <span class="number">255</span>)),
+    NiceFloat(f32::INFINITY)
+);
+<span class="macro">assert_eq!</span>(
+    NiceFloat(f32::from_raw_mantissa_and_exponent(<span class="number">0</span>, <span class="number">127</span>)),
+    NiceFloat(<span class="number">1.0</span>)
+);
+<span class="macro">assert_eq!</span>(
+    NiceFloat(f32::from_raw_mantissa_and_exponent(<span class="number">4788187</span>, <span class="number">128</span>)),
+    NiceFloat(core::f32::consts::PI)
+);
+<span class="macro">assert_eq!</span>(
+    NiceFloat(f32::from_raw_mantissa_and_exponent(<span class="number">5033165</span>, <span class="number">123</span>)),
+    NiceFloat(<span class="number">0.1</span>)
+);
+<span class="macro">assert_eq!</span>(
+    NiceFloat(f32::from_raw_mantissa_and_exponent(<span class="number">2097152</span>, <span class="number">130</span>)),
+    NiceFloat(<span class="number">10.0</span>)
+);</code></pre></div>
+<h2 id="integer_mantissa_and_exponent"><a class="doc-anchor" href="#integer_mantissa_and_exponent">§</a>integer_mantissa_and_exponent</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::basic::floats::PrimitiveFloat;
+<span class="kw">use </span>malachite_base::num::conversion::traits::IntegerMantissaAndExponent;
+
+<span class="macro">assert_eq!</span>(<span class="number">1u8</span>.integer_mantissa_and_exponent(), (<span class="number">1</span>, <span class="number">0</span>));
+<span class="macro">assert_eq!</span>(<span class="number">2u8</span>.integer_mantissa_and_exponent(), (<span class="number">1</span>, <span class="number">1</span>));
+<span class="macro">assert_eq!</span>(<span class="number">3u8</span>.integer_mantissa_and_exponent(), (<span class="number">3</span>, <span class="number">0</span>));
+<span class="macro">assert_eq!</span>(<span class="number">100u8</span>.integer_mantissa_and_exponent(), (<span class="number">25</span>, <span class="number">2</span>));
+
+<span class="macro">assert_eq!</span>(
+    core::f32::consts::PI.integer_mantissa_and_exponent(),
+    (<span class="number">13176795</span>, -<span class="number">22</span>)
+);
+<span class="macro">assert_eq!</span>(<span class="number">0.1f32</span>.integer_mantissa_and_exponent(), (<span class="number">13421773</span>, -<span class="number">27</span>));
+<span class="macro">assert_eq!</span>(<span class="number">10.0f32</span>.integer_mantissa_and_exponent(), (<span class="number">5</span>, <span class="number">1</span>));
+<span class="macro">assert_eq!</span>(
+    f32::MIN_POSITIVE_SUBNORMAL.integer_mantissa_and_exponent(),
+    (<span class="number">1</span>, -<span class="number">149</span>)
+);
+<span class="macro">assert_eq!</span>(
+    f32::MAX_SUBNORMAL.integer_mantissa_and_exponent(),
+    (<span class="number">0x7fffff</span>, -<span class="number">149</span>)
+);
+<span class="macro">assert_eq!</span>(
+    f32::MIN_POSITIVE_NORMAL.integer_mantissa_and_exponent(),
+    (<span class="number">1</span>, -<span class="number">126</span>)
+);
+<span class="macro">assert_eq!</span>(
+    f32::MAX_FINITE.integer_mantissa_and_exponent(),
+    (<span class="number">0xffffff</span>, <span class="number">104</span>)
+);</code></pre></div>
+<h2 id="integer_mantissa"><a class="doc-anchor" href="#integer_mantissa">§</a>integer_mantissa</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::basic::floats::PrimitiveFloat;
+<span class="kw">use </span>malachite_base::num::conversion::traits::IntegerMantissaAndExponent;
+
+<span class="macro">assert_eq!</span>(<span class="number">1u8</span>.integer_mantissa(), <span class="number">1</span>);
+<span class="macro">assert_eq!</span>(<span class="number">2u8</span>.integer_mantissa(), <span class="number">1</span>);
+<span class="macro">assert_eq!</span>(<span class="number">3u8</span>.integer_mantissa(), <span class="number">3</span>);
+<span class="macro">assert_eq!</span>(<span class="number">100u8</span>.integer_mantissa(), <span class="number">25</span>);
+
+<span class="macro">assert_eq!</span>(<span class="number">1.0f32</span>.integer_mantissa(), <span class="number">1</span>);
+<span class="macro">assert_eq!</span>(core::f32::consts::PI.integer_mantissa(), <span class="number">13176795</span>);
+<span class="macro">assert_eq!</span>(<span class="number">0.1f32</span>.integer_mantissa(), <span class="number">13421773</span>);
+<span class="macro">assert_eq!</span>(<span class="number">10.0f32</span>.integer_mantissa(), <span class="number">5</span>);
+<span class="macro">assert_eq!</span>(f32::MIN_POSITIVE_SUBNORMAL.integer_mantissa(), <span class="number">1</span>);
+<span class="macro">assert_eq!</span>(f32::MAX_SUBNORMAL.integer_mantissa(), <span class="number">0x7fffff</span>);
+<span class="macro">assert_eq!</span>(f32::MIN_POSITIVE_NORMAL.integer_mantissa(), <span class="number">1</span>);
+<span class="macro">assert_eq!</span>(f32::MAX_FINITE.integer_mantissa(), <span class="number">0xffffff</span>);</code></pre></div>
+<h2 id="integer_exponent"><a class="doc-anchor" href="#integer_exponent">§</a>integer_exponent</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::basic::floats::PrimitiveFloat;
+<span class="kw">use </span>malachite_base::num::conversion::traits::IntegerMantissaAndExponent;
+
+<span class="macro">assert_eq!</span>(<span class="number">1u8</span>.integer_exponent(), <span class="number">0</span>);
+<span class="macro">assert_eq!</span>(<span class="number">2u8</span>.integer_exponent(), <span class="number">1</span>);
+<span class="macro">assert_eq!</span>(<span class="number">3u8</span>.integer_exponent(), <span class="number">0</span>);
+<span class="macro">assert_eq!</span>(<span class="number">100u8</span>.integer_exponent(), <span class="number">2</span>);
+
+<span class="macro">assert_eq!</span>(<span class="number">1.0f32</span>.integer_exponent(), <span class="number">0</span>);
+<span class="macro">assert_eq!</span>(core::f32::consts::PI.integer_exponent(), -<span class="number">22</span>);
+<span class="macro">assert_eq!</span>(<span class="number">0.1f32</span>.integer_exponent(), -<span class="number">27</span>);
+<span class="macro">assert_eq!</span>(<span class="number">10.0f32</span>.integer_exponent(), <span class="number">1</span>);
+<span class="macro">assert_eq!</span>(f32::MIN_POSITIVE_SUBNORMAL.integer_exponent(), -<span class="number">149</span>);
+<span class="macro">assert_eq!</span>(f32::MAX_SUBNORMAL.integer_exponent(), -<span class="number">149</span>);
+<span class="macro">assert_eq!</span>(f32::MIN_POSITIVE_NORMAL.integer_exponent(), -<span class="number">126</span>);
+<span class="macro">assert_eq!</span>(f32::MAX_FINITE.integer_exponent(), <span class="number">104</span>);</code></pre></div>
+<h2 id="from_integer_mantissa_and_exponent"><a class="doc-anchor" href="#from_integer_mantissa_and_exponent">§</a>from_integer_mantissa_and_exponent;</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::conversion::traits::IntegerMantissaAndExponent;
+<span class="kw">use </span>malachite_base::num::float::NiceFloat;
+
+<span class="macro">assert_eq!</span>(u8::from_integer_mantissa_and_exponent(<span class="number">0</span>, <span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">0</span>));
+<span class="macro">assert_eq!</span>(u8::from_integer_mantissa_and_exponent(<span class="number">1</span>, <span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">1</span>));
+<span class="macro">assert_eq!</span>(u8::from_integer_mantissa_and_exponent(<span class="number">1</span>, <span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">2</span>));
+<span class="macro">assert_eq!</span>(u8::from_integer_mantissa_and_exponent(<span class="number">3</span>, <span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">3</span>));
+<span class="macro">assert_eq!</span>(u8::from_integer_mantissa_and_exponent(<span class="number">25</span>, <span class="number">2</span>), <span class="prelude-val">Some</span>(<span class="number">100</span>));
+
+<span class="macro">assert_eq!</span>(
+    f32::from_integer_mantissa_and_exponent(<span class="number">0</span>, <span class="number">5</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(<span class="number">0.0</span>))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_integer_mantissa_and_exponent(<span class="number">1</span>, <span class="number">0</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(<span class="number">1.0</span>))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_integer_mantissa_and_exponent(<span class="number">4</span>, -<span class="number">2</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(<span class="number">1.0</span>))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_integer_mantissa_and_exponent(<span class="number">13176795</span>, -<span class="number">22</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(core::f32::consts::PI))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_integer_mantissa_and_exponent(<span class="number">13421773</span>, -<span class="number">27</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(<span class="number">0.1</span>))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_integer_mantissa_and_exponent(<span class="number">5</span>, <span class="number">1</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(<span class="number">10.0</span>))
+);
+
+<span class="macro">assert_eq!</span>(f32::from_integer_mantissa_and_exponent(<span class="number">5</span>, <span class="number">10000</span>), <span class="prelude-val">None</span>);
+<span class="macro">assert_eq!</span>(f32::from_integer_mantissa_and_exponent(<span class="number">5</span>, -<span class="number">10000</span>), <span class="prelude-val">None</span>);
+<span class="comment">// In the next 3 examples, the precision is too high.
+</span><span class="macro">assert_eq!</span>(f32::from_integer_mantissa_and_exponent(u64::MAX, -<span class="number">32</span>), <span class="prelude-val">None</span>);
+<span class="macro">assert_eq!</span>(f32::from_integer_mantissa_and_exponent(<span class="number">3</span>, -<span class="number">150</span>), <span class="prelude-val">None</span>);
+<span class="macro">assert_eq!</span>(f32::from_integer_mantissa_and_exponent(<span class="number">1</span>, <span class="number">128</span>), <span class="prelude-val">None</span>);</code></pre></div>
+<h2 id="sci_mantissa_and_exponent"><a class="doc-anchor" href="#sci_mantissa_and_exponent">§</a>sci_mantissa_and_exponent</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::basic::floats::PrimitiveFloat;
+<span class="kw">use </span>malachite_base::num::conversion::traits::SciMantissaAndExponent;
+<span class="kw">use </span>malachite_base::num::float::NiceFloat;
+
+<span class="kw">let </span>test = |n: u32, mantissa: f32, exponent: u64| {
+    <span class="kw">let </span>(m, e) = n.sci_mantissa_and_exponent();
+    <span class="macro">assert_eq!</span>(NiceFloat(m), NiceFloat(mantissa));
+    <span class="macro">assert_eq!</span>(e, exponent);
+};
+test(<span class="number">3</span>, <span class="number">1.5</span>, <span class="number">1</span>);
+test(<span class="number">123</span>, <span class="number">1.921875</span>, <span class="number">6</span>);
+test(<span class="number">1000000000</span>, <span class="number">1.8626451</span>, <span class="number">29</span>);
+
+<span class="kw">let </span>test = |x: f32, mantissa: f32, exponent: i64| {
+    <span class="kw">let </span>(actual_mantissa, actual_exponent) = x.sci_mantissa_and_exponent();
+    <span class="macro">assert_eq!</span>(NiceFloat(actual_mantissa), NiceFloat(mantissa));
+    <span class="macro">assert_eq!</span>(actual_exponent, exponent);
+};
+test(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">0</span>);
+test(core::f32::consts::PI, <span class="number">1.5707964</span>, <span class="number">1</span>);
+test(<span class="number">0.1</span>, <span class="number">1.6</span>, -<span class="number">4</span>);
+test(<span class="number">10.0</span>, <span class="number">1.25</span>, <span class="number">3</span>);
+test(f32::MIN_POSITIVE_SUBNORMAL, <span class="number">1.0</span>, -<span class="number">149</span>);
+test(f32::MAX_SUBNORMAL, <span class="number">1.9999998</span>, -<span class="number">127</span>);
+test(f32::MIN_POSITIVE_NORMAL, <span class="number">1.0</span>, -<span class="number">126</span>);
+test(f32::MAX_FINITE, <span class="number">1.9999999</span>, <span class="number">127</span>);</code></pre></div>
+<h2 id="sci_mantissa"><a class="doc-anchor" href="#sci_mantissa">§</a>sci_mantissa</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::basic::floats::PrimitiveFloat;
+<span class="kw">use </span>malachite_base::num::conversion::traits::SciMantissaAndExponent;
+<span class="kw">use </span>malachite_base::num::float::NiceFloat;
+
+<span class="macro">assert_eq!</span>(NiceFloat(<span class="number">1.0f32</span>.sci_mantissa()), NiceFloat(<span class="number">1.0</span>));
+<span class="macro">assert_eq!</span>(
+    NiceFloat(core::f32::consts::PI.sci_mantissa()),
+    NiceFloat(<span class="number">1.5707964</span>)
+);
+<span class="macro">assert_eq!</span>(NiceFloat(<span class="number">0.1f32</span>.sci_mantissa()), NiceFloat(<span class="number">1.6</span>));
+<span class="macro">assert_eq!</span>(NiceFloat(<span class="number">10.0f32</span>.sci_mantissa()), NiceFloat(<span class="number">1.25</span>));
+<span class="macro">assert_eq!</span>(
+    NiceFloat(f32::MIN_POSITIVE_SUBNORMAL.sci_mantissa()),
+    NiceFloat(<span class="number">1.0</span>)
+);
+<span class="macro">assert_eq!</span>(
+    NiceFloat(f32::MAX_SUBNORMAL.sci_mantissa()),
+    NiceFloat(<span class="number">1.9999998</span>)
+);
+<span class="macro">assert_eq!</span>(
+    NiceFloat(f32::MIN_POSITIVE_NORMAL.sci_mantissa()),
+    NiceFloat(<span class="number">1.0</span>)
+);
+<span class="macro">assert_eq!</span>(
+    NiceFloat(f32::MAX_FINITE.sci_mantissa()),
+    NiceFloat(<span class="number">1.9999999</span>)
+);</code></pre></div>
+<h2 id="sci_exponent"><a class="doc-anchor" href="#sci_exponent">§</a>sci_exponent</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::basic::floats::PrimitiveFloat;
+<span class="kw">use </span>malachite_base::num::conversion::traits::SciMantissaAndExponent;
+
+<span class="macro">assert_eq!</span>(<span class="number">1.0f32</span>.sci_exponent(), <span class="number">0</span>);
+<span class="macro">assert_eq!</span>(core::f32::consts::PI.sci_exponent(), <span class="number">1</span>);
+<span class="macro">assert_eq!</span>(<span class="number">0.1f32</span>.sci_exponent(), -<span class="number">4</span>);
+<span class="macro">assert_eq!</span>(<span class="number">10.0f32</span>.sci_exponent(), <span class="number">3</span>);
+<span class="macro">assert_eq!</span>(f32::MIN_POSITIVE_SUBNORMAL.sci_exponent(), -<span class="number">149</span>);
+<span class="macro">assert_eq!</span>(f32::MAX_SUBNORMAL.sci_exponent(), -<span class="number">127</span>);
+<span class="macro">assert_eq!</span>(f32::MIN_POSITIVE_NORMAL.sci_exponent(), -<span class="number">126</span>);
+<span class="macro">assert_eq!</span>(f32::MAX_FINITE.sci_exponent(), <span class="number">127</span>);</code></pre></div>
+<h2 id="from_sci_mantissa_and_exponent"><a class="doc-anchor" href="#from_sci_mantissa_and_exponent">§</a>from_sci_mantissa_and_exponent;</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::num::basic::floats::PrimitiveFloat;
+<span class="kw">use </span>malachite_base::num::conversion::traits::SciMantissaAndExponent;
+<span class="kw">use </span>malachite_base::num::float::NiceFloat;
+
+<span class="macro">assert_eq!</span>(u32::from_sci_mantissa_and_exponent(<span class="number">1.5</span>, <span class="number">1u64</span>), <span class="prelude-val">Some</span>(<span class="number">3u32</span>));
+<span class="macro">assert_eq!</span>(u32::from_sci_mantissa_and_exponent(<span class="number">1.51</span>, <span class="number">1u64</span>), <span class="prelude-val">Some</span>(<span class="number">3u32</span>));
+<span class="macro">assert_eq!</span>(
+    u32::from_sci_mantissa_and_exponent(<span class="number">1.921875</span>, <span class="number">6u64</span>),
+    <span class="prelude-val">Some</span>(<span class="number">123u32</span>)
+);
+<span class="macro">assert_eq!</span>(u32::from_sci_mantissa_and_exponent(<span class="number">1.5</span>, <span class="number">1u64</span>), <span class="prelude-val">Some</span>(<span class="number">3u32</span>));
+
+<span class="macro">assert_eq!</span>(
+    f32::from_sci_mantissa_and_exponent(<span class="number">1.0</span>, <span class="number">0</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(<span class="number">1.0</span>))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_sci_mantissa_and_exponent(<span class="number">1.5707964</span>, <span class="number">1</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(core::f32::consts::PI))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_sci_mantissa_and_exponent(<span class="number">1.6</span>, -<span class="number">4</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(<span class="number">0.1</span>))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_sci_mantissa_and_exponent(<span class="number">1.25</span>, <span class="number">3</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(<span class="number">10.0</span>))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_sci_mantissa_and_exponent(<span class="number">1.0</span>, -<span class="number">149</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(f32::MIN_POSITIVE_SUBNORMAL))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_sci_mantissa_and_exponent(<span class="number">1.9999998</span>, -<span class="number">127</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(f32::MAX_SUBNORMAL))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_sci_mantissa_and_exponent(<span class="number">1.0</span>, -<span class="number">126</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(f32::MIN_POSITIVE_NORMAL))
+);
+<span class="macro">assert_eq!</span>(
+    f32::from_sci_mantissa_and_exponent(<span class="number">1.9999999</span>, <span class="number">127</span>).map(NiceFloat),
+    <span class="prelude-val">Some</span>(NiceFloat(f32::MAX_FINITE))
+);
+
+<span class="macro">assert_eq!</span>(f32::from_sci_mantissa_and_exponent(<span class="number">2.0</span>, <span class="number">1</span>), <span class="prelude-val">None</span>);
+<span class="macro">assert_eq!</span>(f32::from_sci_mantissa_and_exponent(<span class="number">1.1</span>, -<span class="number">2000</span>), <span class="prelude-val">None</span>);
+<span class="macro">assert_eq!</span>(f32::from_sci_mantissa_and_exponent(<span class="number">1.1</span>, <span class="number">2000</span>), <span class="prelude-val">None</span>);
+<span class="macro">assert_eq!</span>(f32::from_sci_mantissa_and_exponent(<span class="number">1.999</span>, -<span class="number">149</span>), <span class="prelude-val">None</span>);</code></pre></div>
+</div></details><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.from_sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::from_sci_mantissa_and_exponent_round">from_sci_mantissa_and_exponent_round</a></div><div class="desc docblock-short">Constructs a primitive integer from its scientific mantissa and exponent. An <a href="https://doc.rust-lang.org/nightly/core/cmp/enum.Ordering.html" title="enum core::cmp::Ordering"><code>Ordering</code></a> is
+also returned, indicating whether the returned value is less than, equal to, or greater than
+the exact value implied by the input.</div></li><li><div class="item-name"><a class="fn" href="fn.sci_mantissa_and_exponent_round.html" title="fn malachite_base::num::conversion::mantissa_and_exponent::sci_mantissa_and_exponent_round">sci_mantissa_and_exponent_round</a></div><div class="desc docblock-short">Returns the scientific mantissa and exponent of an unsinged value. An <a href="https://doc.rust-lang.org/nightly/core/cmp/enum.Ordering.html" title="enum core::cmp::Ordering"><code>Ordering</code></a> is also
+returned, indicating whether the mantissa and exponent correspond to a value less than, equal
+to, or greater than the original value.</div></li></ul></section></div></main></body></html>

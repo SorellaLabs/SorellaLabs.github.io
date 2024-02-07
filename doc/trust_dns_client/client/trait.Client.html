@@ -1,0 +1,312 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Client trait which implements basic DNS Client operations."><title>Client in trust_dns_client::client - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="trust_dns_client" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (b11fbfbf3 2024-02-03)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../trust_dns_client/index.html">trust_dns_client</a><span class="version">0.20.4</span></h2></div><h2 class="location"><a href="#">Client</a></h2><div class="sidebar-elems"><section><h3><a href="#required-associated-types">Required Associated Types</a></h3><ul class="block"><li><a href="#associatedtype.Handle">Handle</a></li><li><a href="#associatedtype.Response">Response</a></li></ul><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.new_future">new_future</a></li></ul><h3><a href="#provided-methods">Provided Methods</a></h3><ul class="block"><li><a href="#method.append">append</a></li><li><a href="#method.compare_and_swap">compare_and_swap</a></li><li><a href="#method.create">create</a></li><li><a href="#method.delete_all">delete_all</a></li><li><a href="#method.delete_by_rdata">delete_by_rdata</a></li><li><a href="#method.delete_rrset">delete_rrset</a></li><li><a href="#method.notify">notify</a></li><li><a href="#method.query">query</a></li><li><a href="#method.spawn_client">spawn_client</a></li></ul><h3><a href="#object-safety">Object Safety</a></h3><h3><a href="#implementors">Implementors</a></h3></section><h2><a href="index.html">In trust_dns_client::client</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../trust_dns_client/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Trait <a href="../index.html">trust_dns_client</a>::<wbr><a href="index.html">client</a>::<wbr><a class="trait" href="#">Client</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/trust_dns_client/client/client.rs.html#64-395">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub trait Client {
+    type <a href="#associatedtype.Response" class="associatedtype">Response</a>: <a class="trait" href="https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>, ProtoError&gt;&gt; + 'static + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Unpin.html" title="trait core::marker::Unpin">Unpin</a>;
+    type <a href="#associatedtype.Handle" class="associatedtype">Handle</a>: DnsHandle&lt;Response = Self::<a class="associatedtype" href="trait.Client.html#associatedtype.Response" title="type trust_dns_client::client::Client::Response">Response</a>, Error = ProtoError&gt; + 'static + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Unpin.html" title="trait core::marker::Unpin">Unpin</a>;
+
+    // Required method
+    fn <a href="#tymethod.new_future" class="fn">new_future</a>(
+        &amp;self
+    ) -&gt; <a class="struct" href="https://doc.rust-lang.org/nightly/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;(Self::<a class="associatedtype" href="trait.Client.html#associatedtype.Handle" title="type trust_dns_client::client::Client::Handle">Handle</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, ProtoError&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Unpin.html" title="trait core::marker::Unpin">Unpin</a> + 'static&gt;), ProtoError&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'static&gt;&gt;;
+
+    // Provided methods
+    fn <a href="#method.spawn_client" class="fn">spawn_client</a>(&amp;self) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;(Self::<a class="associatedtype" href="trait.Client.html#associatedtype.Handle" title="type trust_dns_client::client::Client::Handle">Handle</a>, <a class="struct" href="../../tokio/runtime/runtime/struct.Runtime.html" title="struct tokio::runtime::runtime::Runtime">Runtime</a>)&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.query" class="fn">query</a>(
+        &amp;self,
+        name: &amp;<a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>,
+        query_class: <a class="enum" href="../rr/enum.DNSClass.html" title="enum trust_dns_client::rr::DNSClass">DNSClass</a>,
+        query_type: <a class="enum" href="../rr/enum.RecordType.html" title="enum trust_dns_client::rr::RecordType">RecordType</a>
+    ) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.notify" class="fn">notify</a>&lt;R&gt;(
+        &amp;mut self,
+        name: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>,
+        query_class: <a class="enum" href="../rr/enum.DNSClass.html" title="enum trust_dns_client::rr::DNSClass">DNSClass</a>,
+        query_type: <a class="enum" href="../rr/enum.RecordType.html" title="enum trust_dns_client::rr::RecordType">RecordType</a>,
+        rrset: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;R&gt;
+    ) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;
+       <span class="where">where R: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;</span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.create" class="fn">create</a>&lt;R&gt;(
+        &amp;self,
+        rrset: R,
+        zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>
+    ) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;
+       <span class="where">where R: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;</span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.append" class="fn">append</a>&lt;R&gt;(
+        &amp;self,
+        rrset: R,
+        zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>,
+        must_exist: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>
+    ) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;
+       <span class="where">where R: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;</span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.compare_and_swap" class="fn">compare_and_swap</a>&lt;CR, NR&gt;(
+        &amp;self,
+        current: CR,
+        new: NR,
+        zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>
+    ) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;
+       <span class="where">where CR: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;,
+             NR: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;</span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.delete_by_rdata" class="fn">delete_by_rdata</a>&lt;R&gt;(
+        &amp;self,
+        record: R,
+        zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>
+    ) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;
+       <span class="where">where R: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;</span> { ... }
+<span class="item-spacer"></span>    fn <a href="#method.delete_rrset" class="fn">delete_rrset</a>(
+        &amp;self,
+        record: <a class="struct" href="../rr/struct.Record.html" title="struct trust_dns_client::rr::Record">Record</a>,
+        zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>
+    ) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.delete_all" class="fn">delete_all</a>(
+        &amp;self,
+        name_of_records: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>,
+        zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>,
+        dns_class: <a class="enum" href="../rr/enum.DNSClass.html" title="enum trust_dns_client::rr::DNSClass">DNSClass</a>
+    ) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt; { ... }
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Client trait which implements basic DNS Client operations.</p>
+<p>As of 0.10.0, the Client is now a wrapper around the <code>AsyncClient</code>, which is a futures-rs
+and tokio-rs based implementation. This trait implements synchronous functions for ease of use.</p>
+<p>There was a strong attempt to make it backwards compatible, but making it a drop in replacement
+for the old Client was not possible. This trait has two implementations, the <code>SyncClient</code> which
+is a standard DNS Client, and the <code>SyncDnssecClient</code> which is a wrapper on <code>DnssecDnsHandle</code>
+providing DNSSec validation.</p>
+<p><em>note</em> When upgrading from previous usage, both <code>SyncClient</code> and <code>SyncDnssecClient</code> have an
+signer which can be optionally associated to the Client. This replaces the previous per-function
+parameter, and it will sign all update requests (this matches the <code>AsyncClient</code> API).</p>
+</div></details><h2 id="required-associated-types" class="section-header">Required Associated Types<a href="#required-associated-types" class="anchor">§</a></h2><div class="methods"><details class="toggle" open><summary><section id="associatedtype.Response" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#66">source</a><h4 class="code-header">type <a href="#associatedtype.Response" class="associatedtype">Response</a>: <a class="trait" href="https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>, ProtoError&gt;&gt; + 'static + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Unpin.html" title="trait core::marker::Unpin">Unpin</a></h4></section></summary><div class="docblock"><p>The result future that will resolve into a DnsResponse</p>
+</div></details><details class="toggle" open><summary><section id="associatedtype.Handle" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#68">source</a><h4 class="code-header">type <a href="#associatedtype.Handle" class="associatedtype">Handle</a>: DnsHandle&lt;Response = Self::<a class="associatedtype" href="trait.Client.html#associatedtype.Response" title="type trust_dns_client::client::Client::Response">Response</a>, Error = ProtoError&gt; + 'static + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Unpin.html" title="trait core::marker::Unpin">Unpin</a></h4></section></summary><div class="docblock"><p>The AsyncClient type used</p>
+</div></details></div><h2 id="required-methods" class="section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="tymethod.new_future" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#73">source</a><h4 class="code-header">fn <a href="#tymethod.new_future" class="fn">new_future</a>(
+    &amp;self
+) -&gt; <a class="struct" href="https://doc.rust-lang.org/nightly/core/pin/struct.Pin.html" title="struct core::pin::Pin">Pin</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;(Self::<a class="associatedtype" href="trait.Client.html#associatedtype.Handle" title="type trust_dns_client::client::Client::Handle">Handle</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/nightly/core/future/future/trait.Future.html" title="trait core::future::future::Future">Future</a>&lt;Output = <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, ProtoError&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Unpin.html" title="trait core::marker::Unpin">Unpin</a> + 'static&gt;), ProtoError&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'static&gt;&gt;</h4></section></summary><div class="docblock"><p>Return the inner Futures items</p>
+<p>Consumes the connection and allows for future based operations afterward.</p>
+</div></details></div><h2 id="provided-methods" class="section-header">Provided Methods<a href="#provided-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="method.spawn_client" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#76-89">source</a><h4 class="code-header">fn <a href="#method.spawn_client" class="fn">spawn_client</a>(&amp;self) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;(Self::<a class="associatedtype" href="trait.Client.html#associatedtype.Handle" title="type trust_dns_client::client::Client::Handle">Handle</a>, <a class="struct" href="../../tokio/runtime/runtime/struct.Runtime.html" title="struct tokio::runtime::runtime::Runtime">Runtime</a>)&gt;</h4></section></summary><div class="docblock"><p>This will create a new AsyncClient and spawn it into a new Runtime</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.query" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#101-110">source</a><h4 class="code-header">fn <a href="#method.query" class="fn">query</a>(
+    &amp;self,
+    name: &amp;<a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>,
+    query_class: <a class="enum" href="../rr/enum.DNSClass.html" title="enum trust_dns_client::rr::DNSClass">DNSClass</a>,
+    query_type: <a class="enum" href="../rr/enum.RecordType.html" title="enum trust_dns_client::rr::RecordType">RecordType</a>
+) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;</h4></section></summary><div class="docblock"><p>A <em>classic</em> DNS query, i.e. does not perform any DNSSec operations</p>
+<p><em>Note</em> As of now, this will not recurse on PTR record responses, that is up to
+the caller.</p>
+<h5 id="arguments"><a class="doc-anchor" href="#arguments">§</a>Arguments</h5>
+<ul>
+<li><code>name</code> - the label to lookup</li>
+<li><code>query_class</code> - most likely this should always be DNSClass::IN</li>
+<li><code>query_type</code> - record type to lookup</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.notify" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#120-133">source</a><h4 class="code-header">fn <a href="#method.notify" class="fn">notify</a>&lt;R&gt;(
+    &amp;mut self,
+    name: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>,
+    query_class: <a class="enum" href="../rr/enum.DNSClass.html" title="enum trust_dns_client::rr::DNSClass">DNSClass</a>,
+    query_type: <a class="enum" href="../rr/enum.RecordType.html" title="enum trust_dns_client::rr::RecordType">RecordType</a>,
+    rrset: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;R&gt;
+) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;<div class="where">where
+    R: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;,</div></h4></section></summary><div class="docblock"><p>Sends a NOTIFY message to the remote system</p>
+<h5 id="arguments-1"><a class="doc-anchor" href="#arguments-1">§</a>Arguments</h5>
+<ul>
+<li><code>name</code> - the label which is being notified</li>
+<li><code>query_class</code> - most likely this should always be DNSClass::IN</li>
+<li><code>query_type</code> - record type which has been updated</li>
+<li><code>rrset</code> - the new version of the record(s) being notified</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.create" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#168-175">source</a><h4 class="code-header">fn <a href="#method.create" class="fn">create</a>&lt;R&gt;(&amp;self, rrset: R, zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;<div class="where">where
+    R: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;,</div></h4></section></summary><div class="docblock"><p>Sends a record to create on the server, this will fail if the record exists (atomicity
+depends on the server)</p>
+<p><a href="https://tools.ietf.org/html/rfc2136">RFC 2136</a>, DNS Update, April 1997</p>
+<div class="example-wrap"><pre class="language-text"><code> 2.4.3 - RRset Does Not Exist
+
+  No RRs with a specified NAME and TYPE (in the zone and class denoted
+  by the Zone Section) can exist.
+
+  For this prerequisite, a requestor adds to the section a single RR
+  whose NAME and TYPE are equal to that of the RRset whose nonexistence
+  is required.  The RDLENGTH of this record is zero (0), and RDATA
+  field is therefore empty.  CLASS must be specified as NONE in order
+  to distinguish this condition from a valid RR whose RDLENGTH is
+  naturally zero (0) (for example, the NULL RR).  TTL must be specified
+  as zero (0).
+
+2.5.1 - Add To An RRset
+
+   RRs are added to the Update Section whose NAME, TYPE, TTL, RDLENGTH
+   and RDATA are those being added, and CLASS is the same as the zone
+   class.  Any duplicate RRs will be silently ignored by the Primary
+   Zone Server.
+</code></pre></div><h5 id="arguments-2"><a class="doc-anchor" href="#arguments-2">§</a>Arguments</h5>
+<ul>
+<li><code>rrset</code> - the record(s) to create</li>
+<li><code>zone_origin</code> - the zone name to update, i.e. SOA name</li>
+</ul>
+<p>The update must go to a zone authority (i.e. the server used in the ClientConnection)</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.append" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#211-218">source</a><h4 class="code-header">fn <a href="#method.append" class="fn">append</a>&lt;R&gt;(
+    &amp;self,
+    rrset: R,
+    zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>,
+    must_exist: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>
+) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;<div class="where">where
+    R: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;,</div></h4></section></summary><div class="docblock"><p>Appends a record to an existing rrset, optionally require the rrset to exist (atomicity
+depends on the server)</p>
+<p><a href="https://tools.ietf.org/html/rfc2136">RFC 2136</a>, DNS Update, April 1997</p>
+<div class="example-wrap"><pre class="language-text"><code>2.4.1 - RRset Exists (Value Independent)
+
+  At least one RR with a specified NAME and TYPE (in the zone and class
+  specified in the Zone Section) must exist.
+
+  For this prerequisite, a requestor adds to the section a single RR
+  whose NAME and TYPE are equal to that of the zone RRset whose
+  existence is required.  RDLENGTH is zero and RDATA is therefore
+  empty.  CLASS must be specified as ANY to differentiate this
+  condition from that of an actual RR whose RDLENGTH is naturally zero
+  (0) (e.g., NULL).  TTL is specified as zero (0).
+
+2.5.1 - Add To An RRset
+
+   RRs are added to the Update Section whose NAME, TYPE, TTL, RDLENGTH
+   and RDATA are those being added, and CLASS is the same as the zone
+   class.  Any duplicate RRs will be silently ignored by the Primary
+   Zone Server.
+</code></pre></div><h5 id="arguments-3"><a class="doc-anchor" href="#arguments-3">§</a>Arguments</h5>
+<ul>
+<li><code>rrset</code> - the record(s) to append to an RRSet</li>
+<li><code>zone_origin</code> - the zone name to update, i.e. SOA name</li>
+<li><code>must_exist</code> - if true, the request will fail if the record does not exist</li>
+</ul>
+<p>The update must go to a zone authority (i.e. the server used in the ClientConnection). If
+the rrset does not exist and must_exist is false, then the RRSet will be created.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.compare_and_swap" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#261-274">source</a><h4 class="code-header">fn <a href="#method.compare_and_swap" class="fn">compare_and_swap</a>&lt;CR, NR&gt;(
+    &amp;self,
+    current: CR,
+    new: NR,
+    zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>
+) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;<div class="where">where
+    CR: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;,
+    NR: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;,</div></h4></section></summary><div class="docblock"><p>Compares and if it matches, swaps it for the new value (atomicity depends on the server)</p>
+<div class="example-wrap"><pre class="language-text"><code> 2.4.2 - RRset Exists (Value Dependent)
+
+  A set of RRs with a specified NAME and TYPE exists and has the same
+  members with the same RDATAs as the RRset specified here in this
+  section.  While RRset ordering is undefined and therefore not
+  significant to this comparison, the sets be identical in their
+  extent.
+
+  For this prerequisite, a requestor adds to the section an entire
+  RRset whose preexistence is required.  NAME and TYPE are that of the
+  RRset being denoted.  CLASS is that of the zone.  TTL must be
+  specified as zero (0) and is ignored when comparing RRsets for
+  identity.
+
+ 2.5.4 - Delete An RR From An RRset
+
+  RRs to be deleted are added to the Update Section.  The NAME, TYPE,
+  RDLENGTH and RDATA must match the RR being deleted.  TTL must be
+  specified as zero (0) and will otherwise be ignored by the Primary
+  Zone Server.  CLASS must be specified as NONE to distinguish this from an
+  RR addition.  If no such RRs exist, then this Update RR will be
+  silently ignored by the Primary Zone Server.
+
+ 2.5.1 - Add To An RRset
+
+  RRs are added to the Update Section whose NAME, TYPE, TTL, RDLENGTH
+  and RDATA are those being added, and CLASS is the same as the zone
+  class.  Any duplicate RRs will be silently ignored by the Primary
+  Zone Server.
+</code></pre></div><h5 id="arguments-4"><a class="doc-anchor" href="#arguments-4">§</a>Arguments</h5>
+<ul>
+<li><code>current</code> - the current rrset which must exist for the swap to complete</li>
+<li><code>new</code> - the new rrset with which to replace the current rrset</li>
+<li><code>zone_origin</code> - the zone name to update, i.e. SOA name</li>
+</ul>
+<p>The update must go to a zone authority (i.e. the server used in the ClientConnection).</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.delete_by_rdata" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#311-318">source</a><h4 class="code-header">fn <a href="#method.delete_by_rdata" class="fn">delete_by_rdata</a>&lt;R&gt;(
+    &amp;self,
+    record: R,
+    zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>
+) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;<div class="where">where
+    R: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../rr/struct.RecordSet.html" title="struct trust_dns_client::rr::RecordSet">RecordSet</a>&gt;,</div></h4></section></summary><div class="docblock"><p>Deletes a record (by rdata) from an rrset, optionally require the rrset to exist.</p>
+<p><a href="https://tools.ietf.org/html/rfc2136">RFC 2136</a>, DNS Update, April 1997</p>
+<div class="example-wrap"><pre class="language-text"><code>2.4.1 - RRset Exists (Value Independent)
+
+  At least one RR with a specified NAME and TYPE (in the zone and class
+  specified in the Zone Section) must exist.
+
+  For this prerequisite, a requestor adds to the section a single RR
+  whose NAME and TYPE are equal to that of the zone RRset whose
+  existence is required.  RDLENGTH is zero and RDATA is therefore
+  empty.  CLASS must be specified as ANY to differentiate this
+  condition from that of an actual RR whose RDLENGTH is naturally zero
+  (0) (e.g., NULL).  TTL is specified as zero (0).
+
+2.5.4 - Delete An RR From An RRset
+
+  RRs to be deleted are added to the Update Section.  The NAME, TYPE,
+  RDLENGTH and RDATA must match the RR being deleted.  TTL must be
+  specified as zero (0) and will otherwise be ignored by the Primary
+  Zone Server.  CLASS must be specified as NONE to distinguish this from an
+  RR addition.  If no such RRs exist, then this Update RR will be
+  silently ignored by the Primary Zone Server.
+</code></pre></div><h5 id="arguments-5"><a class="doc-anchor" href="#arguments-5">§</a>Arguments</h5>
+<ul>
+<li><code>rrset</code> - the record(s) to delete from a RRSet, the name, type and rdata must match the
+record to delete</li>
+<li><code>zone_origin</code> - the zone name to update, i.e. SOA name</li>
+</ul>
+<p>The update must go to a zone authority (i.e. the server used in the ClientConnection). If
+the rrset does not exist and must_exist is false, then the RRSet will be deleted.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.delete_rrset" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#355-359">source</a><h4 class="code-header">fn <a href="#method.delete_rrset" class="fn">delete_rrset</a>(
+    &amp;self,
+    record: <a class="struct" href="../rr/struct.Record.html" title="struct trust_dns_client::rr::Record">Record</a>,
+    zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>
+) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;</h4></section></summary><div class="docblock"><p>Deletes an entire rrset, optionally require the rrset to exist.</p>
+<p><a href="https://tools.ietf.org/html/rfc2136">RFC 2136</a>, DNS Update, April 1997</p>
+<div class="example-wrap"><pre class="language-text"><code>2.4.1 - RRset Exists (Value Independent)
+
+  At least one RR with a specified NAME and TYPE (in the zone and class
+  specified in the Zone Section) must exist.
+
+  For this prerequisite, a requestor adds to the section a single RR
+  whose NAME and TYPE are equal to that of the zone RRset whose
+  existence is required.  RDLENGTH is zero and RDATA is therefore
+  empty.  CLASS must be specified as ANY to differentiate this
+  condition from that of an actual RR whose RDLENGTH is naturally zero
+  (0) (e.g., NULL).  TTL is specified as zero (0).
+
+2.5.2 - Delete An RRset
+
+  One RR is added to the Update Section whose NAME and TYPE are those
+  of the RRset to be deleted.  TTL must be specified as zero (0) and is
+  otherwise not used by the Primary Zone Sever.  CLASS must be specified as
+  ANY.  RDLENGTH must be zero (0) and RDATA must therefore be empty.
+  If no such RRset exists, then this Update RR will be silently ignored
+  by the Primary Zone Server.
+</code></pre></div><h5 id="arguments-6"><a class="doc-anchor" href="#arguments-6">§</a>Arguments</h5>
+<ul>
+<li><code>record</code> - the record to delete from a RRSet, the name, and type must match the
+record set to delete</li>
+<li><code>zone_origin</code> - the zone name to update, i.e. SOA name</li>
+</ul>
+<p>The update must go to a zone authority (i.e. the server used in the ClientConnection). If
+the rrset does not exist and must_exist is false, then the RRSet will be deleted.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.delete_all" class="method"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#385-394">source</a><h4 class="code-header">fn <a href="#method.delete_all" class="fn">delete_all</a>(
+    &amp;self,
+    name_of_records: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>,
+    zone_origin: <a class="struct" href="../rr/struct.Name.html" title="struct trust_dns_client::rr::Name">Name</a>,
+    dns_class: <a class="enum" href="../rr/enum.DNSClass.html" title="enum trust_dns_client::rr::DNSClass">DNSClass</a>
+) -&gt; <a class="type" href="../error/type.ClientResult.html" title="type trust_dns_client::error::ClientResult">ClientResult</a>&lt;<a class="struct" href="../op/struct.DnsResponse.html" title="struct trust_dns_client::op::DnsResponse">DnsResponse</a>&gt;</h4></section></summary><div class="docblock"><p>Deletes all records at the specified name</p>
+<p><a href="https://tools.ietf.org/html/rfc2136">RFC 2136</a>, DNS Update, April 1997</p>
+<div class="example-wrap"><pre class="language-text"><code>2.5.3 - Delete All RRsets From A Name
+
+  One RR is added to the Update Section whose NAME is that of the name
+  to be cleansed of RRsets.  TYPE must be specified as ANY.  TTL must
+  be specified as zero (0) and is otherwise not used by the Primary
+  Zone Server.  CLASS must be specified as ANY.  RDLENGTH must be zero (0)
+  and RDATA must therefore be empty.  If no such RRsets exist, then
+  this Update RR will be silently ignored by the Primary Zone Server.
+</code></pre></div><h5 id="arguments-7"><a class="doc-anchor" href="#arguments-7">§</a>Arguments</h5>
+<ul>
+<li><code>name_of_records</code> - the name of all the record sets to delete</li>
+<li><code>zone_origin</code> - the zone name to update, i.e. SOA name</li>
+<li><code>dns_class</code> - the class of the SOA</li>
+</ul>
+<p>The update must go to a zone authority (i.e. the server used in the ClientConnection). This
+operation attempts to delete all resource record sets the specified name regardless of
+the record type.</p>
+</div></details></div><h2 id="object-safety" class="section-header">Object Safety<a href="#object-safety" class="anchor">§</a></h2><div class="object-safety-info">This trait is <b>not</b> <a href="https://doc.rust-lang.org/nightly/reference/items/traits.html#object-safety">object safe</a>.</div><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><details class="toggle implementors-toggle"><summary><section id="impl-Client-for-SyncClient%3CCC%3E" class="impl"><a class="src rightside" href="../../src/trust_dns_client/client/client.rs.html#433-449">source</a><a href="#impl-Client-for-SyncClient%3CCC%3E" class="anchor">§</a><h3 class="code-header">impl&lt;CC: <a class="trait" href="client_connection/trait.ClientConnection.html" title="trait trust_dns_client::client::client_connection::ClientConnection">ClientConnection</a>&gt; <a class="trait" href="trait.Client.html" title="trait trust_dns_client::client::Client">Client</a> for <a class="struct" href="struct.SyncClient.html" title="struct trust_dns_client::client::SyncClient">SyncClient</a>&lt;CC&gt;</h3></section></summary><div class="impl-items"><section id="associatedtype.Response-1" class="associatedtype trait-impl"><a href="#associatedtype.Response-1" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Response" class="associatedtype">Response</a> = DnsExchangeSend</h4></section><section id="associatedtype.Handle-1" class="associatedtype trait-impl"><a href="#associatedtype.Handle-1" class="anchor">§</a><h4 class="code-header">type <a href="#associatedtype.Handle" class="associatedtype">Handle</a> = <a class="struct" href="struct.AsyncClient.html" title="struct trust_dns_client::client::AsyncClient">AsyncClient</a></h4></section></div></details></div><script src="../../trait.impl/trust_dns_client/client/client/trait.Client.js" async></script></section></div></main></body></html>

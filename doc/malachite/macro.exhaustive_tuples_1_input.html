@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Defines exhaustive tuple generators that generate tuples from a single iterator."><title>exhaustive_tuples_1_input in malachite - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="malachite" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (b11fbfbf3 2024-02-03)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../malachite/index.html">malachite</a><span class="version">0.4.4</span></h2></div><div class="sidebar-elems"></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../malachite/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="index.html">malachite</a>::<wbr><a class="macro" href="#">exhaustive_tuples_1_input</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/malachite_base/tuples/exhaustive.rs.html#645">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><span class="macro">macro_rules! </span>exhaustive_tuples_1_input {
+    (
+        ($(<span class="macro-nonterminal">$vis</span>:tt)<span class="kw-2">*</span>),
+        <span class="macro-nonterminal">$exhaustive_struct</span>: ident,
+        <span class="macro-nonterminal">$exhaustive_fn</span>: ident,
+        <span class="macro-nonterminal">$exhaustive_fn_from_single</span>: ident,
+        <span class="macro-nonterminal">$out_type</span>: ty,
+        $([<span class="macro-nonterminal">$i</span>: tt, <span class="macro-nonterminal">$out_x</span>: ident]),*
+    ) =&gt; { ... };
+}</pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Defines exhaustive tuple generators that generate tuples from a single iterator.</p>
+<p>Malachite provides <a href="tuples/exhaustive/fn.exhaustive_pairs_from_single.html" title="fn malachite::tuples::exhaustive::exhaustive_pairs_from_single"><code>exhaustive_pairs_from_single</code></a> and <a href="tuples/exhaustive/fn.exhaustive_pairs_1_input.html" title="fn malachite::tuples::exhaustive::exhaustive_pairs_1_input"><code>exhaustive_pairs_1_input</code></a>, but you
+can also define <code>exhaustive_triples_from_single</code>, <code>exhaustive_quadruples_from_single</code>, and so
+on, and <code>exhaustive_triples_1_input</code>, <code>exhaustive_quadruples_1_input</code>, and so on, in your
+program using the code below. The documentation for <a href="tuples/exhaustive/fn.exhaustive_pairs_from_single.html" title="fn malachite::tuples::exhaustive::exhaustive_pairs_from_single"><code>exhaustive_pairs_from_single</code></a> and
+<a href="tuples/exhaustive/fn.exhaustive_pairs_1_input.html" title="fn malachite::tuples::exhaustive::exhaustive_pairs_1_input"><code>exhaustive_pairs_1_input</code></a> describes these other functions as well.</p>
+<p>See usage examples <a href="tuples/exhaustive/index.html#exhaustive_pairs_from_single" title="mod malachite::tuples::exhaustive">here</a> and
+<a href="tuples/exhaustive/index.html#exhaustive_pairs_1_input" title="mod malachite::tuples::exhaustive">here</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::iterators::bit_distributor::{BitDistributor, BitDistributorOutputType};
+<span class="kw">use </span>malachite_base::iterators::iterator_cache::IteratorCache;
+<span class="kw">use </span>malachite_base::num::arithmetic::traits::CheckedPow;
+<span class="kw">use </span>malachite_base::num::conversion::traits::{ExactFrom, WrappingFrom};
+<span class="kw">use </span>malachite_base::num::logic::traits::SignificantBits;
+<span class="kw">use </span>std::cmp::max;
+<span class="kw">use </span>std::marker::PhantomData;
+
+<span class="macro">exhaustive_tuples_1_input!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveTriples1Input,
+    exhaustive_triples_1_input,
+    exhaustive_triples_from_single,
+    (I::Item, I::Item, I::Item),
+    [<span class="number">0</span>, output_type_x],
+    [<span class="number">1</span>, output_type_y],
+    [<span class="number">2</span>, output_type_z]
+);
+<span class="macro">exhaustive_tuples_1_input!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveQuadruples1Input,
+    exhaustive_quadruples_1_input,
+    exhaustive_quadruples_from_single,
+    (I::Item, I::Item, I::Item, I::Item),
+    [<span class="number">0</span>, output_type_x],
+    [<span class="number">1</span>, output_type_y],
+    [<span class="number">2</span>, output_type_z],
+    [<span class="number">3</span>, output_type_w]
+);
+<span class="macro">exhaustive_tuples_1_input!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveQuintuples1Input,
+    exhaustive_quintuples_1_input,
+    exhaustive_quintuples_from_single,
+    (I::Item, I::Item, I::Item, I::Item, I::Item),
+    [<span class="number">0</span>, output_type_x],
+    [<span class="number">1</span>, output_type_y],
+    [<span class="number">2</span>, output_type_z],
+    [<span class="number">3</span>, output_type_w],
+    [<span class="number">4</span>, output_type_v]
+);
+<span class="macro">exhaustive_tuples_1_input!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveSextuples1Input,
+    exhaustive_sextuples_1_input,
+    exhaustive_sextuples_from_single,
+    (I::Item, I::Item, I::Item, I::Item, I::Item, I::Item),
+    [<span class="number">0</span>, output_type_x],
+    [<span class="number">1</span>, output_type_y],
+    [<span class="number">2</span>, output_type_z],
+    [<span class="number">3</span>, output_type_w],
+    [<span class="number">4</span>, output_type_v],
+    [<span class="number">5</span>, output_type_u]
+);
+<span class="macro">exhaustive_tuples_1_input!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveSeptuples1Input,
+    exhaustive_septuples_1_input,
+    exhaustive_septuples_from_single,
+    (
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item
+    ),
+    [<span class="number">0</span>, output_type_x],
+    [<span class="number">1</span>, output_type_y],
+    [<span class="number">2</span>, output_type_z],
+    [<span class="number">3</span>, output_type_w],
+    [<span class="number">4</span>, output_type_v],
+    [<span class="number">5</span>, output_type_u],
+    [<span class="number">6</span>, output_type_t]
+);
+<span class="macro">exhaustive_tuples_1_input!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveOctuples1Input,
+    exhaustive_octuples_1_input,
+    exhaustive_octuples_from_single,
+    (
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item,
+        I::Item
+    ),
+    [<span class="number">0</span>, output_type_x],
+    [<span class="number">1</span>, output_type_y],
+    [<span class="number">2</span>, output_type_z],
+    [<span class="number">3</span>, output_type_w],
+    [<span class="number">4</span>, output_type_v],
+    [<span class="number">5</span>, output_type_u],
+    [<span class="number">6</span>, output_type_t],
+    [<span class="number">7</span>, output_type_s]
+);</code></pre></div>
+</div></details></section></div></main></body></html>

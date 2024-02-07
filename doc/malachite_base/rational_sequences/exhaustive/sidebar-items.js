@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["exhaustive_rational_sequences"],"struct":["ExhaustiveRationalSequences"]};

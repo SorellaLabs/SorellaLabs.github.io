@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="DERIVE MACRO"><title>Redefined in redefined - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="redefined" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (b11fbfbf3 2024-02-03)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc derive"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../redefined/index.html">redefined</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../redefined/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Derive Macro <a href="index.html">redefined</a>::<wbr><a class="derive" href="#">Redefined</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/redefined_derive/lib.rs.html#204">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>#[derive(Redefined)]
+{
+    <span class="comment">// Attributes available to this derive:</span>
+    #[redefined]
+    #[redefined_attr]
+}
+</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="derive-macro"><a class="doc-anchor" href="#derive-macro">§</a>DERIVE MACRO</h2><h3 id="container-source-attribute"><a class="doc-anchor" href="#container-source-attribute">§</a>Container Source Attribute</h3>
+<p>WITH: <code>#[redefined(&lt;TYPE IDENTIFIER&gt;)]</code>
+- Only used to specify the source struct (i.e. the struct converting
+from)</p>
+<h4 id="example"><a class="doc-anchor" href="#example">§</a>Example:</h4>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>    <span class="attr">#[derive(Debug, Clone, PartialEq, Default, Redefined)]
+    #[redefined(BasicStruct)]
+    </span><span class="kw">pub struct </span>BasicStructA {
+        <span class="kw">pub </span>val1: u64,
+        <span class="kw">pub </span>val2: f64,
+        <span class="kw">pub </span>val3: String,
+    }</code></pre></div>
+<hr />
+<p>WITHOUT: <code>#[redefined(&lt;TYPE IDENTIFIER&gt;)]</code>
+- Omitted when the current type is the source type to a new type
+- The new type will be created with the same fields and attributes
+(except redefined attributes)
+- The new type’s name will be the same as this type’s name with a
+concatinated <code>Redefined</code>
+- The new type implements from/into this type via transmute
+- TODO: other methods besides transmute</p>
+<h4 id="example-1"><a class="doc-anchor" href="#example-1">§</a>Example:</h4>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>    <span class="attr">#[derive(Debug, Clone, PartialEq, Redefined)]
+    </span><span class="kw">pub struct </span>GenericConstantStructA&lt;<span class="kw">const </span>XVAL: usize&gt; {
+        <span class="kw">pub </span>p: u64,
+        <span class="kw">pub </span>d: [i128; XVAL],
+    }
+
+    <span class="comment">// GenericConstantStructARedefined is created</span></code></pre></div>
+<hr />
+<h3 id="container-attributes"><a class="doc-anchor" href="#container-attributes">§</a>Container Attributes</h3>
+<p><code>#[redefined_attr(...)]</code></p>
+<ol>
+<li>
+<p><code>to_source = &quot;...&quot;</code></p>
+<ul>
+<li>specifies a function to call when converting this type back into it’s
+source type</li>
+<li>(i.e. for when fields are private)</li>
+</ul>
+</li>
+<li>
+<p><code>from_source = &quot;...&quot;</code></p>
+<ul>
+<li>specifies a function to call when converting the source type into this
+type</li>
+<li>NOTE WHEN USING THIS: the source type is a variable called <code>src</code> (see
+first example)</li>
+<li>(i.e. for when fields are private)</li>
+</ul>
+</li>
+<li>
+<p><code>transmute</code></p>
+<ul>
+<li>converts between the types using an unsafe transmute</li>
+<li>conflicts with <code>1</code> and/or <code>2</code></li>
+</ul>
+</li>
+<li>
+<p><code>derive(...)</code></p>
+<ul>
+<li>specifies <code>#[derive(...)]</code> values for the new type</li>
+</ul>
+</li>
+</ol>
+<h4 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples:</h4>
+<p><code>to_source = '..'</code> + <code>from_source = '..'</code></p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>    <span class="attr">#[derive(Debug, Clone, PartialEq, Default, Redefined)]
+    #[redefined(PrivateFieldStruct)]
+    #[redefined_attr(
+        to_source = <span class="string">"PrivateFieldStruct::new(self.p, self.d,self.vals)"</span>,
+        from_source = <span class="string">"ToFromSourceFieldStructB::new(src)"
+    </span>)]
+    </span><span class="kw">pub struct </span>ToFromSourceFieldStructB {
+        <span class="kw">pub </span>p:    u64,
+        <span class="kw">pub </span>d:    u64,
+        <span class="kw">pub </span>vals: Vec&lt;String&gt;,
+    }</code></pre></div>
+<p><code>transmute</code></p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>    <span class="attr">#[derive(Debug, Clone, PartialEq, Default, Redefined)]
+    #[redefined(BasicStruct)]
+    #[redefined_attr(transmute)]
+    </span><span class="kw">pub struct </span>BasicStructA {
+        <span class="kw">pub </span>val1: u64,
+        <span class="kw">pub </span>val2: f64,
+        <span class="kw">pub </span>val3: String,
+    }</code></pre></div>
+<p><code>derive</code></p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>    <span class="attr">#[derive(Debug, Clone, PartialEq, Default, Redefined)]
+    #[redefined_attr(derive(Debug, Clone, PartialEq, Default))]
+    </span><span class="kw">pub struct </span>BasicStructA {
+        <span class="kw">pub </span>val1: u64,
+        <span class="kw">pub </span>val2: f64,
+        <span class="kw">pub </span>val3: String,
+    }</code></pre></div>
+<hr />
+<h3 id="field-attributes"><a class="doc-anchor" href="#field-attributes">§</a>Field Attributes</h3>
+<p><code>#[redefined(...)]</code></p>
+<ul>
+<li>These attributes go on over fields of the type</li>
+</ul>
+<ol>
+<li>
+<p><code>func = &quot;..&quot;</code></p>
+<ul>
+<li>specifies a function to call when getting a field from the source
+struct</li>
+<li>NOTE WHEN USING THIS: the source type is a variable called <code>src</code> (same
+as in <code>from_source = '..'</code> container attribute above)</li>
+</ul>
+</li>
+<li>
+<p><code>field(...)</code></p>
+<ul>
+<li>specifies a type to use when converting between target and source
+types</li>
+<li>syntax: comma seperated list of <code>(&lt;SOURCE TYPE&gt;, &lt;TARGET TYPE&gt;)</code></li>
+<li>NOTE: only used when the container attribute <code>redefined(...)</code> is
+omitted</li>
+<li><strong>Sub-attributes</strong>:
+<ol>
+<li><code>field((&lt;SOURCE TYPE&gt;, same))</code>
+<ul>
+<li><code>same</code> can be used in place of the target type, when the
+target type’s identifier is the same as the source types</li>
+</ul>
+</li>
+<li><code>field((&lt;SOURCE TYPE&gt;, &lt;TARGET TYPE&gt;))</code>
+<ul>
+<li>used when you want to convert the <code>&lt;SOURCE TYPE&gt;</code> to a custom
+<code>&lt;TARGET TYPE&gt;</code></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p><code>same_fields</code></p>
+<ul>
+<li>all non-primitive types are converted to the predefined types by
+default, so passing this in will use the same value in the field for
+the redefined type</li>
+<li>akin to using <code>field((&lt;SOURCE TYPE 1&gt;, same), (&lt;SOURCE TYPE 2&gt;, same), ..)</code></li>
+<li>if a type (owned by you) needs to implement <code>RedefinedConvert</code>, call
+<code>self_convert_redefined(&lt;TYPE&gt;)</code> to implement the trait for itself</li>
+</ul>
+</li>
+</ol>
+<p>#Examples:</p>
+<p><code>func = '..'</code></p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>    <span class="attr">#[derive(Debug, Clone, PartialEq, Default, Redefined)]
+    #[redefined(PrivateFieldStruct)]
+    #[redefined_attr(to_source = <span class="string">"PrivateFieldStruct::new(self.p, self.d, self.vals)"</span>)]     
+    </span><span class="kw">pub struct </span>NonPubFieldStructB {
+        <span class="attr">#[redefined(func = <span class="string">"src.get_p()"</span>)]
+        </span><span class="kw">pub </span>p:    u64,
+        <span class="kw">pub </span>d:    u64,
+        <span class="kw">pub </span>vals: Vec&lt;String&gt;,
+    }</code></pre></div>
+<p><code>field((.., ..))</code> + <code>field((.., same))</code></p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>    <span class="attr">#[derive(Debug, Clone, PartialEq, Default, Redefined)]
+    #[redefined_attr(derive(Debug, Clone, PartialEq))]
+    </span><span class="kw">pub struct </span>ComplexStructAA&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>&gt; {
+        <span class="kw">pub </span>n:       i128,
+        <span class="attr">#[redefined(field((GenericLifetimeStructA, same), (BasicStructA, BasicStructARedefined)))]
+        </span><span class="kw">pub </span>inner_a: Vec&lt;(GenericLifetimeStructA&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>&gt;, BasicStructA)&gt;,
+    }
+    <span class="comment">// the new type will have field:
+    </span><span class="kw">pub </span>inner_a: Vec&lt;(GenericLifetimeStructA&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>&gt;, BasicStructARedefined)&gt;,</code></pre></div>
+<p>/// <code>same_fields</code></p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>    <span class="attr">#[derive(Debug, Clone, PartialEq, Default, Redefined)]
+    #[redefined_attr(derive(Debug, Clone, PartialEq))]
+    </span><span class="kw">pub struct </span>ComplexStructAA&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>&gt; {
+        <span class="kw">pub </span>n:       i128,
+        <span class="attr">#[redefined(same_fields)]
+        </span><span class="kw">pub </span>inner_a: Vec&lt;(GenericLifetimeStructA&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>&gt;, BasicStructA)&gt;,
+    }
+    <span class="comment">// the new type will have field:
+    </span><span class="kw">pub </span>inner_a: Vec&lt;(GenericLifetimeStructA&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>&gt;, BasicStructA)&gt;,
+
+    </code></pre></div>
+</div></details></section></div></main></body></html>

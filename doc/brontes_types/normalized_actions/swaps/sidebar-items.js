@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["ArchivedNormalizedSwapRedefined","ClickhouseDoubleVecNormalizedSwap","ClickhouseStatArbDetails","ClickhouseVecNormalizedSwap","ClickhouseVecStatArbDetails","NormalizedSwap","NormalizedSwapRedefined","NormalizedSwapRedefinedResolver","NormalizedSwapWithFee"]};

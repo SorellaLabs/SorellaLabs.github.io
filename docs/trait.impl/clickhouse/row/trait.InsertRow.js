@@ -1,3 +1,0 @@
-(function() {var implementors = {
-"brontes_types":[["impl InsertRow for <a class=\"enum\" href=\"brontes_types/normalized_actions/enum.Actions.html\" title=\"enum brontes_types::normalized_actions::Actions\">Actions</a>"],["impl InsertRow for <a class=\"enum\" href=\"brontes_types/classified_mev/enum.SpecificMev.html\" title=\"enum brontes_types::classified_mev::SpecificMev\">SpecificMev</a>"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

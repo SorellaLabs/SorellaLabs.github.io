@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="reth P2P networking."><title>reth_network - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="reth_network" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (b11fbfbf3 2024-02-03)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-4c98445ec4002617.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://avatars0.githubusercontent.com/u/97369466?s=256"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../reth_network/index.html"><img src="https://raw.githubusercontent.com/paradigmxyz/reth/main/assets/reth-docs.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../reth_network/index.html"><img src="https://raw.githubusercontent.com/paradigmxyz/reth/main/assets/reth-docs.png" alt="logo"></a><h2><a href="../reth_network/index.html">reth_network</a><span class="version">0.1.0-alpha.17</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li></ul></section></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../reth_network/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">reth_network</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/reth_network/lib.rs.html#1-152">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>reth P2P networking.</p>
+<p>Ethereum’s networking protocol is specified in <a href="https://github.com/ethereum/devp2p">devp2p</a>.</p>
+<p>In order for a node to join the ethereum p2p network it needs to know what nodes are already
+part of that network. This includes public identities (public key) and addresses (where to reach
+them).</p>
+<h3 id="birds-eye-view"><a class="doc-anchor" href="#birds-eye-view">§</a>Bird’s Eye View</h3>
+<p>See also diagram in <a href="struct.NetworkManager.html" title="struct reth_network::NetworkManager"><code>NetworkManager</code></a></p>
+<p>The <code>Network</code> is made up of several, separate tasks:</p>
+<ul>
+<li>
+<p><code>Transactions Task</code>: is a spawned
+<a href="transactions/struct.TransactionsManager.html" title="struct reth_network::transactions::TransactionsManager"><code>TransactionsManager</code></a> future that:</p>
+<ul>
+<li>Responds to incoming transaction related requests</li>
+<li>Requests missing transactions from the <code>Network</code></li>
+<li>Broadcasts new transactions received from the
+<a href="../reth_transaction_pool/traits/trait.TransactionPool.html" title="trait reth_transaction_pool::traits::TransactionPool"><code>TransactionPool</code></a> over the <code>Network</code></li>
+</ul>
+</li>
+<li>
+<p><code>ETH request Task</code>: is a spawned
+<a href="eth_requests/struct.EthRequestHandler.html" title="struct reth_network::eth_requests::EthRequestHandler"><code>EthRequestHandler</code></a> future that:</p>
+<ul>
+<li>Responds to incoming ETH related requests: <code>Headers</code>, <code>Bodies</code></li>
+</ul>
+</li>
+<li>
+<p><code>Discovery Task</code>: is a spawned <a href="../reth_discv4/struct.Discv4.html" title="struct reth_discv4::Discv4"><code>Discv4</code></a> future that handles peer
+discovery and emits new peers to the <code>Network</code></p>
+</li>
+<li>
+<p><a href="struct.NetworkManager.html" title="struct reth_network::NetworkManager"><code>NetworkManager</code></a> task advances the state of the <code>Network</code>, which includes:</p>
+<ul>
+<li>Initiating new <em>outgoing</em> connections to discovered peers</li>
+<li>Handling <em>incoming</em> TCP connections from peers</li>
+<li>Peer management</li>
+<li>Route requests:
+<ul>
+<li>from remote peers to corresponding tasks</li>
+<li>from local to remote peers</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="usage"><a class="doc-anchor" href="#usage">§</a>Usage</h3><h4 id="configure-and-launch-a-standalone-network"><a class="doc-anchor" href="#configure-and-launch-a-standalone-network">§</a>Configure and launch a standalone network</h4>
+<p>The <a href="config/struct.NetworkConfig.html" title="struct reth_network::config::NetworkConfig"><code>NetworkConfig</code></a> is used to configure the network.
+It requires an instance of <a href="../reth_provider/traits/block/trait.BlockReader.html" title="trait reth_provider::traits::block::BlockReader"><code>BlockReader</code></a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>reth_network::{config::rng_secret_key, NetworkConfig, NetworkManager};
+<span class="kw">use </span>reth_primitives::mainnet_nodes;
+<span class="kw">use </span>reth_provider::test_utils::NoopProvider;
+
+<span class="comment">// This block provider implementation is used for testing purposes.
+</span><span class="kw">let </span>client = NoopProvider::default();
+
+<span class="comment">// The key that's used for encrypting sessions and to identify our node.
+</span><span class="kw">let </span>local_key = rng_secret_key();
+
+<span class="kw">let </span>config = NetworkConfig::builder(local_key).boot_nodes(mainnet_nodes()).build(client);
+
+<span class="comment">// create the network instance
+</span><span class="kw">let </span>network = NetworkManager::new(config).<span class="kw">await</span>.unwrap();
+
+<span class="comment">// keep a handle to the network and spawn it
+</span><span class="kw">let </span>handle = network.handle().clone();
+tokio::task::spawn(network);
+</code></pre></div>
+<h4 id="configure-all-components-of-the-network-with-the-networkbuilder"><a class="doc-anchor" href="#configure-all-components-of-the-network-with-the-networkbuilder">§</a>Configure all components of the Network with the <a href="struct.NetworkBuilder.html" title="struct reth_network::NetworkBuilder"><code>NetworkBuilder</code></a></h4>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>reth_network::{config::rng_secret_key, NetworkConfig, NetworkManager};
+<span class="kw">use </span>reth_primitives::mainnet_nodes;
+<span class="kw">use </span>reth_provider::test_utils::NoopProvider;
+<span class="kw">use </span>reth_transaction_pool::TransactionPool;
+<span class="kw">async fn </span>launch&lt;Pool: TransactionPool&gt;(pool: Pool) {
+    <span class="comment">// This block provider implementation is used for testing purposes.
+    </span><span class="kw">let </span>client = NoopProvider::default();
+
+    <span class="comment">// The key that's used for encrypting sessions and to identify our node.
+    </span><span class="kw">let </span>local_key = rng_secret_key();
+
+    <span class="kw">let </span>config =
+        NetworkConfig::builder(local_key).boot_nodes(mainnet_nodes()).build(client.clone());
+
+    <span class="comment">// create the network instance
+    </span><span class="kw">let </span>(handle, network, transactions, request_handler) = NetworkManager::builder(config)
+        .<span class="kw">await
+        </span>.unwrap()
+        .transactions(pool)
+        .request_handler(client)
+        .split_with_handle();
+}</code></pre></div>
+<h2 id="feature-flags"><a class="doc-anchor" href="#feature-flags">§</a>Feature Flags</h2>
+<ul>
+<li><code>serde</code> (default): Enable serde support for configuration types.</li>
+<li><code>test-utils</code>: Various utilities helpful for writing tests</li>
+<li><code>geth-tests</code>: Runs tests that require Geth to be installed locally.</li>
+</ul>
+</div></details><h2 id="reexports" class="section-header">Re-exports<a href="#reexports" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name" id="reexport.NetworkConfig"><code>pub use config::<a class="struct" href="config/struct.NetworkConfig.html" title="struct reth_network::config::NetworkConfig">NetworkConfig</a>;</code></div></li><li><div class="item-name" id="reexport.NetworkConfigBuilder"><code>pub use config::<a class="struct" href="config/struct.NetworkConfigBuilder.html" title="struct reth_network::config::NetworkConfigBuilder">NetworkConfigBuilder</a>;</code></div></li><li><div class="item-name" id="reexport.PeerRequest"><code>pub use message::<a class="enum" href="message/enum.PeerRequest.html" title="enum reth_network::message::PeerRequest">PeerRequest</a>;</code></div></li><li><div class="item-name" id="reexport.PeersConfig"><code>pub use peers::<a class="struct" href="peers/struct.PeersConfig.html" title="struct reth_network::peers::PeersConfig">PeersConfig</a>;</code></div></li><li><div class="item-name" id="reexport.AnnouncementFilter"><code>pub use transactions::<a class="struct" href="transactions/struct.AnnouncementFilter.html" title="struct reth_network::transactions::AnnouncementFilter">AnnouncementFilter</a>;</code></div></li><li><div class="item-name" id="reexport.FilterAnnouncement"><code>pub use transactions::<a class="trait" href="transactions/trait.FilterAnnouncement.html" title="trait reth_network::transactions::FilterAnnouncement">FilterAnnouncement</a>;</code></div></li><li><div class="item-name" id="reexport.ValidateTx68"><code>pub use transactions::<a class="trait" href="transactions/trait.ValidateTx68.html" title="trait reth_network::transactions::ValidateTx68">ValidateTx68</a>;</code></div></li></ul><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="config/index.html" title="mod reth_network::config">config</a></div><div class="desc docblock-short">Network config support</div></li><li><div class="item-name"><a class="mod" href="error/index.html" title="mod reth_network::error">error</a></div><div class="desc docblock-short">Possible errors when interacting with the network.</div></li><li><div class="item-name"><a class="mod" href="eth_requests/index.html" title="mod reth_network::eth_requests">eth_requests</a></div><div class="desc docblock-short">Blocks/Headers management for the p2p network.</div></li><li><div class="item-name"><a class="mod" href="import/index.html" title="mod reth_network::import">import</a></div><div class="desc docblock-short">This module provides an abstraction over block import in the form of the <code>BlockImport</code> trait.</div></li><li><div class="item-name"><a class="mod" href="message/index.html" title="mod reth_network::message">message</a></div><div class="desc docblock-short">Capability messaging</div></li><li><div class="item-name"><a class="mod" href="peers/index.html" title="mod reth_network::peers">peers</a></div><div class="desc docblock-short">Peer related implementations</div></li><li><div class="item-name"><a class="mod" href="protocol/index.html" title="mod reth_network::protocol">protocol</a></div><div class="desc docblock-short">Support for handling additional RLPx-based application-level protocols.</div></li><li><div class="item-name"><a class="mod" href="transactions/index.html" title="mod reth_network::transactions">transactions</a></div><div class="desc docblock-short">Transactions management for the p2p network.</div></li></ul><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.ActiveSessionHandle.html" title="struct reth_network::ActiveSessionHandle">ActiveSessionHandle</a></div><div class="desc docblock-short">An established session with a remote peer.</div></li><li><div class="item-name"><a class="struct" href="struct.Discovery.html" title="struct reth_network::Discovery">Discovery</a></div><div class="desc docblock-short">An abstraction over the configured discovery protocol.</div></li><li><div class="item-name"><a class="struct" href="struct.FetchClient.html" title="struct reth_network::FetchClient">FetchClient</a></div><div class="desc docblock-short">Front-end API for fetching data from the network.</div></li><li><div class="item-name"><a class="struct" href="struct.HelloMessageWithProtocols.html" title="struct reth_network::HelloMessageWithProtocols">HelloMessageWithProtocols</a></div><div class="desc docblock-short">This is a superset of <a href="../reth_eth_wire/hello/struct.HelloMessage.html" title="struct reth_eth_wire::hello::HelloMessage">HelloMessage</a> that provides additional protocol <a href="../reth_eth_wire/protocol/struct.Protocol.html" title="struct reth_eth_wire::protocol::Protocol">Protocol</a> information
+about the number of messages used by each capability in order to do proper message ID
+multiplexing.</div></li><li><div class="item-name"><a class="struct" href="struct.NetworkBuilder.html" title="struct reth_network::NetworkBuilder">NetworkBuilder</a></div><div class="desc docblock-short">A builder that can configure all components of the network.</div></li><li><div class="item-name"><a class="struct" href="struct.NetworkHandle.html" title="struct reth_network::NetworkHandle">NetworkHandle</a></div><div class="desc docblock-short">A <em>shareable</em> network frontend. Used to interact with the network.</div></li><li><div class="item-name"><a class="struct" href="struct.NetworkManager.html" title="struct reth_network::NetworkManager">NetworkManager</a></div><div class="desc docblock-short">Manages the <em>entire</em> state of the network.</div></li><li><div class="item-name"><a class="struct" href="struct.PeerInfo.html" title="struct reth_network::PeerInfo">PeerInfo</a></div><div class="desc docblock-short">Info about an active peer session.</div></li><li><div class="item-name"><a class="struct" href="struct.PendingSessionHandle.html" title="struct reth_network::PendingSessionHandle">PendingSessionHandle</a></div><div class="desc docblock-short">A handler attached to a peer session that’s not authenticated yet, pending Handshake and hello
+message which exchanges the <code>capabilities</code> of the peer.</div></li><li><div class="item-name"><a class="struct" href="struct.SessionId.html" title="struct reth_network::SessionId">SessionId</a></div><div class="desc docblock-short">Internal identifier for active sessions.</div></li><li><div class="item-name"><a class="struct" href="struct.SessionLimits.html" title="struct reth_network::SessionLimits">SessionLimits</a></div><div class="desc docblock-short">Limits for sessions.</div></li><li><div class="item-name"><a class="struct" href="struct.SessionManager.html" title="struct reth_network::SessionManager">SessionManager</a></div><div class="desc docblock-short">Manages a set of sessions.</div></li><li><div class="item-name"><a class="struct" href="struct.SessionsConfig.html" title="struct reth_network::SessionsConfig">SessionsConfig</a></div><div class="desc docblock-short">Configuration options when creating a <a href="struct.SessionManager.html" title="struct reth_network::SessionManager">SessionManager</a>.</div></li></ul><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.ActiveSessionMessage.html" title="enum reth_network::ActiveSessionMessage">ActiveSessionMessage</a></div><div class="desc docblock-short">Message variants an active session can produce and send back to the
+<a href="struct.SessionManager.html" title="struct reth_network::SessionManager"><code>SessionManager</code></a></div></li><li><div class="item-name"><a class="enum" href="enum.Direction.html" title="enum reth_network::Direction">Direction</a></div><div class="desc docblock-short">The direction of the connection.</div></li><li><div class="item-name"><a class="enum" href="enum.DisconnectReason.html" title="enum reth_network::DisconnectReason">DisconnectReason</a></div><div class="desc docblock-short">RLPx disconnect reason.</div></li><li><div class="item-name"><a class="enum" href="enum.DiscoveryEvent.html" title="enum reth_network::DiscoveryEvent">DiscoveryEvent</a></div><div class="desc docblock-short">Events produced by the <a href="struct.Discovery.html" title="struct reth_network::Discovery"><code>Discovery</code></a> manager.</div></li><li><div class="item-name"><a class="enum" href="enum.NetworkEvent.html" title="enum reth_network::NetworkEvent">NetworkEvent</a></div><div class="desc docblock-short">(Non-exhaustive) Events emitted by the network that are of interest for subscribers.</div></li><li><div class="item-name"><a class="enum" href="enum.PendingSessionEvent.html" title="enum reth_network::PendingSessionEvent">PendingSessionEvent</a></div><div class="desc docblock-short">Events a pending session can produce.</div></li><li><div class="item-name"><a class="enum" href="enum.PendingSessionHandshakeError.html" title="enum reth_network::PendingSessionHandshakeError">PendingSessionHandshakeError</a></div><div class="desc docblock-short">Errors that can occur during handshaking/authenticating the underlying streams.</div></li><li><div class="item-name"><a class="enum" href="enum.SessionCommand.html" title="enum reth_network::SessionCommand">SessionCommand</a></div><div class="desc docblock-short">Commands that can be sent to the spawned session.</div></li><li><div class="item-name"><a class="enum" href="enum.SessionEvent.html" title="enum reth_network::SessionEvent">SessionEvent</a></div><div class="desc docblock-short">Events produced by the <a href="struct.SessionManager.html" title="struct reth_network::SessionManager"><code>SessionManager</code></a></div></li></ul><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.NetworkEvents.html" title="trait reth_network::NetworkEvents">NetworkEvents</a></div><div class="desc docblock-short">Provides event subscription for the network.</div></li><li><div class="item-name"><a class="trait" href="trait.NetworkProtocols.html" title="trait reth_network::NetworkProtocols">NetworkProtocols</a></div><div class="desc docblock-short">Provides access to modify the network’s additional protocol handlers.</div></li></ul></section></div></main></body></html>

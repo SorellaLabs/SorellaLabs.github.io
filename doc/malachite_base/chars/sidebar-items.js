@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["char_is_graphic"],"mod":["constants","crement","exhaustive"]};

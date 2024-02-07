@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ArchivedFund","Fund","FundResolver"],"struct":["ArchivedSearcherInfoRedefined","SearcherInfo","SearcherInfoRedefined","SearcherInfoRedefinedResolver"]};

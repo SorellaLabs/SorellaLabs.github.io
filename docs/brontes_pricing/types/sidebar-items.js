@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["DexPriceMsg","PoolVariants"],"struct":["DiscoveredPool","PoolState","PoolUpdate"]};

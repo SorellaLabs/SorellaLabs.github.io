@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ArchivedMevType","ArchivedPriceKind","MevType","MevTypeResolver","PriceKind","PriceKindResolver","SpecificMev"],"fn":["compose_sandwich_jit"],"struct":["AtomicBackrun","CexDex","ClassifiedMev","JitLiquidity","JitLiquiditySandwich","Liquidation","MevBlock","MevTypeIter","PriceKindIter","Sandwich","SpecificMevIter"],"trait":["Mev"]};

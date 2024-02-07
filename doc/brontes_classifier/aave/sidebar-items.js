@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["__action_sig_AaveV2flashLoanCall","__action_sig_AaveV2liquidationCallCall","__action_sig_AaveV3flashLoanCall","__action_sig_AaveV3flashLoanSimpleCall","__action_sig_AaveV3liquidationCallCall"],"struct":["AaveV2flashLoanCall","AaveV2liquidationCallCall","AaveV3flashLoanCall","AaveV3flashLoanSimpleCall","AaveV3liquidationCallCall"]};

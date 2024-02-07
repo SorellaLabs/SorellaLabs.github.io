@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ExchangeChannel","TardisClientType","TardisStream"],"struct":["AvailableExchangeSymbols","L2","Quotes","TardisDate","TardisExchangeSymbol","TardisStreamType","Trades","UnverifiedTardisDates"],"trait":["TardisTimeAdj"]};

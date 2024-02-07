@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["ArchivedLibmdbxMetadataInner","LibmdbxMetadataInner","LibmdbxMetadataInnerResolver","MetadataData"]};

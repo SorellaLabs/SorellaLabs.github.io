@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["exhaustive_vec_permutations","vec_delete_left","vec_from_str","vec_from_str_custom","vec_pad_left"],"mod":["exhaustive"],"struct":["ExhaustiveVecPermutations"]};

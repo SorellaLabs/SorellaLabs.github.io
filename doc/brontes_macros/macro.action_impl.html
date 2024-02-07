@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="the action impl macro deals with automatically parsing the data needed for underlying actions. The use is as followed"><title>action_impl in brontes_macros - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="brontes_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (b11fbfbf3 2024-02-03)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../brontes_macros/index.html">brontes_macros</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../brontes_macros/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="index.html">brontes_macros</a>::<wbr><a class="macro" href="#">action_impl</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/brontes_macros/lib.rs.html#81-86">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>action_impl!() { <span class="comment">/* proc-macro */</span> }</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>the action impl macro deals with automatically parsing the data needed for
+underlying actions. The use is as followed</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="macro">action_impl!</span>(ProtocolPath, PathToCall, CallType, [LogType / <span class="lifetime">'s</span>], [logs: bool , call_data: bool, return_data: bool])</code></pre></div>
+<p>The generated structs name will be as the following:
+<LastIdentInProtocolPath> + <LastIdentInPathToCall>
+Example:
+a macro invoked with
+Protocol::UniswapV2,
+crate::UniswapV2::swapCall,</p>
+<p>becomes: UniswapV2swapCall.
+This is done to avoid naming conflicts between classifiers as this is name
+will always be unique.</p>
+<p>The Array of log types are expected to be in the order that they are emitted
+in. Otherwise the decoding will fail</p>
+<h3 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h3>
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="macro">action_impl!</span>(
+    Protocol::UniswapV2,
+    <span class="kw">crate</span>::UniswapV2::swapCall,
+    Swap,
+    [..Swap],
+    logs: <span class="bool-val">true</span>,
+    |index,
+    from_address: Address,
+    target_address: Address,
+    msg_sender: Address,
+    log_data: UniswapV2swapCallLogs| { &lt;body&gt; });
+
+<span class="macro">action_impl!</span>(
+    Protocol::UniswapV2,
+    <span class="kw">crate</span>::UniswapV2::mintCall,
+    Mint,
+    [..Mint],
+    logs: <span class="bool-val">true</span>,
+    call_data: <span class="bool-val">true</span>,
+    |index,
+     from_address: Address,
+     target_address: Address,
+     msg_sender: Address,
+     call_data: mintCall,
+     log_data: UniswapV2mintCallLogs|  { &lt;body&gt; });</code></pre></div>
+<h2 id="logs-config"><a class="doc-anchor" href="#logs-config">§</a>Logs Config</h2>
+<p>NOTE: all log modifiers are compatible with each_other</p>
+<h3 id="log-ignore-before"><a class="doc-anchor" href="#log-ignore-before">§</a>Log Ignore Before</h3>
+<p>if you want to ignore all logs that occurred before a certain log,
+prefix the log with .. ex <code>..Mint</code>.</p>
+<h3 id="log-repeating"><a class="doc-anchor" href="#log-repeating">§</a>Log Repeating</h3>
+<p>if a log is repeating and dynamic in length, use <code>*</code> after the log
+to mark that there is a arbitrary amount of these logs emitted.
+ex <code>Transfer*</code> or <code>..Transfer*</code></p>
+<p>the fields <code>call_data</code>, <code>return_data</code> and <code>log_data</code> are only put into the
+closure if specified they are always in this order, for example if you put</p>
+<p><code>return_data: true</code>
+then then the closure would be as followed
+<code>|index, from_address, target_address, return_data|</code></p>
+<p>for</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code>log_data: <span class="bool-val">true</span>,
+call_data: <span class="bool-val">true</span></code></pre></div>
+<p><code>|index, from_address, target_address, return_data, log_data|</code></p>
+</div></details></section></div></main></body></html>

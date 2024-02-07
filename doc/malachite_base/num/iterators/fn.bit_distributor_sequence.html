@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Returns a sequence based on a `BitDistributor`."><title>bit_distributor_sequence in malachite_base::num::iterators - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="malachite_base" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (b11fbfbf3 2024-02-03)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../malachite_base/index.html">malachite_base</a><span class="version">0.4.4</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In malachite_base::num::iterators</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../malachite_base/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Function <a href="../../index.html">malachite_base</a>::<wbr><a href="../index.html">num</a>::<wbr><a href="index.html">iterators</a>::<wbr><a class="fn" href="#">bit_distributor_sequence</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../../src/malachite_base/num/iterators/mod.rs.html#520-527">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub fn bit_distributor_sequence(
+    x_output_type: <a class="struct" href="../../iterators/bit_distributor/struct.BitDistributorOutputType.html" title="struct malachite_base::iterators::bit_distributor::BitDistributorOutputType">BitDistributorOutputType</a>,
+    y_output_type: <a class="struct" href="../../iterators/bit_distributor/struct.BitDistributorOutputType.html" title="struct malachite_base::iterators::bit_distributor::BitDistributorOutputType">BitDistributorOutputType</a>
+) -&gt; <a class="struct" href="struct.BitDistributorSequence.html" title="struct malachite_base::num::iterators::BitDistributorSequence">BitDistributorSequence</a> <a href="#" class="tooltip" data-notable-ty="BitDistributorSequence">ⓘ</a></code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Returns a sequence based on a <a href="../../iterators/bit_distributor/struct.BitDistributor.html" title="struct malachite_base::iterators::bit_distributor::BitDistributor"><code>BitDistributor</code></a>.</p>
+<p>The sequence is obtained by taking the second output of a two-output <a href="../../iterators/bit_distributor/struct.BitDistributor.html" title="struct malachite_base::iterators::bit_distributor::BitDistributor"><code>BitDistributor</code></a>. If both
+output types are normal with weight 1, the sequence is <a href="https://oeis.org/A059905">https://oeis.org/A059905</a>.</p>
+<p>The smaller the first output type is relative to the second (where tiny outputs are smaller than
+normal outputs), the slower the sequence will grow.</p>
+<ul>
+<li>If the first output type is normal and the second is tiny, the sequence grows as $O(n)$.</li>
+<li>If the first output type is tiny and the second is normal, the sequence grows as $O(\log n)$.</li>
+<li>If both output types are normal with weights $p$ and $q$, the sequence grows as
+$O(n^\frac{p}{p+q})$.</li>
+<li>The output types cannot both be tiny.</li>
+</ul>
+<p>Every number occurs infinitely many times, and any number’s first occurrence is after all
+smaller numbers have occured. The sequence increases by no more than 1 at each step, but may
+decrease by an arbitrarily large amount.</p>
+<p>The output length is infinite.</p>
+<h2 id="complexity-per-iteration"><a class="doc-anchor" href="#complexity-per-iteration">§</a>Complexity per iteration</h2>
+<p>Constant time and additional memory.</p>
+<h2 id="panics"><a class="doc-anchor" href="#panics">§</a>Panics</h2>
+<p>Panics if both output types are tiny.</p>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>malachite_base::iterators::bit_distributor::BitDistributorOutputType;
+<span class="kw">use </span>malachite_base::iterators::prefix_to_string;
+<span class="kw">use </span>malachite_base::num::iterators::bit_distributor_sequence;
+
+<span class="macro">assert_eq!</span>(
+    prefix_to_string(
+        bit_distributor_sequence(
+            BitDistributorOutputType::normal(<span class="number">1</span>),
+            BitDistributorOutputType::normal(<span class="number">2</span>)
+        ),
+        <span class="number">50
+    </span>),
+    <span class="string">"[0, 1, 0, 1, 0, 1, 0, 1, 2, 3, 2, 3, 2, 3, 2, 3, 0, 1, 0, 1, 0, 1, 0, 1, 2, 3, 2, 3, 2, \
+    3, 2, 3, 0, 1, 0, 1, 0, 1, 0, 1, 2, 3, 2, 3, 2, 3, 2, 3, 0, 1, ...]"
+</span>);
+<span class="macro">assert_eq!</span>(
+    prefix_to_string(
+        bit_distributor_sequence(
+            BitDistributorOutputType::normal(<span class="number">2</span>),
+            BitDistributorOutputType::normal(<span class="number">1</span>)
+        ),
+        <span class="number">50
+    </span>),
+    <span class="string">"[0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7, 4, 5, 6, 7, 8, 9, 10, 11, 8, 9, 10, 11, 12, 13, 14, \
+    15, 12, 13, 14, 15, 0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7, 4, 5, 6, 7, 8, 9, ...]"
+</span>);</code></pre></div>
+</div></details><script type="text/json" id="notable-traits-data">{"BitDistributorSequence":"<h3>Notable traits for <code><a class=\"struct\" href=\"struct.BitDistributorSequence.html\" title=\"struct malachite_base::num::iterators::BitDistributorSequence\">BitDistributorSequence</a></code></h3><pre><code><div class=\"where\">impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html\" title=\"trait core::iter::traits::iterator::Iterator\">Iterator</a> for <a class=\"struct\" href=\"struct.BitDistributorSequence.html\" title=\"struct malachite_base::num::iterators::BitDistributorSequence\">BitDistributorSequence</a></div><div class=\"where\">    type <a href=\"https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html#associatedtype.Item\" class=\"associatedtype\">Item</a> = <a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.usize.html\">usize</a>;</div>"}</script></section></div></main></body></html>

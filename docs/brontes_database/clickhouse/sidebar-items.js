@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["USDT_ADDRESS","WETH_ADDRESS"],"mod":["errors"],"struct":["Clickhouse"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"derive":["Row"],"enum":["Compression"],"mod":["config","db","error","errors","fixed_string","insert","inserter","params","query","row","serde","serde_utils","sql","tables","test_utils","types","utils"],"struct":["Client","Credentials"],"trait":["DbRow","InsertRow","Primitive"]};

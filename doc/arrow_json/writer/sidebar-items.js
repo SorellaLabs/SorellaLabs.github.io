@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["array_to_json_array","record_batches_to_json_rows"],"struct":["JsonArray","LineDelimited","Writer","WriterBuilder"],"trait":["JsonFormat"],"type":["ArrayWriter","LineDelimitedWriter"]};

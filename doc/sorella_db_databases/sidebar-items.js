@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"macro":["database_table"],"mod":["clickhouse","errors","tables","test_utils"],"trait":["Database","DatabaseQuery","DatabaseTypeConvert"]};

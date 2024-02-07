@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["SignedFromFloatError","UnsignedFromFloatError"],"struct":["PrimitiveFloatFromSignedError","PrimitiveFloatFromUnsignedError"]};

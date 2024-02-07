@@ -1,0 +1,5 @@
+(function() {var implementors = {
+"brontes_types":[["impl <a class=\"trait\" href=\"clickhouse/row/trait.InsertRow.html\" title=\"trait clickhouse::row::InsertRow\">InsertRow</a> for <a class=\"enum\" href=\"brontes_types/mev/bundle/data/enum.BundleData.html\" title=\"enum brontes_types::mev::bundle::data::BundleData\">BundleData</a>"],["impl <a class=\"trait\" href=\"clickhouse/row/trait.InsertRow.html\" title=\"trait clickhouse::row::InsertRow\">InsertRow</a> for <a class=\"enum\" href=\"brontes_types/normalized_actions/enum.Actions.html\" title=\"enum brontes_types::normalized_actions::Actions\">Actions</a>"]],
+"clickhouse":[],
+"sorella_db_databases":[]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

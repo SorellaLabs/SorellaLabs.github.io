@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["USDC_PSM_ADDRESS","USDP_PSM_ADDRESS"],"fn":["__action_sig_MakerPSMbuyGemCall","__action_sig_MakerPSMsellGemCall"],"struct":["MakerPSMbuyGemCall","MakerPSMsellGemCall"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["errors","factory","lazy","uniswap_v2","uniswap_v3","uniswap_v3_math"],"trait":["AutomatedMarketMaker"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["ArchivedRedefined_Address","ArchivedRedefined_FixedBytes","ArchivedRedefined_Pair","ArchivedRedefined_Uint","Redefined_Address","Redefined_AddressResolver","Redefined_FixedBytes","Redefined_FixedBytesResolver","Redefined_Pair","Redefined_PairResolver","Redefined_Uint","Redefined_UintResolver"],"type":["Redefined_TxHash","Redefined_U256"]};

@@ -1,0 +1,504 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Iterators that generate tuples without repetition."><title>malachite_base::tuples::exhaustive - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="malachite_base" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (b11fbfbf3 2024-02-03)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../malachite_base/index.html">malachite_base</a><span class="version">0.4.4</span></h2></div><h2 class="location"><a href="#">Module exhaustive</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></section><h2><a href="../index.html">In malachite_base::tuples</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../malachite_base/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../../index.html">malachite_base</a>::<wbr><a href="../index.html">tuples</a>::<wbr><a class="mod" href="#">exhaustive</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../../src/malachite_base/tuples/exhaustive.rs.html#1-2893">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Iterators that generate tuples without repetition.</p>
+<p>To reduce binary size and lower compilation time, many of the functions described here are not
+actually defined in Malachite, but may be created in your program using macros exported from
+Malachite. To do this, see the documentation for <code>lex_tuples</code> and <code>lex_custom_tuples</code>.</p>
+<h2 id="lex_pairs"><a class="doc-anchor" href="#lex_pairs">§</a>lex_pairs</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::tuples::exhaustive::lex_pairs;
+
+<span class="macro">assert_eq!</span>(
+    lex_pairs(<span class="string">'a'</span>..<span class="string">'f'</span>, <span class="number">0</span>..<span class="number">3</span>).collect_vec(),
+    <span class="kw-2">&amp;</span>[
+        (<span class="string">'a'</span>, <span class="number">0</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>),
+        (<span class="string">'a'</span>, <span class="number">2</span>),
+        (<span class="string">'b'</span>, <span class="number">0</span>),
+        (<span class="string">'b'</span>, <span class="number">1</span>),
+        (<span class="string">'b'</span>, <span class="number">2</span>),
+        (<span class="string">'c'</span>, <span class="number">0</span>),
+        (<span class="string">'c'</span>, <span class="number">1</span>),
+        (<span class="string">'c'</span>, <span class="number">2</span>),
+        (<span class="string">'d'</span>, <span class="number">0</span>),
+        (<span class="string">'d'</span>, <span class="number">1</span>),
+        (<span class="string">'d'</span>, <span class="number">2</span>),
+        (<span class="string">'e'</span>, <span class="number">0</span>),
+        (<span class="string">'e'</span>, <span class="number">1</span>),
+        (<span class="string">'e'</span>, <span class="number">2</span>)
+    ]
+);</code></pre></div>
+<h2 id="lex_pairs_from_single"><a class="doc-anchor" href="#lex_pairs_from_single">§</a>lex_pairs_from_single</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::tuples::exhaustive::lex_pairs_from_single;
+
+<span class="macro">assert_eq!</span>(
+    lex_pairs_from_single(<span class="number">0</span>..<span class="number">3</span>).collect_vec(),
+    <span class="kw-2">&amp;</span>[(<span class="number">0</span>, <span class="number">0</span>), (<span class="number">0</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">2</span>)]
+);</code></pre></div>
+<h2 id="lex_triples_xyx"><a class="doc-anchor" href="#lex_triples_xyx">§</a>lex_triples_xyx</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::chars::exhaustive::exhaustive_ascii_chars;
+<span class="kw">use </span>malachite_base::iterators::iterator_cache::IteratorCache;
+<span class="kw">use </span>malachite_base::lex_custom_tuples;
+
+<span class="kw">fn </span>unwrap_triple&lt;X, Y, Z&gt;((a, b, c): (<span class="prelude-ty">Option</span>&lt;X&gt;, <span class="prelude-ty">Option</span>&lt;Y&gt;, <span class="prelude-ty">Option</span>&lt;Z&gt;)) -&gt; (X, Y, Z) {
+    (a.unwrap(), b.unwrap(), c.unwrap())
+}
+
+<span class="macro">lex_custom_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    LexTriplesXYX,
+    (X, Y, X),
+    (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>),
+    unwrap_triple,
+    lex_triples_xyx,
+    [X, I, xs, [<span class="number">0</span>, x_0], [<span class="number">2</span>, x_2]],
+    [Y, J, ys, [<span class="number">1</span>, y_1]]
+);
+
+<span class="comment">// We are generating triples of `char`, `i8`, and `char` using two input iterators. The first
+// iterator, `xs`, the chars 'a' through 'c', and the second, `ys`, produces the three numbers
+// 0, 1, and 2. The function we're using is `lex_triples_xyx`, meaning that the first element of
+// the output triples will be taken from `xs`, the second element from `ys`, and the third also
+// from `xs`.
+</span><span class="kw">let </span>ts = lex_triples_xyx(<span class="string">'a'</span>..=<span class="string">'c'</span>, <span class="number">0</span>..<span class="number">3</span>);
+<span class="macro">assert_eq!</span>(
+    ts.collect_vec(),
+    <span class="kw-2">&amp;</span>[
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'a'</span>), (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'b'</span>), (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'c'</span>), (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'a'</span>), (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'b'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'c'</span>), (<span class="string">'a'</span>, <span class="number">2</span>, <span class="string">'a'</span>), (<span class="string">'a'</span>, <span class="number">2</span>, <span class="string">'b'</span>), (<span class="string">'a'</span>, <span class="number">2</span>, <span class="string">'c'</span>), (<span class="string">'b'</span>, <span class="number">0</span>, <span class="string">'a'</span>),
+        (<span class="string">'b'</span>, <span class="number">0</span>, <span class="string">'b'</span>), (<span class="string">'b'</span>, <span class="number">0</span>, <span class="string">'c'</span>), (<span class="string">'b'</span>, <span class="number">1</span>, <span class="string">'a'</span>), (<span class="string">'b'</span>, <span class="number">1</span>, <span class="string">'b'</span>), (<span class="string">'b'</span>, <span class="number">1</span>, <span class="string">'c'</span>),
+        (<span class="string">'b'</span>, <span class="number">2</span>, <span class="string">'a'</span>), (<span class="string">'b'</span>, <span class="number">2</span>, <span class="string">'b'</span>), (<span class="string">'b'</span>, <span class="number">2</span>, <span class="string">'c'</span>), (<span class="string">'c'</span>, <span class="number">0</span>, <span class="string">'a'</span>), (<span class="string">'c'</span>, <span class="number">0</span>, <span class="string">'b'</span>),
+        (<span class="string">'c'</span>, <span class="number">0</span>, <span class="string">'c'</span>), (<span class="string">'c'</span>, <span class="number">1</span>, <span class="string">'a'</span>), (<span class="string">'c'</span>, <span class="number">1</span>, <span class="string">'b'</span>), (<span class="string">'c'</span>, <span class="number">1</span>, <span class="string">'c'</span>), (<span class="string">'c'</span>, <span class="number">2</span>, <span class="string">'a'</span>),
+        (<span class="string">'c'</span>, <span class="number">2</span>, <span class="string">'b'</span>), (<span class="string">'c'</span>, <span class="number">2</span>, <span class="string">'c'</span>)
+    ]
+);</code></pre></div>
+<h2 id="exhaustive_pairs_from_single"><a class="doc-anchor" href="#exhaustive_pairs_from_single">§</a>exhaustive_pairs_from_single</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::tuples::exhaustive::exhaustive_pairs_from_single;
+
+<span class="macro">assert_eq!</span>(
+    exhaustive_pairs_from_single(<span class="number">0</span>..<span class="number">4</span>).collect_vec(),
+    <span class="kw-2">&amp;</span>[
+        (<span class="number">0</span>, <span class="number">0</span>),
+        (<span class="number">0</span>, <span class="number">1</span>),
+        (<span class="number">1</span>, <span class="number">0</span>),
+        (<span class="number">1</span>, <span class="number">1</span>),
+        (<span class="number">0</span>, <span class="number">2</span>),
+        (<span class="number">0</span>, <span class="number">3</span>),
+        (<span class="number">1</span>, <span class="number">2</span>),
+        (<span class="number">1</span>, <span class="number">3</span>),
+        (<span class="number">2</span>, <span class="number">0</span>),
+        (<span class="number">2</span>, <span class="number">1</span>),
+        (<span class="number">3</span>, <span class="number">0</span>),
+        (<span class="number">3</span>, <span class="number">1</span>),
+        (<span class="number">2</span>, <span class="number">2</span>),
+        (<span class="number">2</span>, <span class="number">3</span>),
+        (<span class="number">3</span>, <span class="number">2</span>),
+        (<span class="number">3</span>, <span class="number">3</span>)
+    ]
+);</code></pre></div>
+<h2 id="exhaustive_pairs_1_input"><a class="doc-anchor" href="#exhaustive_pairs_1_input">§</a>exhaustive_pairs_1_input</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::chars::exhaustive::exhaustive_ascii_chars;
+<span class="kw">use </span>malachite_base::exhaustive_tuples_1_input;
+<span class="kw">use </span>malachite_base::iterators::bit_distributor::{BitDistributor, BitDistributorOutputType};
+<span class="kw">use </span>malachite_base::iterators::iterator_cache::IteratorCache;
+<span class="kw">use </span>malachite_base::num::arithmetic::traits::CheckedPow;
+<span class="kw">use </span>malachite_base::num::conversion::traits::{ExactFrom, WrappingFrom};
+<span class="kw">use </span>malachite_base::num::logic::traits::SignificantBits;
+<span class="kw">use </span>std::cmp::max;
+<span class="kw">use </span>std::marker::PhantomData;
+
+<span class="macro">exhaustive_tuples_1_input!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveTriples1Input,
+    exhaustive_triples_1_input,
+    exhaustive_triples_from_single,
+    (I::Item, I::Item, I::Item),
+    [<span class="number">0</span>, output_type_x],
+    [<span class="number">1</span>, output_type_y],
+    [<span class="number">2</span>, output_type_z]
+);
+
+<span class="comment">// We are generating triples of `char`s using one input iterator, which produces all ASCII
+// `char`s. The third element has a tiny output type, so it will grow more slowly than the other
+// two elements (though it doesn't look that way from the first few tuples).
+</span><span class="kw">let </span>ts = exhaustive_triples_1_input(
+    exhaustive_ascii_chars(),
+    BitDistributorOutputType::normal(<span class="number">1</span>),
+    BitDistributorOutputType::normal(<span class="number">1</span>),
+    BitDistributorOutputType::tiny(),
+);
+<span class="macro">assert_eq!</span>(
+    ts.take(<span class="number">20</span>).collect_vec(),
+    <span class="kw-2">&amp;</span>[
+        (<span class="string">'a'</span>, <span class="string">'a'</span>, <span class="string">'a'</span>),
+        (<span class="string">'a'</span>, <span class="string">'a'</span>, <span class="string">'b'</span>),
+        (<span class="string">'a'</span>, <span class="string">'a'</span>, <span class="string">'c'</span>),
+        (<span class="string">'a'</span>, <span class="string">'a'</span>, <span class="string">'d'</span>),
+        (<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'a'</span>),
+        (<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'b'</span>),
+        (<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>),
+        (<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'d'</span>),
+        (<span class="string">'a'</span>, <span class="string">'a'</span>, <span class="string">'e'</span>),
+        (<span class="string">'a'</span>, <span class="string">'a'</span>, <span class="string">'f'</span>),
+        (<span class="string">'a'</span>, <span class="string">'a'</span>, <span class="string">'g'</span>),
+        (<span class="string">'a'</span>, <span class="string">'a'</span>, <span class="string">'h'</span>),
+        (<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'e'</span>),
+        (<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'f'</span>),
+        (<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'g'</span>),
+        (<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'h'</span>),
+        (<span class="string">'b'</span>, <span class="string">'a'</span>, <span class="string">'a'</span>),
+        (<span class="string">'b'</span>, <span class="string">'a'</span>, <span class="string">'b'</span>),
+        (<span class="string">'b'</span>, <span class="string">'a'</span>, <span class="string">'c'</span>),
+        (<span class="string">'b'</span>, <span class="string">'a'</span>, <span class="string">'d'</span>)
+    ]
+);</code></pre></div>
+<h2 id="exhaustive_pairs"><a class="doc-anchor" href="#exhaustive_pairs">§</a>exhaustive_pairs</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::tuples::exhaustive::exhaustive_pairs;
+
+<span class="kw">let </span>xss = exhaustive_pairs([<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>].iter().cloned(), <span class="number">0</span>..<span class="number">3</span>).collect_vec();
+<span class="macro">assert_eq!</span>(
+    xss,
+    <span class="kw-2">&amp;</span>[(<span class="string">'a'</span>, <span class="number">0</span>), (<span class="string">'a'</span>, <span class="number">1</span>), (<span class="string">'b'</span>, <span class="number">0</span>), (<span class="string">'b'</span>, <span class="number">1</span>), (<span class="string">'a'</span>, <span class="number">2</span>), (<span class="string">'b'</span>, <span class="number">2</span>), (<span class="string">'c'</span>, <span class="number">0</span>), (<span class="string">'c'</span>, <span class="number">1</span>), (<span class="string">'c'</span>, <span class="number">2</span>)]
+);</code></pre></div>
+<h2 id="exhaustive_pairs_custom_output"><a class="doc-anchor" href="#exhaustive_pairs_custom_output">§</a>exhaustive_pairs_custom_output</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::iterators::bit_distributor::BitDistributorOutputType;
+<span class="kw">use </span>malachite_base::tuples::exhaustive::exhaustive_pairs_custom_output;
+
+<span class="kw">let </span>xss = exhaustive_pairs_custom_output(
+    [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>].iter().cloned(),
+    <span class="number">0</span>..<span class="number">3</span>,
+    BitDistributorOutputType::normal(<span class="number">1</span>),
+    BitDistributorOutputType::tiny(),
+)
+.collect_vec();
+<span class="macro">assert_eq!</span>(
+    xss,
+    <span class="kw-2">&amp;</span>[(<span class="string">'a'</span>, <span class="number">0</span>), (<span class="string">'a'</span>, <span class="number">1</span>), (<span class="string">'a'</span>, <span class="number">2</span>), (<span class="string">'b'</span>, <span class="number">0</span>), (<span class="string">'b'</span>, <span class="number">1</span>), (<span class="string">'b'</span>, <span class="number">2</span>), (<span class="string">'c'</span>, <span class="number">0</span>), (<span class="string">'c'</span>, <span class="number">1</span>), (<span class="string">'c'</span>, <span class="number">2</span>)]
+);</code></pre></div>
+<h2 id="exhaustive_triples_xyx"><a class="doc-anchor" href="#exhaustive_triples_xyx">§</a>exhaustive_triples_xyx</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::chars::exhaustive::exhaustive_ascii_chars;
+<span class="kw">use </span>malachite_base::custom_tuples;
+<span class="kw">use </span>malachite_base::iterators::bit_distributor::{BitDistributor, BitDistributorOutputType};
+<span class="kw">use </span>malachite_base::iterators::iterator_cache::IteratorCache;
+<span class="kw">use </span>malachite_base::num::conversion::traits::{ExactFrom, WrappingFrom};
+<span class="kw">use </span>malachite_base::num::logic::traits::SignificantBits;
+<span class="kw">use </span>std::cmp::max;
+
+<span class="attr">#[allow(clippy::missing_const_for_fn)]
+</span><span class="kw">fn </span>unwrap_triple&lt;X, Y, Z&gt;((a, b, c): (<span class="prelude-ty">Option</span>&lt;X&gt;, <span class="prelude-ty">Option</span>&lt;Y&gt;, <span class="prelude-ty">Option</span>&lt;Z&gt;)) -&gt; (X, Y, Z) {
+    (a.unwrap(), b.unwrap(), c.unwrap())
+}
+
+<span class="macro">custom_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveTriplesXYX,
+    (X, Y, X),
+    (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>),
+    unwrap_triple,
+    exhaustive_triples_xyx,
+    exhaustive_triples_xyx_custom_output,
+    [X, I, xs, xs_done, [<span class="number">0</span>, output_type_xs_0], [<span class="number">2</span>, output_type_ys_1]],
+    [Y, J, ys, ys_done, [<span class="number">1</span>, output_type_xs_2]]
+);
+
+<span class="comment">// We are generating triples of `char`, `i8`, and `char` using two input iterators. The first
+// iterator, `xs`, produces all ASCII `char`s, and the second, `ys`, produces the three numbers
+// 0, 1, and 2. The function we're using is `exhaustive_triples_xyx`, meaning that the first
+// element of the output triples will be taken from `xs`, the second element from `ys`, and the
+// third also from `xs`.
+</span><span class="kw">let </span>ts = exhaustive_triples_xyx(exhaustive_ascii_chars(), <span class="number">0</span>..<span class="number">3</span>);
+<span class="macro">assert_eq!</span>(
+    ts.take(<span class="number">20</span>).collect_vec(),
+    <span class="kw-2">&amp;</span>[
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'a'</span>),
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'b'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'a'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'b'</span>),
+        (<span class="string">'b'</span>, <span class="number">0</span>, <span class="string">'a'</span>),
+        (<span class="string">'b'</span>, <span class="number">0</span>, <span class="string">'b'</span>),
+        (<span class="string">'b'</span>, <span class="number">1</span>, <span class="string">'a'</span>),
+        (<span class="string">'b'</span>, <span class="number">1</span>, <span class="string">'b'</span>),
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'c'</span>),
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'d'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'c'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'d'</span>),
+        (<span class="string">'b'</span>, <span class="number">0</span>, <span class="string">'c'</span>),
+        (<span class="string">'b'</span>, <span class="number">0</span>, <span class="string">'d'</span>),
+        (<span class="string">'b'</span>, <span class="number">1</span>, <span class="string">'c'</span>),
+        (<span class="string">'b'</span>, <span class="number">1</span>, <span class="string">'d'</span>),
+        (<span class="string">'a'</span>, <span class="number">2</span>, <span class="string">'a'</span>),
+        (<span class="string">'a'</span>, <span class="number">2</span>, <span class="string">'b'</span>),
+        (<span class="string">'b'</span>, <span class="number">2</span>, <span class="string">'a'</span>),
+        (<span class="string">'b'</span>, <span class="number">2</span>, <span class="string">'b'</span>)
+    ]
+);</code></pre></div>
+<h2 id="exhaustive_triples_xyx_custom_output"><a class="doc-anchor" href="#exhaustive_triples_xyx_custom_output">§</a>exhaustive_triples_xyx_custom_output</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::chars::exhaustive::exhaustive_ascii_chars;
+<span class="kw">use </span>malachite_base::custom_tuples;
+<span class="kw">use </span>malachite_base::iterators::bit_distributor::{BitDistributor, BitDistributorOutputType};
+<span class="kw">use </span>malachite_base::iterators::iterator_cache::IteratorCache;
+<span class="kw">use </span>malachite_base::num::conversion::traits::{ExactFrom, WrappingFrom};
+<span class="kw">use </span>malachite_base::num::logic::traits::SignificantBits;
+<span class="kw">use </span>std::cmp::max;
+
+<span class="attr">#[allow(clippy::missing_const_for_fn)]
+</span><span class="kw">fn </span>unwrap_triple&lt;X, Y, Z&gt;((a, b, c): (<span class="prelude-ty">Option</span>&lt;X&gt;, <span class="prelude-ty">Option</span>&lt;Y&gt;, <span class="prelude-ty">Option</span>&lt;Z&gt;)) -&gt; (X, Y, Z) {
+    (a.unwrap(), b.unwrap(), c.unwrap())
+}
+
+<span class="macro">custom_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveTriplesXYX,
+    (X, Y, X),
+    (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>),
+    unwrap_triple,
+    exhaustive_triples_xyx,
+    exhaustive_triples_xyx_custom_output,
+    [X, I, xs, xs_done, [<span class="number">0</span>, output_type_xs_0], [<span class="number">2</span>, output_type_ys_1]],
+    [Y, J, ys, ys_done, [<span class="number">1</span>, output_type_xs_2]]
+);
+
+<span class="comment">// We are generating triples of `char`, `i8`, and `char` using two input iterators. The first
+// iterator, `xs`, produces all ASCII `char`s, and the second, `ys`, produces the three numbers
+// 0, 1, and 2. The function we're using is `exhaustive_triples_xyx_custom_output`, meaning that
+// the first element of the output triples will be taken from `xs`, the second element from
+// `ys`, and the third also from `xs`.
+//
+// The third element has a tiny output type, so it will grow more slowly than the other two
+// elements (though it doesn't look that way from the first few tuples).
+</span><span class="kw">let </span>ts = exhaustive_triples_xyx_custom_output(
+    exhaustive_ascii_chars(),
+    <span class="number">0</span>..<span class="number">3</span>,
+    BitDistributorOutputType::normal(<span class="number">1</span>),
+    BitDistributorOutputType::normal(<span class="number">1</span>),
+    BitDistributorOutputType::tiny(),
+);
+<span class="macro">assert_eq!</span>(
+    ts.take(<span class="number">20</span>).collect_vec(),
+    <span class="kw-2">&amp;</span>[
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'a'</span>),
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'b'</span>),
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'c'</span>),
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'d'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'a'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'b'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'c'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'d'</span>),
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'e'</span>),
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'f'</span>),
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'g'</span>),
+        (<span class="string">'a'</span>, <span class="number">0</span>, <span class="string">'h'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'e'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'f'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'g'</span>),
+        (<span class="string">'a'</span>, <span class="number">1</span>, <span class="string">'h'</span>),
+        (<span class="string">'b'</span>, <span class="number">0</span>, <span class="string">'a'</span>),
+        (<span class="string">'b'</span>, <span class="number">0</span>, <span class="string">'b'</span>),
+        (<span class="string">'b'</span>, <span class="number">0</span>, <span class="string">'c'</span>),
+        (<span class="string">'b'</span>, <span class="number">0</span>, <span class="string">'d'</span>)
+    ]
+);</code></pre></div>
+<h2 id="lex_ordered_unique_quadruples"><a class="doc-anchor" href="#lex_ordered_unique_quadruples">§</a>lex_ordered_unique_quadruples</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::iterators::iterator_cache::IteratorCache;
+<span class="kw">use </span>malachite_base::lex_ordered_unique_tuples;
+<span class="kw">use </span>malachite_base::vecs::exhaustive::fixed_length_ordered_unique_indices_helper;
+<span class="kw">use </span>std::marker::PhantomData;
+
+<span class="macro">lex_ordered_unique_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    LexOrderedUniqueQuadruples,
+    <span class="number">4</span>,
+    (I::Item, I::Item, I::Item, I::Item),
+    lex_ordered_unique_quadruples,
+    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+);
+
+<span class="kw">let </span>xss = lex_ordered_unique_quadruples(<span class="number">1</span>..=<span class="number">6</span>).collect_vec();
+<span class="macro">assert_eq!</span>(
+    xss.into_iter().collect_vec().as_slice(),
+    <span class="kw-2">&amp;</span>[
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>),
+        (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>),
+        (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>),
+        (<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>),
+        (<span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>),
+        (<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)
+    ]
+);</code></pre></div>
+<h2 id="exhaustive_ordered_unique_quadruples"><a class="doc-anchor" href="#exhaustive_ordered_unique_quadruples">§</a>exhaustive_ordered_unique_quadruples</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::exhaustive_ordered_unique_tuples;
+<span class="kw">use </span>malachite_base::iterators::iterator_cache::IteratorCache;
+<span class="kw">use </span>malachite_base::vecs::exhaustive::next_bit_pattern;
+
+<span class="macro">exhaustive_ordered_unique_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveOrderedUniqueQuadruples,
+    <span class="number">4</span>,
+    (I::Item, I::Item, I::Item, I::Item),
+    exhaustive_ordered_unique_quadruples,
+    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+);
+
+<span class="kw">let </span>xss = exhaustive_ordered_unique_quadruples(<span class="number">1</span>..=<span class="number">6</span>).collect_vec();
+<span class="macro">assert_eq!</span>(
+    xss.into_iter().collect_vec().as_slice(),
+    <span class="kw-2">&amp;</span>[
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>),
+        (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>),
+        (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>),
+        (<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>),
+        (<span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>),
+        (<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)
+    ]
+);</code></pre></div>
+<h2 id="lex_unique_quadruples"><a class="doc-anchor" href="#lex_unique_quadruples">§</a>lex_unique_quadruples</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::iterators::iterator_cache::IteratorCache;
+<span class="kw">use </span>malachite_base::lex_unique_tuples;
+<span class="kw">use </span>malachite_base::vecs::exhaustive::{UniqueIndices, unique_indices};
+
+<span class="macro">lex_unique_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    LexUniqueQuadruples,
+    <span class="number">4</span>,
+    (I::Item, I::Item, I::Item, I::Item),
+    lex_unique_quadruples,
+    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+);
+
+<span class="kw">let </span>xss = lex_unique_quadruples(<span class="number">1</span>..=<span class="number">6</span>).take(<span class="number">20</span>).collect_vec();
+<span class="macro">assert_eq!</span>(
+    xss.into_iter().collect_vec().as_slice(),
+    <span class="kw-2">&amp;</span>[
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">3</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">4</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">3</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">4</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">2</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">4</span>)
+    ]
+);</code></pre></div>
+<h2 id="exhaustive_unique_quadruples"><a class="doc-anchor" href="#exhaustive_unique_quadruples">§</a>exhaustive_unique_quadruples</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
+<span class="kw">use </span>malachite_base::exhaustive_unique_tuples;
+<span class="kw">use </span>malachite_base::num::iterators::{RulerSequence, ruler_sequence};
+<span class="kw">use </span>malachite_base::tuples::exhaustive::{ExhaustiveDependentPairs, exhaustive_dependent_pairs};
+<span class="kw">use </span>malachite_base::vecs::ExhaustiveVecPermutations;
+<span class="kw">use </span>malachite_base::vecs::exhaustive::{
+    ExhaustiveOrderedUniqueCollections,
+    ExhaustiveUniqueVecsGenerator,
+    exhaustive_ordered_unique_vecs_fixed_length
+};
+
+<span class="macro">exhaustive_unique_tuples!</span>(
+    (<span class="kw">pub</span>(<span class="kw">crate</span>)),
+    ExhaustiveUniqueQuadruples,
+    <span class="number">4</span>,
+    (I::Item, I::Item, I::Item, I::Item),
+    exhaustive_unique_quadruples,
+    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+);
+
+<span class="kw">let </span>xss = exhaustive_unique_quadruples(<span class="number">1</span>..=<span class="number">6</span>).take(<span class="number">20</span>).collect_vec();
+<span class="macro">assert_eq!</span>(
+    xss.into_iter().collect_vec().as_slice(),
+    <span class="kw-2">&amp;</span>[
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">3</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">5</span>),
+        (<span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>),
+        (<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">4</span>),
+        (<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>),
+        (<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">2</span>),
+        (<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>),
+        (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>),
+        (<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>),
+        (<span class="number">1</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">3</span>),
+        (<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">1</span>),
+        (<span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>)
+    ]
+);</code></pre></div>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.ExhaustiveDependentPairs.html" title="struct malachite_base::tuples::exhaustive::ExhaustiveDependentPairs">ExhaustiveDependentPairs</a></div><div class="desc docblock-short">Generates pairs $(x, y)$, where the possible values of $y$ depend on the value of $x$.</div></li><li><div class="item-name"><a class="struct" href="struct.ExhaustiveOrderedUniquePairs.html" title="struct malachite_base::tuples::exhaustive::ExhaustiveOrderedUniquePairs">ExhaustiveOrderedUniquePairs</a></div><div class="desc docblock-short">This documentation applies not only to <code>ExhaustiveOrderedUniquePairs</code>, but also to
+<code>ExhaustiveOrderedUniqueTriples</code>, <code>ExhaustiveOrderedUniqueQuadruples</code>, and so on. See
+<a href="../../macro.exhaustive_ordered_unique_tuples.html" title="macro malachite_base::exhaustive_ordered_unique_tuples"><code>exhaustive_ordered_unique_tuples</code></a> for more information.</div></li><li><div class="item-name"><a class="struct" href="struct.ExhaustivePairs.html" title="struct malachite_base::tuples::exhaustive::ExhaustivePairs">ExhaustivePairs</a></div><div class="desc docblock-short">This documentation applies not only to <code>ExhaustivePairs</code>, but also to
+<code>ExhaustiveTriples</code>, <code>ExhaustiveQuadruples</code>, and so on. See <a href="../../macro.exhaustive_tuples.html" title="macro malachite_base::exhaustive_tuples"><code>exhaustive_tuples</code></a> for
+more information.</div></li><li><div class="item-name"><a class="struct" href="struct.ExhaustivePairs1Input.html" title="struct malachite_base::tuples::exhaustive::ExhaustivePairs1Input">ExhaustivePairs1Input</a></div><div class="desc docblock-short">This documentation applies not only to <code>ExhaustivePairs1Input</code>, but also to
+<code>ExhaustiveTriples1Input</code>, <code>ExhaustiveQuadruples1Input</code>, and so on. See
+<a href="../../macro.exhaustive_tuples_1_input.html" title="macro malachite_base::exhaustive_tuples_1_input"><code>exhaustive_tuples_1_input</code></a> for more information.</div></li><li><div class="item-name"><a class="struct" href="struct.ExhaustiveUniquePairs.html" title="struct malachite_base::tuples::exhaustive::ExhaustiveUniquePairs">ExhaustiveUniquePairs</a></div><div class="desc docblock-short">Generates all pairs of elements from an iterator, where the pairs have no repetitions.</div></li><li><div class="item-name"><a class="struct" href="struct.LexDependentPairs.html" title="struct malachite_base::tuples::exhaustive::LexDependentPairs">LexDependentPairs</a></div><div class="desc docblock-short">Generates pairs $(x, y)$, where the possible values of $y$ depend on the value of $x$. All $y$
+values are output before proceeding to the next $x$.</div></li><li><div class="item-name"><a class="struct" href="struct.LexOrderedUniquePairs.html" title="struct malachite_base::tuples::exhaustive::LexOrderedUniquePairs">LexOrderedUniquePairs</a></div><div class="desc docblock-short">This documentation applies not only to <code>LexOrderedUniquePairs</code>, but also to
+<code>LexOrderedUniqueTriples</code>, <code>LexOrderedUniqueQuadruples</code>, and so on. See
+<a href="../../macro.lex_ordered_unique_tuples.html" title="macro malachite_base::lex_ordered_unique_tuples"><code>lex_ordered_unique_tuples</code></a> for more information.</div></li><li><div class="item-name"><a class="struct" href="struct.LexPairs.html" title="struct malachite_base::tuples::exhaustive::LexPairs">LexPairs</a></div><div class="desc docblock-short">This documentation applies not only to <code>LexPairs</code>, but also to <code>LexTriples</code>,
+<code>LexQuadruples</code>, and so on. See <code>lex_tuples</code> for more information.</div></li><li><div class="item-name"><a class="struct" href="struct.LexPairsFromSingle.html" title="struct malachite_base::tuples::exhaustive::LexPairsFromSingle">LexPairsFromSingle</a></div><div class="desc docblock-short">This documentation applies not only to <code>LexPairsFromSingle</code>, but also to
+<code>LexTriplesFromSingle</code>, <code>LexQuadruplesFromSingle</code>, and so on. See <a href="../../macro.lex_tuples.html" title="macro malachite_base::lex_tuples"><code>lex_tuples</code></a> for
+more information.</div></li><li><div class="item-name"><a class="struct" href="struct.LexUniquePairs.html" title="struct malachite_base::tuples::exhaustive::LexUniquePairs">LexUniquePairs</a></div><div class="desc docblock-short">This documentation applies not only to <code>LexUniquePairs</code>, but also to
+<code>LexUniqueTriples</code>, <code>LexUniqueQuadruples</code>, and so on. See <a href="../../macro.lex_unique_tuples.html" title="macro malachite_base::lex_unique_tuples"><code>lex_unique_tuples</code></a> for
+more information.</div></li></ul><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.ExhaustiveDependentPairsYsGenerator.html" title="trait malachite_base::tuples::exhaustive::ExhaustiveDependentPairsYsGenerator">ExhaustiveDependentPairsYsGenerator</a></div><div class="desc docblock-short">A trait used by dependent-pairs structs.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.exhaustive_dependent_pairs.html" title="fn malachite_base::tuples::exhaustive::exhaustive_dependent_pairs">exhaustive_dependent_pairs</a></div><div class="desc docblock-short">Generates pairs $(x, y)$, where the possible values of $y$ depend on the value of $x$.</div></li><li><div class="item-name"><a class="fn" href="fn.exhaustive_dependent_pairs_stop_after_empty_ys.html" title="fn malachite_base::tuples::exhaustive::exhaustive_dependent_pairs_stop_after_empty_ys">exhaustive_dependent_pairs_stop_after_empty_ys</a></div><div class="desc docblock-short">Generates pairs $(x, y)$, where the possible values of $y$ depend on the value of $x$. $x$
+values with no corresponding $y$ values are treated specially.</div></li><li><div class="item-name"><a class="fn" href="fn.exhaustive_ordered_unique_pairs.html" title="fn malachite_base::tuples::exhaustive::exhaustive_ordered_unique_pairs">exhaustive_ordered_unique_pairs</a></div><div class="desc docblock-short">This documentation applies not only to <code>exhaustive_ordered_unique_pairs</code>, but also to
+<code>exhaustive_ordered_unique_triples</code>, <code>exhaustive_ordered_unique_quadruples</code>, and so on.
+See <a href="../../macro.exhaustive_ordered_unique_tuples.html" title="macro malachite_base::exhaustive_ordered_unique_tuples"><code>exhaustive_ordered_unique_tuples</code></a> for more information.</div></li><li><div class="item-name"><a class="fn" href="fn.exhaustive_pairs.html" title="fn malachite_base::tuples::exhaustive::exhaustive_pairs">exhaustive_pairs</a></div><div class="desc docblock-short">This documentation applies not only to <code>exhaustive_pairs</code>, but also to
+<code>exhaustive_triples</code>, <code>exhaustive_quadruples</code>, and so on. See <a href="../../macro.exhaustive_tuples.html" title="macro malachite_base::exhaustive_tuples"><code>exhaustive_tuples</code></a> for
+more information.</div></li><li><div class="item-name"><a class="fn" href="fn.exhaustive_pairs_1_input.html" title="fn malachite_base::tuples::exhaustive::exhaustive_pairs_1_input">exhaustive_pairs_1_input</a></div><div class="desc docblock-short">This documentation applies not only to <code>exhaustive_pairs_1_input</code>, but also to
+<code>exhaustive_triples_1_input</code>, <code>exhaustive_quadruples_1_input</code>, and so on. See
+<a href="../../macro.exhaustive_tuples_1_input.html" title="macro malachite_base::exhaustive_tuples_1_input"><code>exhaustive_tuples_1_input</code></a> for more information.</div></li><li><div class="item-name"><a class="fn" href="fn.exhaustive_pairs_custom_output.html" title="fn malachite_base::tuples::exhaustive::exhaustive_pairs_custom_output">exhaustive_pairs_custom_output</a></div><div class="desc docblock-short">This documentation applies not only to <code>exhaustive_pairs_custom_output</code>, but also to
+<code>exhaustive_triples_custom_output</code>, <code>exhaustive_quadruples_custom_output</code>, and so on.
+See <a href="../../macro.exhaustive_tuples.html" title="macro malachite_base::exhaustive_tuples"><code>exhaustive_tuples</code></a> for more information.</div></li><li><div class="item-name"><a class="fn" href="fn.exhaustive_pairs_from_single.html" title="fn malachite_base::tuples::exhaustive::exhaustive_pairs_from_single">exhaustive_pairs_from_single</a></div><div class="desc docblock-short">This documentation applies not only to <code>exhaustive_pairs_from_single</code>, but also to
+<code>exhaustive_triples_from_single</code>, <code>exhaustive_quadruples_from_single</code>, and so on. See
+<a href="../../macro.exhaustive_tuples_1_input.html" title="macro malachite_base::exhaustive_tuples_1_input"><code>exhaustive_tuples_1_input</code></a> for more information.</div></li><li><div class="item-name"><a class="fn" href="fn.exhaustive_unique_pairs.html" title="fn malachite_base::tuples::exhaustive::exhaustive_unique_pairs">exhaustive_unique_pairs</a></div><div class="desc docblock-short">Generates pairs of elements from a single iterator, such that each pair has no repeated
+elements.</div></li><li><div class="item-name"><a class="fn" href="fn.exhaustive_units.html" title="fn malachite_base::tuples::exhaustive::exhaustive_units">exhaustive_units</a></div><div class="desc docblock-short">Generates the only unit: <code>()</code>.</div></li><li><div class="item-name"><a class="fn" href="fn.lex_dependent_pairs.html" title="fn malachite_base::tuples::exhaustive::lex_dependent_pairs">lex_dependent_pairs</a></div><div class="desc docblock-short">Generates pairs $(x, y)$, where the possible values of $y$ depend on the value of $x$. All $y$
+values are output before proceeding to the next $x$.</div></li><li><div class="item-name"><a class="fn" href="fn.lex_dependent_pairs_stop_after_empty_ys.html" title="fn malachite_base::tuples::exhaustive::lex_dependent_pairs_stop_after_empty_ys">lex_dependent_pairs_stop_after_empty_ys</a></div><div class="desc docblock-short">Generates pairs $(x, y)$, where the possible values of $y$ depend on the value of $x$. $x$
+values with no corresponding $y$ values are treated specially.</div></li><li><div class="item-name"><a class="fn" href="fn.lex_ordered_unique_pairs.html" title="fn malachite_base::tuples::exhaustive::lex_ordered_unique_pairs">lex_ordered_unique_pairs</a></div><div class="desc docblock-short">This documentation applies not only to <code>lex_ordered_unique_pairs</code>, but also to
+<code>lex_ordered_unique_triples</code>, <code>lex_ordered_unique_quadruples</code>, and so on. See
+<a href="../../macro.lex_ordered_unique_tuples.html" title="macro malachite_base::lex_ordered_unique_tuples"><code>lex_ordered_unique_tuples</code></a> for more information.</div></li><li><div class="item-name"><a class="fn" href="fn.lex_pairs.html" title="fn malachite_base::tuples::exhaustive::lex_pairs">lex_pairs</a></div><div class="desc docblock-short">This documentation applies not only to <code>lex_pairs</code>, but also to <code>lex_triples</code>,
+<code>lex_quadruples</code>, and so on. See <a href="../../macro.lex_tuples.html" title="macro malachite_base::lex_tuples"><code>lex_tuples</code></a> for more information.</div></li><li><div class="item-name"><a class="fn" href="fn.lex_pairs_from_single.html" title="fn malachite_base::tuples::exhaustive::lex_pairs_from_single">lex_pairs_from_single</a></div><div class="desc docblock-short">This documentation applies not only to <code>lex_pairs_from_single</code>, but also to
+<code>lex_triples_from_single</code>, <code>lex_quadruples_from_single</code>, and so on. See <a href="../../macro.lex_tuples.html" title="macro malachite_base::lex_tuples"><code>lex_tuples</code></a>
+for more information.</div></li><li><div class="item-name"><a class="fn" href="fn.lex_unique_pairs.html" title="fn malachite_base::tuples::exhaustive::lex_unique_pairs">lex_unique_pairs</a></div><div class="desc docblock-short">This documentation applies not only to <code>lex_unique_pairs</code>, but also to
+<code>lex_unique_triples</code>, <code>lex_unique_quadruples</code>, and so on. See <a href="../../macro.lex_unique_tuples.html" title="macro malachite_base::lex_unique_tuples"><code>lex_unique_tuples</code></a> for
+more information.</div></li></ul></section></div></main></body></html>

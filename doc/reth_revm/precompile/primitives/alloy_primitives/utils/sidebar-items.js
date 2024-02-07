@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["EIP191_PREFIX"],"enum":["ParseUnits","UnitsError"],"fn":["eip191_hash_message","eip191_message","format_ether","format_units","keccak256","parse_ether","parse_units"],"struct":["Keccak256","Unit"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["array","vec"],"trait":["OwnedChunks","StaticOwnedChunks"]};

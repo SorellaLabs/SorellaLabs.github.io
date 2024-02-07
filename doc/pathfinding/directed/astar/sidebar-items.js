@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["astar","astar_bag","astar_bag_collect"],"struct":["AstarSolution"]};

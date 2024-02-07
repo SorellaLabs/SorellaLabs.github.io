@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="The `brontes_inspect` crate is designed to efficiently detect and analyze MEV. Emphasizing modularity and ease of use, this crate provides a robust foundation for developing custom inspectors, streamlining the process of MEV strategy identification."><title>brontes_inspect - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="brontes_inspect" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (b11fbfbf3 2024-02-03)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-4c98445ec4002617.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../brontes_inspect/index.html">brontes_inspect</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li></ul></section></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../brontes_inspect/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">brontes_inspect</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/brontes_inspect/lib.rs.html#1-173">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>The <code>brontes_inspect</code> crate is designed to efficiently detect and analyze
+MEV. Emphasizing modularity and ease of use, this crate provides a robust
+foundation for developing custom inspectors, streamlining the process of MEV
+strategy identification.</p>
+<p>By abstracting complex tasks such as decoding, normalization, metadata
+fetching, and price tracking, <code>brontes_inspect</code> allows developers to
+concentrate on the unique logic of their MEV detection strategies. This
+design philosophy ensures that users can easily integrate their own
+inspectors, tailored to specific MEV strategies, without delving
+into the underlying infrastructure details.</p>
+<h3 id="inspector"><a class="doc-anchor" href="#inspector">§</a>Inspector</h3>
+<p><code>Inspector</code> is a trait defining a method <code>process_tree</code>. This method takes a
+<code>BlockTree</code> and <code>Metadata</code> as input and returns a vector of tuples, each
+containing a <code>BundleHeader</code> and a <code>BundleData</code>.</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[async_trait::async_trait]
+</span><span class="kw">pub trait </span>Inspector: Send + Sync {
+    <span class="kw">async fn </span>process_tree(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        tree: Arc&lt;BlockTree&lt;Actions&gt;&gt;,
+        metadata: Arc&lt;Metadata&gt;,
+    ) -&gt; Vec&lt;Bundle&gt;;
+}</code></pre></div>
+<p>The <a href="../brontes-classifier/index.html"><code>BlockTree</code></a> represents a block of
+classified &amp; normalized Ethereum transactions &amp; their traces, and the
+<a href="../brontes-database"><code>Metadata</code></a> contains price information &amp; relevant off
+chain data such as mempool data &amp; centralized exchange price data relevant
+to that block. The <code>process_tree</code> method analyzes the block and identifies
+instances of the MEV strategy that the inspector is designed to detect.</p>
+<h3 id="individual-inspectors"><a class="doc-anchor" href="#individual-inspectors">§</a>Individual Inspectors</h3>
+<p>The <code>brontes_inspect</code> crate provides several individual inspectors, each
+designed to detect a specific type of MEV strategy. These inspectors are
+defined in their respective modules:</p>
+<ul>
+<li><a href="atomic_backrun/index.html"><code>atomic_backrun</code></a></li>
+<li><a href="cex_dex/index.html"><code>cex_dex</code></a></li>
+<li><a href="jit/index.html"><code>jit</code></a></li>
+<li><a href="sandwich/index.html"><code>sandwich</code></a></li>
+<li><a href="liquidations/index.html"><code>liquidations</code></a></li>
+<li><a href="long_tail/index.html"><code>long_tail</code></a></li>
+</ul>
+<p>Each inspector implements the <code>Inspector</code> trait and provides its own
+implementation of the <code>process_tree</code> method.</p>
+<h3 id="composer"><a class="doc-anchor" href="#composer">§</a>Composer</h3>
+<p>The <code>Composer</code> is a special type of inspector that combines the results of
+individual inspectors to identify more complex MEV strategies. It takes an
+array of individual inspectors and a <code>BlockTree</code> and <code>Metadata</code> as input,
+running each inspector on the block and collecting their results.</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">pub struct </span>Composer&lt;<span class="lifetime">'a</span>, <span class="kw">const </span>N: usize&gt; {
+    inspectors_execution: InspectorFut&lt;<span class="lifetime">'a</span>&gt;,
+    pre_processing:       BlockPreprocessing,
+}</code></pre></div>
+<p>The <code>Composer</code> uses  to define a filter that
+orders results from individual inspectors. This ensures that lower-level
+actions are composed before higher-level actions, which could affect the
+composition.</p>
+<p>Additionally, the <code>Composer</code> provides a <code>Future</code> implementation for use in
+asynchronous contexts. When polled, it runs the individual inspectors in
+parallel and collects their results, processing them to identify complex MEV
+strategies.</p>
+<p>In summary, the <code>brontes_inspect</code> crate offers tools for detecting and
+analyzing MEV strategies in Ethereum transactions. Individual inspectors
+identify specific MEV strategies, while the <code>Composer</code> combines these
+results to identify more complex strategies.</p>
+</div></details><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="atomic_arb/index.html" title="mod brontes_inspect::atomic_arb">atomic_arb</a></div></li><li><div class="item-name"><a class="mod" href="cex_dex/index.html" title="mod brontes_inspect::cex_dex">cex_dex</a></div><div class="desc docblock-short">This module implements the <code>CexDexInspector</code>, a specialized inspector
+designed to detect arbitrage opportunities between centralized
+exchanges (CEXs) and decentralized exchanges (DEXs).</div></li><li><div class="item-name"><a class="mod" href="composer/index.html" title="mod brontes_inspect::composer">composer</a></div><div class="desc docblock-short">The <code>composer</code> module in <code>brontes-inspect</code> specializes in analyzing and
+processing MEV data. Its primary functions include composing complex MEV
+types from simpler ones and deduplicating overlapping MEV occurrences.</div></li><li><div class="item-name"><a class="mod" href="discovery/index.html" title="mod brontes_inspect::discovery">discovery</a></div><div class="desc docblock-short">The <code>DiscoveryInspector</code> module in <code>brontes-inspect</code> specializes in
+identifying potential MEV transactions. It does this by looking for
+transactions that are x standard deviations above the average priority fee
+(where x is the std_dev_threshold paramater, set to 2 by default), or have a
+coinbase transfer, or are private transactions based on the indexed mempool
+transactions we have in our metadata database (s/o chainbound).</div></li><li><div class="item-name"><a class="mod" href="jit/index.html" title="mod brontes_inspect::jit">jit</a></div></li><li><div class="item-name"><a class="mod" href="liquidations/index.html" title="mod brontes_inspect::liquidations">liquidations</a></div></li><li><div class="item-name"><a class="mod" href="long_tail/index.html" title="mod brontes_inspect::long_tail">long_tail</a></div></li><li><div class="item-name"><a class="mod" href="sandwich/index.html" title="mod brontes_inspect::sandwich">sandwich</a></div></li><li><div class="item-name"><a class="mod" href="shared_utils/index.html" title="mod brontes_inspect::shared_utils">shared_utils</a></div></li></ul><h2 id="macros" class="section-header">Macros<a href="#macros" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="macro" href="macro.define_mev_precedence.html" title="macro brontes_inspect::define_mev_precedence">define_mev_precedence</a></div><div class="desc docblock-short">Defines precedence rules among different MEV types for the purpose of
+deduplication.</div></li><li><div class="item-name"><a class="macro" href="macro.mev_composability.html" title="macro brontes_inspect::mev_composability">mev_composability</a></div><div class="desc docblock-short">Defines rules for composing multiple child MEV types into a single, complex
+parent MEV type.</div></li></ul><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.InspectorsIter.html" title="struct brontes_inspect::InspectorsIter">InspectorsIter</a></div><div class="desc docblock-short">An iterator over the variants of <a href="enum.Inspectors.html" title="enum brontes_inspect::Inspectors">Inspectors</a></div></li></ul><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.Inspectors.html" title="enum brontes_inspect::Inspectors">Inspectors</a></div></li></ul><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.Inspector.html" title="trait brontes_inspect::Inspector">Inspector</a></div></li></ul></section></div></main></body></html>

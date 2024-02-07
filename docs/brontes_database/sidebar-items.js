@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"macro":["compressed_table","decode"],"mod":["clickhouse","libmdbx"]};

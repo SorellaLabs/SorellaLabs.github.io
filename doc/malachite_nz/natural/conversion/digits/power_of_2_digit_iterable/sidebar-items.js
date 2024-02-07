@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["NaturalPowerOf2DigitIterator","NaturalPowerOf2DigitPrimitiveIterator"]};

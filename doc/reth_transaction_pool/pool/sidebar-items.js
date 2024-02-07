@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AddedTransaction","FullTransactionEvent","TransactionEvent"],"fn":["blob_tx_priority","fee_delta"],"mod":["txpool"],"struct":["AddedPendingTransaction","AllTransactionsEvents","BasefeeOrd","BestTransactionFilter","ParkedPool","PendingPool","PoolInner","TransactionEvents"],"trait":["ParkedOrd"]};

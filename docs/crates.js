@@ -1,1 +1,0 @@
-window.ALL_CRATES = ["brontes","brontes_classifier","brontes_core","brontes_database","brontes_inspect","brontes_macros","brontes_metrics","brontes_pricing","brontes_tracing","brontes_types","reth_tracing_ext"];

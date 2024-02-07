@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["try_decode_transfer"],"struct":["transferCall","transferFromCall","transferFromReturn","transferReturn"]};

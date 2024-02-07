@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["SIGNATURE_DECODED_SIZE_BYTES"],"enum":["FilterOutcome","NetworkTransactionEvent","ValidationOutcome"],"struct":["AnnouncementFilter","EthAnnouncementFilter","TransactionsHandle","TransactionsManager"],"trait":["FilterAnnouncement","ValidateTx68"],"type":["PoolImportFuture"]};

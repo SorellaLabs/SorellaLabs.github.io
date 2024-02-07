@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Never"],"fn":["nevers"],"struct":["NeverError"]};

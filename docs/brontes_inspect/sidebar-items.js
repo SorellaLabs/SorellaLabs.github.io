@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"macro":["define_mev_precedence","mev_composability"],"mod":["atomic_backrun","cex_dex","composer","jit","liquidations","long_tail","sandwich","shared_utils"],"trait":["Inspector"]};

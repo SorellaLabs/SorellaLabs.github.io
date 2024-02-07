@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["DB_VERSION","DB_VERSION_FILE_NAME"],"enum":["DatabaseVersionError"],"fn":["check_db_version_file","create_db_version_file","db_version_file_path","get_db_version"]};

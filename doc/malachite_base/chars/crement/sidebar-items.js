@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["char_to_contiguous_range","contiguous_range_to_char","decrement_char","increment_char"]};

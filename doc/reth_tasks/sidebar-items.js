@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["metrics","shutdown"],"struct":["PanickedTaskError","TaskExecutor","TaskManager","TokioTaskExecutor"],"trait":["TaskSpawner","TaskSpawnerExt"]};
