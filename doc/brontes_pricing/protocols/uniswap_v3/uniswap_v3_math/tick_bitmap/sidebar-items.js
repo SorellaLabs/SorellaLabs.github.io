@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["flip_tick","next_initialized_tick_within_one_word","position"]};

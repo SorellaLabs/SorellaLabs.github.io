@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Inspectors"],"macro":["define_mev_precedence","mev_composability"],"mod":["atomic_arb","cex_dex","composer","discovery","jit","liquidations","long_tail","sandwich","shared_utils"],"struct":["InspectorsIter"],"trait":["Inspector"]};

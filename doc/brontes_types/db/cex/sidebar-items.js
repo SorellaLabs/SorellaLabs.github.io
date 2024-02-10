@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ArchivedCexExchange","CexExchange","CexExchangeResolver"],"struct":["ArchivedCexPriceMapRedefined","ArchivedCexQuoteRedefined","CexPriceMap","CexPriceMapRedefined","CexPriceMapRedefinedResolver","CexQuote","CexQuoteRedefined","CexQuoteRedefinedResolver","SupportedCexExchanges"]};

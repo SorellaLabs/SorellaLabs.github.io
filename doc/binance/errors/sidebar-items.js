@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ErrorKind"],"struct":["BinanceContentError","Error"],"trait":["ResultExt"],"type":["Result"]};

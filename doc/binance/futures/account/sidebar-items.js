@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ContractType","IncomeType","OrderType","PositionSide","TimeInForce","WorkingType"],"struct":["CustomOrderRequest","FuturesAccount","IncomeRequest"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["ALL"],"enum":["Error","Version"],"fn":["addr","addr_v4","addr_v6","addr_with","addr_with_details","resolve"],"mod":["dns","http"],"trait":["Resolver"],"type":["Details","Resolutions"]};

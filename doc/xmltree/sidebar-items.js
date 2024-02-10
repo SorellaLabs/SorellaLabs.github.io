@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Error","ParseError","XMLNode"],"struct":["Element","EmitterConfig","Namespace"],"trait":["ElementPredicate"]};

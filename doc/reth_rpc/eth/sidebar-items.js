@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["RPC_DEFAULT_GAS_CAP"],"enum":["TransactionSource"],"fn":["fee_history_cache_new_blocks_task"],"mod":["bundle","cache","error","gas_oracle","revm_utils"],"struct":["EthApi","EthFilter","EthFilterConfig","EthPubSub","EthSubscriptionIdProvider","FeeHistoryCache","FeeHistoryCacheConfig"],"trait":["EthApiSpec","EthTransactions"]};

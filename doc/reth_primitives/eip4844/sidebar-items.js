@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["calc_blob_gasprice","calculate_excess_blob_gas","kzg_to_versioned_hash"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["constants","events","payload","withdrawals"],"type":["BlsPublicKey","BlsSignature"]};

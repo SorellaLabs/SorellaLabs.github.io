@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["BYTES_PER_BLOB"],"type":["Blob","Bytes48"]};

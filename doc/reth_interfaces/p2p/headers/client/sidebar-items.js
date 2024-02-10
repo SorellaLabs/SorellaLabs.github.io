@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["BlockHeaders","HeadersRequest","SingleHeaderRequest"],"trait":["HeadersClient"],"type":["HeadersFut"]};

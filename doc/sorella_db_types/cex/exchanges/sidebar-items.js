@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["binance","bitmex","bitstamp","bybit","coinbase","deribit","gateio","gemini","huobi","kraken","kucoin","okex","symbols","upbit"]};

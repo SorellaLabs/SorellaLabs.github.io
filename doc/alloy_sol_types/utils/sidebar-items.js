@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["next_multiple_of_32","words_for","words_for_len"]};

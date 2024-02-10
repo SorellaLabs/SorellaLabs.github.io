@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"macro":["matrix"],"mod":["cycle_detection","directed","grid","kuhn_munkres","matrix","prelude","undirected","utils"]};

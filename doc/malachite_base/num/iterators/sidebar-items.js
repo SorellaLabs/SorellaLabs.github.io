@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["IteratorToBitChunks"],"fn":["bit_distributor_sequence","iterator_to_bit_chunks","ruler_sequence"],"struct":["BitDistributorSequence","RulerSequence"]};

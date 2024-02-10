@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"macro":["action_dispatch","action_impl","discovery_dispatch","discovery_impl"]};

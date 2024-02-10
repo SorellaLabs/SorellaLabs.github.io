@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ForkFilterKey","Hardfork","ValidationError"],"struct":["ForkFilter","ForkHash","ForkId","ForkTransition","Head"]};

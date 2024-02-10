@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["IUniswapV2PairCalls","IUniswapV2PairEvents"],"struct":["Sync","getReservesCall","getReservesReturn","swapCall","swapReturn","token0Call","token0Return","token1Call","token1Return"]};

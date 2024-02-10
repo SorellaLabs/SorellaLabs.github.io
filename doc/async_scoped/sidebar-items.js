@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["Scope","Tokio"],"type":["TokioScope"]};

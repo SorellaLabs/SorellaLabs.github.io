@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"derive":["Redefined"],"macro":["redefined_remote","self_convert_redefined","self_convert_redefined_as_generic_slice","self_convert_redefined_sized","self_convert_redefined_tuples","self_convert_redefined_with_fixed_size_array"],"trait":["RedefinedConvert"]};

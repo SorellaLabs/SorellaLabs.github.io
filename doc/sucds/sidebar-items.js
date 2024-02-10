@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["bit_vectors","broadword","char_sequences","int_vectors","mii_sequences","serial","utils"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["blocks","broadcast","message","receipts","state","transactions","version"],"struct":["Status"]};

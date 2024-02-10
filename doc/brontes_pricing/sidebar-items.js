@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Protocol","VerificationResults"],"mod":["protocols","types"],"struct":["AllPairGraph","BrontesBatchPricer","GraphManager","PoolPairInfoDirection","PoolPairInformation","StateBuffer","SubGraphEdge","SubGraphsEntry"]};

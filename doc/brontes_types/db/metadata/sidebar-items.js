@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["ArchivedBlockMetadataInnerRedefined","BlockMetadata","BlockMetadataInner","BlockMetadataInnerRedefined","BlockMetadataInnerRedefinedResolver","Metadata"]};

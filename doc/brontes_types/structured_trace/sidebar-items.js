@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["ArchivedDecodedCallData","ArchivedDecodedParams","DecodedCallData","DecodedCallDataResolver","DecodedParams","DecodedParamsResolver","TransactionTraceWithLogs","TxTrace"],"trait":["TraceActions"]};

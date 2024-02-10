@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["OperationType","PromiseState"],"struct":["Promise","ResolvingFunctions"]};

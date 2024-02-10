@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["ArchivedGasDetails","ClickhouseVecGasDetails","GasDetails","GasDetailsResolver","Root"]};

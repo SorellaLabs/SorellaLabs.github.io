@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["consts"],"struct":["Error","Payload"],"trait":["Aead","AeadCore","AeadInPlace","AeadMut","AeadMutInPlace","Buffer","NewAead"],"type":["Key","Nonce","Result","Tag"]};

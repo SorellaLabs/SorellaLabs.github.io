@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ArchivedProtocol","Protocol","ProtocolResolver"]};

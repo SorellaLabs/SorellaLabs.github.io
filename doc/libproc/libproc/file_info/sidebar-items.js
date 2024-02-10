@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["PIDFDInfoFlavor","ProcFDType"],"fn":["pidfdinfo"],"struct":["ListFDs","ProcFDInfo"],"trait":["PIDFDInfo"]};

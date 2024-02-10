@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["BURN_EVENT_SIGNATURE","MAX_SQRT_RATIO","MINT_EVENT_SIGNATURE","MIN_SQRT_RATIO","POPULATE_TICK_DATA_STEP","Q128","Q224","SWAP_EVENT_SIGNATURE","U256_TWO"],"mod":["IUniswapV3Factory","IUniswapV3Pool","batch_request","uniswap_v3_math"],"struct":["Info","StepComputations","Tick","UniswapV3Pool"]};

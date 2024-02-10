@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["DNSClass","RData","RecordType"],"mod":["dns_class","dnssec","domain","rdata","record_data","record_type","resource","zone"],"struct":["Label","LowerName","Name","Record","RecordSet","RrKey"],"trait":["IntoName","IntoRecordSet"]};

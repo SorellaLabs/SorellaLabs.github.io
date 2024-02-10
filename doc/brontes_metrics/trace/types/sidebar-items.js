@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["TraceMetricEvent","TraceParseErrorKind"],"struct":["BlockStats","TraceStats","TransactionStats"]};

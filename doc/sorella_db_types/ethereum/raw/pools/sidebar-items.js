@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ContractProtocol"],"fn":["u256_to_rational"],"struct":["PoolDB","PoolReservesDB","PoolTokenPrice","TokenReservesWithDecimals"]};

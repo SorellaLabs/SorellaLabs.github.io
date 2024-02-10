@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["compose_mev_results"],"struct":["ComposerResults"]};

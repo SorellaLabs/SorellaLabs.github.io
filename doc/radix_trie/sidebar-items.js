@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["iter"],"struct":["NibbleVec","SubTrie","SubTrieMut","Trie"],"trait":["TrieCommon","TrieKey"],"type":["SubTrieResult"]};

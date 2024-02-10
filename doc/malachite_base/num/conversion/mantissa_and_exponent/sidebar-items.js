@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["from_sci_mantissa_and_exponent_round","sci_mantissa_and_exponent_round"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["NewPooledTransactionHashes"],"struct":["BlockHashNumber","NewBlock","NewBlockHashes","NewPooledTransactionHashes66","NewPooledTransactionHashes68","SharedTransactions","Transactions","ValidAnnouncementData","ValidTxHashes"],"trait":["HandleAnnouncement"]};

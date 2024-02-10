@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["AtomicStorage","Generation","Generational","GenerationalStorage","Recency","Registry"],"trait":["Storage"],"type":["GenerationalAtomicStorage"]};

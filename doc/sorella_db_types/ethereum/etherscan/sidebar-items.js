@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["contract_abis","metadata"]};

@@ -1,3 +1,0 @@
-(function() {var implementors = {
-"reth_db":[["impl CheckTotalSizeMultipleOf8 for <a class=\"struct\" href=\"reth_db/tables/models/blocks/struct.StoredBlockBodyIndicesFlags.html\" title=\"struct reth_db::tables::models::blocks::StoredBlockBodyIndicesFlags\">StoredBlockBodyIndicesFlags</a>"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

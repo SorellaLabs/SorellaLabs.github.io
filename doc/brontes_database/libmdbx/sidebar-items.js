@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["implementation","initialize","tables","types","utils"],"struct":["Libmdbx","LibmdbxReadWriter"],"trait":["LibmdbxReader","LibmdbxWriter"]};

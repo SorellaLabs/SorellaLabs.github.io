@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["generators"],"struct":["NoopFullBlockClient","TestBodiesClient","TestConsensus","TestFullBlockClient","TestHeaderDownloader","TestHeadersClient"]};

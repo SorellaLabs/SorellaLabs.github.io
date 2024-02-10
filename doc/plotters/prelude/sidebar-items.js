@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["FontFamily","FontStyle","FontTransform"],"struct":["SVGBackend"],"trait":["DrawingBackend"],"type":["DrawResult"]};

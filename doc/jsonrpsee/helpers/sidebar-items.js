@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["MethodResponseResult"],"fn":["batch_response_error","prepare_error"],"struct":["BatchResponseBuilder","BoundedWriter","MethodResponse","MethodSink"]};

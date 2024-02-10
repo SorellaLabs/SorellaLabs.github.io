@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"attr":["bitfield"],"derive":["BitfieldSpecifier"],"mod":["error","prelude","specifiers"],"trait":["Specifier"]};

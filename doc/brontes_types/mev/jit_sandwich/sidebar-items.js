@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["compose_sandwich_jit"],"struct":["ArchivedJitLiquiditySandwichRedefined","JitLiquiditySandwich","JitLiquiditySandwichRedefined","JitLiquiditySandwichRedefinedResolver"]};

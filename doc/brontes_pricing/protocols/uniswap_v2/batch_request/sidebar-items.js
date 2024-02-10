@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["get_v2_pool_data"],"mod":["IGetUniswapV2PoolDataBatchRequest"],"struct":["PoolData","data_constructorCall","data_constructorReturn"]};

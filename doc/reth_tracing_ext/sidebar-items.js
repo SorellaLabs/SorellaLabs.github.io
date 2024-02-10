@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["init_db"],"struct":["StackStep","TracingClient","TracingInspectorLocal"],"type":["Provider","RethApi","RethTxPool"]};

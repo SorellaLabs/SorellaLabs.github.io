@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["eio"],"struct":["AllocVec","Cobs","ExtendFlavor","Size","Slice"],"trait":["Flavor"]};

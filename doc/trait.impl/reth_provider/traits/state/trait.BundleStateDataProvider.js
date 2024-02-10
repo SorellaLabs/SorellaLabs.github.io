@@ -1,4 +1,0 @@
-(function() {var implementors = {
-"reth_blockchain_tree":[["impl&lt;'a&gt; <a class=\"trait\" href=\"reth_provider/traits/state/trait.BundleStateDataProvider.html\" title=\"trait reth_provider::traits::state::BundleStateDataProvider\">BundleStateDataProvider</a> for <a class=\"struct\" href=\"reth_blockchain_tree/struct.BundleStateDataRef.html\" title=\"struct reth_blockchain_tree::BundleStateDataRef\">BundleStateDataRef</a>&lt;'a&gt;"],["impl <a class=\"trait\" href=\"reth_provider/traits/state/trait.BundleStateDataProvider.html\" title=\"trait reth_provider::traits::state::BundleStateDataProvider\">BundleStateDataProvider</a> for <a class=\"struct\" href=\"reth_blockchain_tree/struct.BundleStateData.html\" title=\"struct reth_blockchain_tree::BundleStateData\">BundleStateData</a>"]],
-"reth_provider":[]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

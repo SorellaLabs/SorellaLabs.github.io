@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["__action_sig_BalancerV1swapExactAmountInCall","__action_sig_BalancerV1swapExactAmountOutCall"],"struct":["BalancerV1swapExactAmountInCall","BalancerV1swapExactAmountOutCall"]};

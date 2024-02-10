@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["NippyJarError"],"mod":["compression","filter","phf"],"struct":["DataReader","NippyJar","NippyJarCursor","NippyJarWriter"],"trait":["NippyJarHeader"],"type":["ColumnResult"]};

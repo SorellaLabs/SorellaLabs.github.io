@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["types"],"struct":["BigEndian","LittleEndian"],"trait":["Endian"],"type":["NetworkOrder"]};

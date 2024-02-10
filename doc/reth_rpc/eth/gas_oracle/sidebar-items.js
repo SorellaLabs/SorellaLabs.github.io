@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["DEFAULT_GAS_PRICE_BLOCKS","DEFAULT_GAS_PRICE_PERCENTILE","DEFAULT_IGNORE_GAS_PRICE","DEFAULT_MAX_GAS_PRICE","MAX_HEADER_HISTORY","SAMPLE_NUMBER"],"struct":["EffectiveTipLruCache","GasPriceOracle","GasPriceOracleConfig","GasPriceOracleResult"]};

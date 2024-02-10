@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["DatabaseComponentError"],"mod":["components"],"struct":["DatabaseComponents","WrapDatabaseRef"],"trait":["BlockHash","BlockHashRef","Database","DatabaseCommit","DatabaseRef","State","StateRef"]};

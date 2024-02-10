@@ -1,4 +1,0 @@
-(function() {var implementors = {
-"brontes_types":[["impl <a class=\"trait\" href=\"reth_db/abstraction/table/trait.Encode.html\" title=\"trait reth_db::abstraction::table::Encode\">Encode</a> for <a class=\"struct\" href=\"brontes_types/db/dex/struct.DexKey.html\" title=\"struct brontes_types::db::dex::DexKey\">DexKey</a>"],["impl <a class=\"trait\" href=\"reth_db/abstraction/table/trait.Encode.html\" title=\"trait reth_db::abstraction::table::Encode\">Encode</a> for <a class=\"struct\" href=\"brontes_types/pair/struct.Pair.html\" title=\"struct brontes_types::pair::Pair\">Pair</a>"]],
-"reth_db":[]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

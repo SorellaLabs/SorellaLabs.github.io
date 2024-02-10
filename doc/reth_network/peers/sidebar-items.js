@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["PeerAction","PeerKind"],"struct":["ConnectionInfo","Peer","PeersConfig","PeersHandle","PeersManager","ReputationChangeWeights"]};

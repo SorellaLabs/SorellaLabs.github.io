@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["ID_NONCE_LENGTH","IV_LENGTH","MESSAGE_NONCE_LENGTH","STATIC_HEADER_LENGTH"],"enum":["PacketKind"],"struct":["ChallengeData","DefaultProtocolId","Packet","PacketHeader"],"trait":["ProtocolIdentity"],"type":["IdNonce","MessageNonce"]};

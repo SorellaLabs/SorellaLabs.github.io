@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["convergents","from_continued_fraction","to_continued_fraction"]};

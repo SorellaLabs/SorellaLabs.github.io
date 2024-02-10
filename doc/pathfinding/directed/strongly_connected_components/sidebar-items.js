@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["strongly_connected_component","strongly_connected_components","strongly_connected_components_from"]};

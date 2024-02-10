@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"macro":["clickhouse_table"]};

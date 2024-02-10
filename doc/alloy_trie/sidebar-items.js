@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["EMPTY_ROOT_HASH"],"mod":["hash_builder","nodes"],"struct":["HashMap","TrieMask"]};

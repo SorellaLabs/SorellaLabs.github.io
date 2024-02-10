@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["from_reader","from_reader_with_buffer","from_reader_with_recursion_limit"]};

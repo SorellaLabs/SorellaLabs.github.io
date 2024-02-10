@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["DescriptorKind","PropertyKey"],"struct":["Attribute","PropertyDescriptor","PropertyDescriptorBuilder"]};

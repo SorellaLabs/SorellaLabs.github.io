@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["BLOCKS_PER_SNAPSHOT"],"enum":["Compression","Filters","InclusionFilter","PerfectHashingFunction","SnapshotSegment"],"struct":["HighestSnapshots","SegmentConfig","SegmentHeader"]};

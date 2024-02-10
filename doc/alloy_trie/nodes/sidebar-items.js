@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["CHILD_INDEX_RANGE"],"fn":["word_rlp"],"struct":["BranchNode","BranchNodeCompact","ExtensionNode","LeafNode"]};

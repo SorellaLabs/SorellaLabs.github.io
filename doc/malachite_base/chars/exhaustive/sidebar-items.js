@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["ascii_chars_increasing","chars_increasing","exhaustive_ascii_chars","exhaustive_chars"],"struct":["ExhaustiveChars"]};

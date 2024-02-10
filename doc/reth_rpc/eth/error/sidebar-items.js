@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["EthApiError","RpcInvalidTransactionError","RpcPoolError","SignError"],"struct":["RevertError"],"type":["EthResult"]};

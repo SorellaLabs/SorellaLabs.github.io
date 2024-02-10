@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"trait":["Infinity","NaN","NegativeInfinity","NegativeOne","NegativeZero","One","OneHalf","Two","Zero"]};

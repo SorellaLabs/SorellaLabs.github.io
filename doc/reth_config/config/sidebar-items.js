@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["BodiesConfig","Config","ExecutionConfig","HashingConfig","HeadersConfig","IndexHistoryConfig","MerkleConfig","PruneConfig","SenderRecoveryConfig","StageConfig","TotalDifficultyConfig","TransactionLookupConfig"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["ArchivedTokenInfo","ArchivedTokenInfoWithAddressRedefined","TokenInfo","TokenInfoResolver","TokenInfoWithAddress","TokenInfoWithAddressRedefined","TokenInfoWithAddressRedefinedResolver"]};

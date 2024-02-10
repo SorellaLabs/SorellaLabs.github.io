@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["invalid","jump","jumpdest","jumpi","not_found","pc","ret","revert","stop"]};

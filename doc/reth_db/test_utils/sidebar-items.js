@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["ERROR_DB_CREATION","ERROR_DB_OPEN","ERROR_TABLE_CREATION","ERROR_TEMPDIR"],"fn":["create_test_ro_db","create_test_rw_db","create_test_rw_db_with_path","tempdir_path"],"struct":["TempDatabase"]};
